@@ -4,6 +4,7 @@ import Navbar from './components/common/navbar';
 import Sidebar from './components/common/sidebar';
 import Footer from './components/common/footer';
 import CustomerManagement from "./components/customer-management";
+import productCategory from "./components/product-category"
 import {PrivateRoute} from "./components/privateroute";
 import {ToastContainer} from "react-toastify";
 import EditCustomer from "./components/edit-customer";
@@ -22,8 +23,11 @@ class App extends Component {
                     >
                         <Router history={this.props.history}>
                             <Switch>
+                                <PrivateRoute path="/product-category" exact={false} component={productCategory}/>
+
                                 <PrivateRoute path="/edit-customer" exact={false} component={EditCustomer}/>
                                 <PrivateRoute path="/customer-management" exact={false} component={CustomerManagement}/>
+
                                 <PrivateRoute path="/" exact={true} component={CustomerManagement}/>
                                 <Redirect to="/not-found"/>
                             </Switch>

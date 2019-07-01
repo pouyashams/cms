@@ -1,7 +1,7 @@
 const navLinks = [
 
     {
-        path: "/ProductCategoryAttribute",
+        path: "/product-category",
         name: "ویژگی نوع کالا",
         icon: "fa fa-sliders",
     },

@@ -142,8 +142,7 @@ class CustomerManagement extends Component {
         const {searchResultList, pageSize} = this.state;
 
         return (
-            <div
-                className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
+            <div className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
                     <h4 className="py-2">مدیریت مشتریان</h4>
                 </div>

@@ -202,7 +202,7 @@ class EditCustomer extends Component {
                         </div>
 
                         <div className="col-12 text-center justify-content-center">
-                            <input type="button" className="btn btn-primary" value="اصلاح "
+                            <input type="button" className="btn btn-primary" value="ویرایش"
                                    onClick={this.updateCustomer}/>
                         </div>
                     </form>

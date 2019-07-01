@@ -89,3 +89,14 @@ code {
     position:fixed;
     max-width: 20%;
 }
+
+.remove-attribute-icon {
+    width: 30px;
+    font-size: 37px;
+}
+
+.disabled-remove-attribute-icon {
+    width: 30px;
+    font-size: 37px;
+    background-color: #ccc !important;
+}

@@ -19,7 +19,7 @@ class productCategory extends Component {
         this.setState({numberOfCategory});
     };
 
-    // sendListOfProduct = () => {};
+    sendListOfProduct = () => {};
 
     handelChangeCategoryName = (categoryName) => {
         this.setState({categoryName});

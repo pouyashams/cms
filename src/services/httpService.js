@@ -27,7 +27,7 @@ axios.interceptors.response.use(null, error => {
 
     if (!expectedError) {
         console.log('Logging the error:', error);
-        toast.error(error.message);
+        toast.error("خطایی در برقراری با سرور به وجود امده است");
     }
 
     return Promise.reject(error);

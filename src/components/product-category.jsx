@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {loadAllProductAttributeCategory} from "../services/productService";
+import {sendListOfProduct} from "../services/productService";
 import {toast} from "react-toastify";
 
 class productCategory extends Component {
@@ -11,11 +12,11 @@ class productCategory extends Component {
             numberOfCategory: "",
             categoryName: "",
             productAttributeList: [],
-            selectedOldProductAttributeCategory: null,
+            selectedOldProductAttributeCategory: "",
             oldProductAttributeCategoryArray: [
                 {
                     identifier: "",
-                    categoryName: '---'
+                    categoryName: 'انتخاب کنید...'
                 }
             ]
         };
@@ -41,10 +42,50 @@ class productCategory extends Component {
         }
     }
 
+    getSelectedProductCategoryName = (id) => {
+        let categoryName = "";
+        const {oldProductAttributeCategoryArray} = this.state;
+        oldProductAttributeCategoryArray.forEach((oldProductAttributeCategory) => {
+            if (parseInt(oldProductAttributeCategory.identifier) === parseInt(id)) {
+                console.log(oldProductAttributeCategory.categoryName)
+                categoryName = oldProductAttributeCategory.categoryName;
+            }
+        });
+        return categoryName;
+    };
+
+    sendProduct = async () => {
+        const {selectedOldProductAttributeCategory, productAttributeList} = this.state;
+        let categoryName = "";
+        if (selectedOldProductAttributeCategory === "") {
+            categoryName = this.state.categoryName;
+        } else {
+            categoryName = this.getSelectedProductCategoryName(selectedOldProductAttributeCategory);
+        }
+        const data = {
+            identifier: selectedOldProductAttributeCategory,
+            categoryName: categoryName,
+            productAttributeList: productAttributeList
+        };
+        console.log(data)
+        try {
+            const result = await await sendListOfProduct(data);
+            if (result.status === 200) {
+                toast.success('عملیات با موفقیت انجام شد');
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('خطایی در دریافت اطلاعات رخ داده است.');
+            }
+        }
+    };
 
     handelChangeOldProductAttributeCategory = (identifier) => {
         if (this.hasValue(identifier)) {
             const {oldProductAttributeCategoryArray} = this.state;
+            this.setState({
+                categoryName: ""
+            });
             oldProductAttributeCategoryArray.forEach((oldProductAttributeCategory) => {
                 if (oldProductAttributeCategory.identifier != null) {
                     if (parseInt(oldProductAttributeCategory.identifier, 10) === parseInt(identifier, 10)) {
@@ -61,7 +102,7 @@ class productCategory extends Component {
                         this.setState({
                             productAttributeList: newProductAttributeList,
                             selectedOldProductAttributeCategory: identifier,
-                            lastIndex : ++lastIndex
+                            lastIndex: ++lastIndex
                         });
                     }
                 }
@@ -69,7 +110,7 @@ class productCategory extends Component {
         } else {
             this.setState({
                 productAttributeList: [],
-                selectedOldProductAttributeCategory: null
+                selectedOldProductAttributeCategory: ""
             });
         }
     };
@@ -91,7 +132,7 @@ class productCategory extends Component {
         if (this.hasValue(selectedOldProductAttributeCategory)) {
             this.setState({
                 categoryName,
-                selectedOldProductAttributeCategory: null,
+                selectedOldProductAttributeCategory: "",
                 productAttributeList: [rawAttribute]
             });
         } else {
@@ -116,7 +157,7 @@ class productCategory extends Component {
 
 
     removeProductAttribute = (productAttribute) => {
-        if(productAttribute.canBeDelete) {
+        if (productAttribute.canBeDelete) {
             const productAttributeList = this.state.productAttributeList.filter(attribute => productAttribute.index !== attribute.index);
             this.setState({productAttributeList});
         }
@@ -130,8 +171,7 @@ class productCategory extends Component {
             index: lastIndex,
             identifier: "",
             attributeValue: "",
-            canBeDelete: true,
-            lastIndex: ++lastIndex
+            canBeDelete: true
         }
     };
 
@@ -154,7 +194,7 @@ class productCategory extends Component {
 
                         <div className="form-group col-6 float-right border-left">
                             <label>نوع ویژگی:</label>
-                            <select className="form-control text-center"
+                            <select className="form-control text-center w-50"
                                     value={this.state.selectedOldProductAttributeCategory}
                                     onChange={(e) => this.handelChangeOldProductAttributeCategory(e.target.value)}
                             >
@@ -168,7 +208,7 @@ class productCategory extends Component {
                         </div>
                         <div className="form-group col-6 float-right">
                             <label>نام ویژگی جدید:</label>
-                            <input className="form-control text-center"
+                            <input className="form-control text-center w-50"
                                    type={"input"}
                                    placeholder="---"
                                    value={this.state.categoryName}
@@ -197,7 +237,7 @@ class productCategory extends Component {
                                                 />
                                                 <span
                                                     className={
-                                                      productAttribute.canBeDelete ? "fa fa-remove bg-danger text-light h-100 p-0 m-0  remove-attribute-icon" : "fa fa-remove bg-danger text-light h-100 p-0 m-0  disabled-remove-attribute-icon"
+                                                        productAttribute.canBeDelete ? "fa fa-remove bg-danger text-light h-100 p-0 m-0  remove-attribute-icon" : "fa fa-remove bg-danger text-light h-100 p-0 m-0  disabled-remove-attribute-icon"
                                                     }
                                                     onClick={() => this.removeProductAttribute(productAttribute)}/>
                                             </div>
@@ -206,8 +246,13 @@ class productCategory extends Component {
                                 )
                             )}
                             <div className="col-12 text-center justify-content-center">
-                                <input type="button" className="btn btn-primary mr-3" value="ثبت نهایی "/>
-                                <input type="button" className="btn btn-primary" value="اضافه کردن" onClick={()=>{this.addNewAttribute();}}/>
+                                <input type="button" className="btn btn-primary mr-3" value="ثبت نهایی "
+                                       onClick={() => {
+                                           this.sendProduct();
+                                       }}/>
+                                <input type="button" className="btn btn-primary" value="اضافه کردن" onClick={() => {
+                                    this.addNewAttribute();
+                                }}/>
                             </div>
                         </form>
                     </div>

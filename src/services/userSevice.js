@@ -5,6 +5,5 @@ export function searchCustomer(parameters) {
 }
 
 export function updateCustomerInfo(customerInfo) {
-    console.log(customerInfo);
     return http.post("http://shop.isuncharge.com/isunshop/user/update-customer", customerInfo);
 }

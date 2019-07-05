@@ -7,7 +7,7 @@ const navLinks = [
     },
 
     {
-        path: "/definitionProductCategory",
+        path: "/definition-product-category",
         name: "تعریف نوع کالا",
         icon: "fa fa-product-hunt",
     },

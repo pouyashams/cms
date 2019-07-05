@@ -48,7 +48,7 @@ const navLinks = [
         icon: "fa fa-user",
     },
     {
-        path: "/chargeDetails",
+        path: "/report-of-charge",
         name: "گزارش شارژ",
         icon: "fa fa-align-left",
     },

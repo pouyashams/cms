@@ -14,7 +14,7 @@ class productCategory extends Component {
             oldProductCategoryArray: [
                 {
                     identifier: "",
-                    categoryName: "انتخاب کنید..."
+                    productCategoryName: "انتخاب کنید..."
                 }
             ],
             productCategoryName: "",

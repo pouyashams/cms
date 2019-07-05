@@ -3,12 +3,13 @@ import {Switch, Redirect, Router, withRouter} from 'react-router-dom';
 import Navbar from './components/common/navbar';
 import Sidebar from './components/common/sidebar';
 import Footer from './components/common/footer';
-import CustomerManagement from "./components/customer-management";
+import CustomerManagement from "./components/customer-management/customer-management";
 import definitionProductCategory from "./components/definition-product-category"
 import productCategory from "./components/product-category"
 import {PrivateRoute} from "./components/privateroute";
 import {ToastContainer} from "react-toastify";
-import EditCustomer from "./components/edit-customer";
+import EditCustomer from "./components/customer-management/edit-customer";
+import reportOfCharge from "./components/report-of-charge";
 
 class App extends Component {
     render() {
@@ -29,6 +30,10 @@ class App extends Component {
 
                                 <PrivateRoute path="/edit-customer" exact={false} component={EditCustomer}/>
                                 <PrivateRoute path="/customer-management" exact={false} component={CustomerManagement}/>
+
+
+                                <PrivateRoute path="/report-of-charge" exact={false} component={reportOfCharge}/>
+
 
                                 <PrivateRoute path="/" exact={true} component={CustomerManagement}/>
                                 <Redirect to="/not-found"/>

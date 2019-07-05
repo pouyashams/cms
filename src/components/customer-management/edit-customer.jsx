@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {updateCustomerInfo} from "./../services/userSevice"
+import {updateCustomerInfo} from "../../services/userService"
 
 
 class EditCustomer extends Component {

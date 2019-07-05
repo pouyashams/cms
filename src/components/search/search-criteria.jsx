@@ -46,6 +46,19 @@ class SearchCriteria extends Component {
                                         />
                                     </div>
                                 );
+                            } else if (searchCriteria.element === 'number') {
+                                return (
+                                    <div className="form-group col-12 col-sm-6 col-md-3 float-right" key={index++}>
+                                        <label>{searchCriteria.label} :</label>
+                                        <input className="form-control text-center"
+                                               type={searchCriteria.type}
+                                               placeholder={searchCriteria.placeholder}
+                                               value={this.state[searchCriteria.name]}
+                                               name={searchCriteria.name}
+                                               onChange={(e) => this.fillParameterValue(e.target.value, searchCriteria.name)}
+                                        />
+                                    </div>
+                                );
                             } else if (searchCriteria.element === 'select') {
                                 return (
                                     <div className="form-group col-12 col-sm-6 col-md-3 float-right" key={index++}>

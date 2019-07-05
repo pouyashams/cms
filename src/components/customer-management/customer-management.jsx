@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import SearchCriteria from "./search/search-criteria";
-import SearchResult from "./search/search-result";
-import {searchCustomer} from "./../services/userSevice"
+import SearchCriteria from "../search/search-criteria";
+import SearchResult from "../search/search-result";
+import {searchCustomer} from "../../services/userService"
 import {toast} from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 

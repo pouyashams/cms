@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import SearchCriteria from "../search/search-criteria";
 import SearchResult from "../search/search-result";
-import {searchCustomerBill} from "../../services/reportService"
+import {searchCustomerInternet} from "../../services/reportService"
 import {toast} from 'react-toastify';
 import {withRouter} from 'react-router-dom';
 
 
-class reportOfBill extends Component {
+class reportOfInternetPack extends Component {
 
     constructor(props) {
         super(props);
@@ -15,10 +15,8 @@ class reportOfBill extends Component {
             searchResultList: []
         };
     }
-
     getSearchCriteriaArray() {
         return [
-
             {
                 name: "customerReferenceNumber",
                 element: "input",
@@ -27,18 +25,18 @@ class reportOfBill extends Component {
                 label: "شماره پیگیری",
                 defaultValue: ""
             }, {
-                name: "paymentId",
+                name: "orderStatusCode",
                 element: "input",
                 type: "text",
                 placeholder: "---",
-                label: "شناسه پرداخت",
+                label: "کد وضعیت سفارش ",
                 defaultValue: ""
-            }, {
-                name: "billId",
+            },{
+                name: "packageCode",
                 element: "input",
                 type: "text",
                 placeholder: "---",
-                label: "شناسه قبض",
+                label: "کد بسته ",
                 defaultValue: ""
             },
             {
@@ -55,6 +53,14 @@ class reportOfBill extends Component {
                 type: "number",
                 placeholder: "---",
                 label: "شماره موبایل",
+                defaultValue: ""
+            },
+            {
+                name: "subscriberNumber",
+                element: "input",
+                type: "text",
+                placeholder: "---",
+                label: "شماره ذینفع",
                 defaultValue: ""
             },
             {
@@ -82,25 +88,18 @@ class reportOfBill extends Component {
                 ]
             },
             {
-                name: "billTypeCode",
+                name: "operatorCode",
                 element: "select",
                 placeholder: "---",
                 defaultValue: "",
-                label: "نوع قبض",
+                label: "اپراتور",
                 options: [
                     {value: "", title: "انتخاب کنید..."},
-                    {value: "WATER_BILL_TYPE", title: "قبض آب"},
-                    {value: "ELECTRICITY_BILL_TYPE", title: "قبض برق"},
-                    {value: "GAS_BILL_TYPE", title: "قبض گاز"},
-                    {value: "PHONE_BILL_TYPE", title: "قبض تلفن ثابت"},
-                    {value: "MOBILE_BILL_TYPE", title: "قبض تلفن همراه"},
-                    {value: "MUNICIPALITY_BILL_TYPE", title: "قبض  شهرداری"},
-                    {value: "TAX_BILL_TYPE", title: "قبض مالیات"},
-                    {value: "DRIVING_BILL_TYPE", title: "قبض راهنمایی و رانندگی"},
-
+                    {value: "IRANCELL", title: "ایرانسل"},
+                    {value: "MCI", title: "همراه اول"},
+                    {value: "RIGHTEL", title: "رایتل"}
                 ]
-            },
-            {
+            }, {
                 name: "orderStatusCode",
                 element: "select",
                 placeholder: "---",
@@ -120,10 +119,10 @@ class reportOfBill extends Component {
             showCheckBox: false,
             actions: [],
             headerTitleInfos: [
+                {name: "internetPackage.code", title: "کد بسته"},
+                {name: "operator", title: "اپراتور"},
+                {name: "subscriberNumber", title: "شماره ذینفع"},
                 {name: "identifier", title: "شناسه سفارش"},
-                {name: "billId", title: "شناسه قبض"},
-                {name: "billType", title: "نوع قبض"},
-                {name: "paymentId", title: "شناسه پرداخت"},
                 {name: "orderStatus", title: "وضعیت سفارش"},
                 {name: "mobileNumber", title: "شماره موبایل"},
                 {name: "customerReferenceNumber", title: "شماره پیگیری"},
@@ -137,7 +136,7 @@ class reportOfBill extends Component {
 
     search = async (parameters) => {
         try {
-            const result = await searchCustomerBill(parameters);
+            const result = await searchCustomerInternet(parameters);
             if (result.status === 200) {
                 this.setState({searchResultList: result.data.data})
             }
@@ -157,7 +156,7 @@ class reportOfBill extends Component {
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
-                    <h4 className="py-2">گزارشات قبض</h4>
+                    <h4 className="py-2">گزارشات بسته اینترنت</h4>
                 </div>
                 <SearchCriteria onSearch={this.search} searchCriteriaArray={searchCriteriaArray}/>
                 <SearchResult headerInfo={headerInfo} searchResultList={searchResultList} pageSize={pageSize}/>
@@ -166,4 +165,4 @@ class reportOfBill extends Component {
     }
 }
 
-export default withRouter(reportOfBill);
+export default withRouter(reportOfInternetPack);

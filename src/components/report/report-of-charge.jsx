@@ -6,7 +6,7 @@ import {toast} from 'react-toastify';
 import {withRouter} from 'react-router-dom';
 
 
-class CustomerManagement extends Component {
+class reportOfCharge extends Component {
 
     constructor(props) {
         super(props);
@@ -141,7 +141,7 @@ class CustomerManagement extends Component {
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
-                    <h4 className="py-2">مدیریت مشتریان</h4>
+                    <h4 className="py-2">گزارشات شارژ</h4>
                 </div>
                 <SearchCriteria onSearch={this.search} searchCriteriaArray={searchCriteriaArray}/>
                 <SearchResult headerInfo={headerInfo} searchResultList={searchResultList} pageSize={pageSize}/>
@@ -150,4 +150,4 @@ class CustomerManagement extends Component {
     }
 }
 
-export default withRouter(CustomerManagement);
+export default withRouter(reportOfCharge);

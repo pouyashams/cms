@@ -58,7 +58,7 @@ const navLinks = [
         icon: "fa fa-align-center",
     },
     {
-        path: "/internetPack",
+        path: "/report-of-internet-pack",
         name: "گزارش بسته اینترنت",
         icon: "fa fa-align-right",
     },

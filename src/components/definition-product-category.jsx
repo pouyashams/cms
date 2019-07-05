@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {loadData, sendListOfDefinitionProduct} from "../services/productService";
 import {toast} from "react-toastify";
 
-class productCategory extends Component {
+class definitionProductCategory extends Component {
 
     constructor(props) {
         super(props);
@@ -148,6 +148,6 @@ class productCategory extends Component {
     };
 };
 
-export default productCategory;
+export default definitionProductCategory;
 
 

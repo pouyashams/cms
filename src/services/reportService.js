@@ -6,3 +6,6 @@ export function searchCustomerCharge(parameters) {
 export function searchCustomerBill(parameters) {
     return http.post("http://shop.isuncharge.com/isunshop/report/search-bill-order", parameters);
 }
+export function searchCustomerInternet(parameters) {
+    return http.post("http://shop.isuncharge.com/isunshop/report/search-internet-package-order", parameters);
+}

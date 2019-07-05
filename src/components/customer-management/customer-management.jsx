@@ -6,7 +6,7 @@ import {toast} from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 
 
-class CustomerManagement extends Component {
+class customerManagement extends Component {
 
     constructor(props) {
         super(props);
@@ -153,4 +153,4 @@ class CustomerManagement extends Component {
     }
 }
 
-export default withRouter(CustomerManagement);
+export default withRouter(customerManagement);

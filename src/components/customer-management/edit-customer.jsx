@@ -4,7 +4,7 @@ import {toast} from 'react-toastify';
 import {updateCustomerInfo} from "../../services/userService"
 
 
-class EditCustomer extends Component {
+class editCustomer extends Component {
 
     constructor(props) {
         super(props);
@@ -213,4 +213,4 @@ class EditCustomer extends Component {
     }
 }
 
-export default withRouter(EditCustomer);
+export default withRouter(editCustomer);

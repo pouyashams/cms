@@ -9,7 +9,8 @@ import productCategory from "./components/product-category"
 import {PrivateRoute} from "./components/privateroute";
 import {ToastContainer} from "react-toastify";
 import EditCustomer from "./components/customer-management/edit-customer";
-import reportOfCharge from "./components/report-of-charge";
+import reportOfCharge from "./components/report/report-of-charge";
+import reportOfbill from "./components/report/report-of-bill";
 
 class App extends Component {
     render() {
@@ -33,6 +34,7 @@ class App extends Component {
 
 
                                 <PrivateRoute path="/report-of-charge" exact={false} component={reportOfCharge}/>
+                                <PrivateRoute path="/report-of-bill" exact={false} component={reportOfbill}/>
 
 
                                 <PrivateRoute path="/" exact={true} component={CustomerManagement}/>

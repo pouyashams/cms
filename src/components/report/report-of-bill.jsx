@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import SearchCriteria from "./search/search-criteria";
-import SearchResult from "./search/search-result";
-import {searchCustomer} from "../services/reportService"
+import SearchCriteria from "../search/search-criteria";
+import SearchResult from "../search/search-result";
+import {searchCustomerBill} from "../../services/reportService"
 import {toast} from 'react-toastify';
 import {withRouter} from 'react-router-dom';
 
@@ -15,14 +15,30 @@ class CustomerManagement extends Component {
             searchResultList: []
         };
     }
+
     getSearchCriteriaArray() {
         return [
+
             {
                 name: "customerReferenceNumber",
                 element: "input",
                 type: "text",
                 placeholder: "---",
                 label: "شماره پیگیری",
+                defaultValue: ""
+            }, {
+                name: "paymentId",
+                element: "input",
+                type: "text",
+                placeholder: "---",
+                label: "شناسه پرداخت",
+                defaultValue: ""
+            }, {
+                name: "billId",
+                element: "input",
+                type: "text",
+                placeholder: "---",
+                label: "شناسه قبض",
                 defaultValue: ""
             },
             {
@@ -39,14 +55,6 @@ class CustomerManagement extends Component {
                 type: "number",
                 placeholder: "---",
                 label: "شماره موبایل",
-                defaultValue: ""
-            },
-            {
-                name: "subscriberNumber",
-                element: "input",
-                type: "text",
-                placeholder: "---",
-                label: "شماره ذینفع",
                 defaultValue: ""
             },
             {
@@ -74,18 +82,25 @@ class CustomerManagement extends Component {
                 ]
             },
             {
-                name: "operatorCode",
+                name: "billTypeCode",
                 element: "select",
                 placeholder: "---",
                 defaultValue: "",
-                label: "درگاه پرداخت",
+                label: "نوع قبض",
                 options: [
                     {value: "", title: "انتخاب کنید..."},
-                    {value: "IRANCELL", title: "ایرانسل"},
-                    {value: "MCI", title: "همراه اول"},
-                    {value: "RIGHTEL", title: "رایتل"}
+                    {value: "WATER_BILL_TYPE", title: "قبض آب"},
+                    {value: "ELECTRICITY_BILL_TYPE", title: "قبض برق"},
+                    {value: "GAS_BILL_TYPE", title: "قبض گاز"},
+                    {value: "PHONE_BILL_TYPE", title: "قبض تلفن ثابت"},
+                    {value: "MOBILE_BILL_TYPE", title: "قبض تلفن همراه"},
+                    {value: "MUNICIPALITY_BILL_TYPE", title: "قبض  شهرداری"},
+                    {value: "TAX_BILL_TYPE", title: "قبض مالیات"},
+                    {value: "DRIVING_BILL_TYPE", title: "قبض راهنمایی و رانندگی"},
+
                 ]
-            }, {
+            },
+            {
                 name: "orderStatusCode",
                 element: "select",
                 placeholder: "---",
@@ -105,9 +120,10 @@ class CustomerManagement extends Component {
             showCheckBox: false,
             actions: [],
             headerTitleInfos: [
-                {name: "operator", title: "اپراتور"},
-                {name: "subscriberNumber", title: "شماره ذینفع"},
                 {name: "identifier", title: "شناسه سفارش"},
+                {name: "billId", title: "شناسه قبض"},
+                {name: "billType", title: "نوع قبض"},
+                {name: "paymentId", title: "شناسه پرداخت"},
                 {name: "orderStatus", title: "وضعیت سفارش"},
                 {name: "mobileNumber", title: "شماره موبایل"},
                 {name: "customerReferenceNumber", title: "شماره پیگیری"},
@@ -121,7 +137,7 @@ class CustomerManagement extends Component {
 
     search = async (parameters) => {
         try {
-            const result = await searchCustomer(parameters);
+            const result = await searchCustomerBill(parameters);
             if (result.status === 200) {
                 this.setState({searchResultList: result.data.data})
             }

@@ -53,7 +53,7 @@ const navLinks = [
         icon: "fa fa-align-left",
     },
     {
-        path: "/billDetails",
+        path: "/report-of-bill",
         name: "گزارش قبض",
         icon: "fa fa-align-center",
     },

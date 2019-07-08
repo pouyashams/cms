@@ -12,6 +12,7 @@ import EditCustomer from "./components/customer-management/edit-customer";
 import reportOfCharge from "./components/report/report-of-charge";
 import reportOfBill from "./components/report/report-of-bill";
 import reportOfInternetPack from "./components/report/report-of-internet-pack";
+import addProductFirstPage from "./components/add-product/add-product-first-page";
 
 class App extends Component {
     render() {
@@ -38,8 +39,9 @@ class App extends Component {
                                 <PrivateRoute path="/report-of-bill" exact={false} component={reportOfBill}/>
                                 <PrivateRoute path="/report-of-internet-pack" exact={false} component={reportOfInternetPack}/>
 
+                                <PrivateRoute path="/add-product" exact={false} component={addProductFirstPage}/>
 
-                                <PrivateRoute path="/" exact={true} component={CustomerManagement}/>
+                                <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>
                             </Switch>
                         </Router>

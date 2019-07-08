@@ -75,28 +75,6 @@ class customerManagement extends Component {
                 label: "ایمیل",
                 defaultValue: ""
             },
-            // {
-            //     name: "جنسیت",
-            //     element: "select",
-            //     placeholder: "جنسیت",
-            //     defaultValue: "",
-            //     label: "جنسیت",
-            //     options: [
-            //         {
-            //             value: "male",
-            //             title: "مذکر"
-            //         },
-            //         {
-            //             value: "Female",
-            //             title: "مونث"
-            //         }
-            //     ]
-            // }, {
-            //     name: "sentDate",
-            //     element: "date",
-            //     placeholder: "تاریخ ارسال",
-            //     label: "تاریخ ارسال"
-            // }
         ];
     }
 

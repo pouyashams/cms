@@ -13,7 +13,7 @@ const navLinks = [
     },
 
     {
-        path: "/addProduct",
+        path: "/add-product",
         name: "اضافه کردن کالا",
         icon: "fa fa-plus-square",
     },
@@ -38,7 +38,7 @@ const navLinks = [
         icon: "fa fa-internet-explorer",
     },
     {
-        path: "/merchantInfo",
+        path: "/merchant-info",
         name: "مدیریت پذیرنده",
         icon: "fa fa-user-md",
     },
@@ -67,7 +67,7 @@ const navLinks = [
         path: "/hardwareInfo",
         name: "وضعیت سخت افزار",
         icon: "fa fa-cogs",
-    }
+    },
 ];
 
 const getNavLinks = () => {

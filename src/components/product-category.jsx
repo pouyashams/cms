@@ -29,7 +29,7 @@ class productCategory extends Component {
 
     async componentDidMount() {
         try {
-            const result = await await loadAllProductAttributeCategory();
+            const result = await loadAllProductAttributeCategory();
             if (result.status === 200) {
                 const {oldProductAttributeCategoryArray} = this.state;
                 const loadedOldProductAttributeCategory = oldProductAttributeCategoryArray.concat(result.data.data);
@@ -192,7 +192,7 @@ class productCategory extends Component {
                     <form
                         className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
 
-                        <div className="form-group col-6 float-right border-left">
+                        <div className="form-group col-12 col-sm-6 col-md-6 float-right border-left">
                             <label>نوع ویژگی:</label>
                             <select className="form-control text-center w-50"
                                     value={this.state.selectedOldProductAttributeCategory}
@@ -206,7 +206,7 @@ class productCategory extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="form-group col-6 float-right">
+                        <div className="form-group col-12 col-sm-6 col-md-6 float-right">
                             <label>نام ویژگی جدید:</label>
                             <input className="form-control text-center w-50"
                                    type={"input"}

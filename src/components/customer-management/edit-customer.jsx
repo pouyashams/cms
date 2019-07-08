@@ -25,10 +25,8 @@ class editCustomer extends Component {
     }
 
 
-
     componentDidMount() {
         const {customerInfo} = this.props.location;
-
         if (!customerInfo) return this.props.history.push('/customer-management');
 
         this.setState({
@@ -53,7 +51,6 @@ class editCustomer extends Component {
         if (canUpdateCustomer) {
             try {
                 const info = this.state;
-                console.log(info);
                 const result = await updateCustomerInfo(info);
                 if (result.status === 200) {
                     toast.success('اصلاح مشتری با موفقیت انجام شد.');

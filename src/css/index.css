@@ -50,7 +50,13 @@ code {
 }
 
 .table-counter {
-    max-width: 30px;
+    width: 30px;
+    text-align: center;
+}
+
+.table-checkbox {
+    width: 30px;
+    text-align: center;
 }
 
 .feather {

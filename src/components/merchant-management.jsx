@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import SearchCriteria from "../search/search-criteria";
-import SearchResult from "../search/search-result";
-import {searchCustomer} from "../../services/userService"
+import SearchCriteria from "./search/search-criteria";
+import SearchResult from "./search/search-result";
+import {searchMerchant} from "./../services/userService"
 import {toast} from 'react-toastify';
-import { withRouter } from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 
-class customerManagement extends Component {
+class MerchantManagement extends Component {
 
     constructor(props) {
         super(props);
@@ -15,20 +15,27 @@ class customerManagement extends Component {
             searchResultList: []
         };
         this.onUpdate = this.onUpdate.bind(this);
+        this.onRegisterMerchant = this.onRegisterMerchant.bind(this);
     }
 
 
     onUpdate(searchResult) {
         this.props.history.push({
-            pathname: '/edit-customer',
-            customerInfo: searchResult
+            pathname: '/edit-merchant',
+            merchantInfo: searchResult
+        });
+    }
+
+    onRegisterMerchant() {
+        this.props.history.push({
+            pathname: '/register-merchant'
         });
     }
 
     getSearchCriteriaArray() {
         return [
             {
-                name: "firstName",
+                name: "name",
                 element: "input",
                 type: "text",
                 placeholder: "---",
@@ -36,11 +43,11 @@ class customerManagement extends Component {
                 defaultValue: ""
             },
             {
-                name: "lastName",
+                name: "code",
                 element: "input",
                 type: "text",
                 placeholder: "---",
-                label: "نام خانوادگی",
+                label: "کد پذیرنده",
                 defaultValue: ""
             },
             {
@@ -52,35 +59,37 @@ class customerManagement extends Component {
                 defaultValue: ""
             },
             {
-                name: "nationalCode",
-                element: "input",
-                type: "text",
-                placeholder: "---",
-                label: "کد ملی",
-                defaultValue: ""
-            },
-            {
-                name: "mobileNumber",
-                element: "input",
-                type: "text",
-                placeholder: "---",
-                label: "شماره موبایل",
-                defaultValue: ""
-            },
-            {
                 name: "email",
                 element: "input",
                 type: "text",
                 placeholder: "---",
                 label: "ایمیل",
                 defaultValue: ""
-            },
+            }
         ];
+    }
+
+    getExtraActions() {
+        let extraActions = {
+            rightActions: [],
+            leftActions: [
+                {
+                    name: 'update',
+                    title: 'اضافه کردن',
+                    icon: 'fa fa-user-plus',
+                    style: 'btn btn-success btn-xs',
+                    onclick: this.onRegisterMerchant
+                }
+            ]
+        };
+        return extraActions;
     }
 
     getResultTableHeader() {
         let headerInfo = {
             showCheckBox: false,
+            rightActions : [],
+            leftActions : [],
             actions: [
                 {
                     name: 'update',
@@ -91,30 +100,21 @@ class customerManagement extends Component {
                 }
             ],
             headerTitleInfos: [
-                {name: "firstName", title: "نام"},
-                {name: "lastName", title: "نام خانوادگی"},
+                {name: "name", title: "نام"},
+                {name: "code", title: "کد پذیرنده"},
                 {name: "username", title: "نام کاربری"},
-                {name: "nationalCode", title: "شماره ملی"},
-                {name: "mobileNumber", title: "شماره موبایل"},
+                {name: "email", title: "ایمیل"}
             ]
         };
         return headerInfo;
     }
 
-    getExtraActions() {
-        let extraActions = {
-            rightActions: [],
-            leftActions: []
-        };
-        return extraActions;
-    }
-
-
     search = async (parameters) => {
         try {
-            const result = await searchCustomer(parameters);
+            const result = await searchMerchant(parameters);
             if (result.status === 200) {
-                this.setState({searchResultList : result.data.data})
+                console.log(result.data)
+                this.setState({searchResultList: result.data.data})
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -126,13 +126,14 @@ class customerManagement extends Component {
     render() {
         const searchCriteriaArray = this.getSearchCriteriaArray();
         const headerInfo = this.getResultTableHeader();
-        const extraActions = this.getExtraActions();
         const {searchResultList, pageSize} = this.state;
+        const extraActions = this.getExtraActions();
 
         return (
-            <div className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
+            <div
+                className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
-                    <h4 className="py-2">مدیریت مشتریان</h4>
+                    <h4 className="py-2">مدیریت پذیرندگان</h4>
                 </div>
                 <SearchCriteria extraActions={extraActions} onSearch={this.search} searchCriteriaArray={searchCriteriaArray}/>
                 <SearchResult headerInfo={headerInfo} searchResultList={searchResultList} pageSize={pageSize}/>
@@ -141,4 +142,4 @@ class customerManagement extends Component {
     }
 }
 
-export default withRouter(customerManagement);
+export default withRouter(MerchantManagement);

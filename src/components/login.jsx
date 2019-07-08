@@ -16,13 +16,15 @@ class Login extends Component {
             if (access_token !== null) {
                 sessionStorage.setItem('token', access_token);
                 sessionStorage.removeItem("login-message");
+                // await getUserInfo();
                 this.props.history.replace('/');
             } else {
                 toast.error('نام کاربری یا کلمه عبور اشتباه هست');
             }
         } catch (ex) {
-            if (ex.response && ex.response.status === 400)
+            if (ex.response && ex.response.status === 400) {
                 toast.error('نام کاربری یا کلمه عبور اشتباه هست');
+            }
         }
     };
 

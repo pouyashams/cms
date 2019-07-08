@@ -93,8 +93,6 @@ class editCustomer extends Component {
     }
 
     render() {
-
-        let index = 1;
         return (
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
@@ -104,7 +102,7 @@ class editCustomer extends Component {
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <form
                         className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" key={index++}>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>نام :</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -115,7 +113,7 @@ class editCustomer extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" key={index++}>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>نام خانوادگی :</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -126,7 +124,7 @@ class editCustomer extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" key={index++}>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>نام کاربری:</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -138,8 +136,8 @@ class editCustomer extends Component {
                         </div>
 
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" key={index++}>
-                            <label>رمز عبور :</label>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                            <label>کلمه عبور :</label>
                             <input className="form-control text-center"
                                    type="password"
                                    autoComplete="off"
@@ -150,7 +148,7 @@ class editCustomer extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" key={index++}>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>حد مجاز خرید :</label>
                             <input className="form-control text-center"
                                    type="number"
@@ -163,7 +161,7 @@ class editCustomer extends Component {
                         </div>
 
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" key={index++}>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>ایمیل :</label>
                             <input className="form-control text-center"
                                    type="email"
@@ -174,7 +172,7 @@ class editCustomer extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" key={index++}>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>شماره همراه :</label>
                             <input className="form-control text-center"
                                    type="number"
@@ -186,7 +184,7 @@ class editCustomer extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" key={index++}>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>کد ملی :</label>
                             <input className="form-control text-center"
                                    type="number"

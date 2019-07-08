@@ -13,6 +13,9 @@ import reportOfCharge from "./components/report/report-of-charge";
 import reportOfBill from "./components/report/report-of-bill";
 import reportOfInternetPack from "./components/report/report-of-internet-pack";
 import addProductFirstPage from "./components/add-product/add-product-first-page";
+import RegisterMerchant from "./components/register-merchant";
+import EditMerchant from "./components/edit-merchant";
+import MerchantManagement from "./components/merchant-management";
 
 class App extends Component {
     render() {
@@ -32,8 +35,10 @@ class App extends Component {
                                 <PrivateRoute path="/definition-product-category" exact={false} component={definitionProductCategory}/>
 
                                 <PrivateRoute path="/edit-customer" exact={false} component={EditCustomer}/>
+                                <PrivateRoute path="/edit-merchant" exact={false} component={EditMerchant}/>
+                                <PrivateRoute path="/register-merchant" exact={false} component={RegisterMerchant}/>
                                 <PrivateRoute path="/customer-management" exact={false} component={CustomerManagement}/>
-
+                                <PrivateRoute path="/merchant-management" exact={false} component={MerchantManagement}/>
 
                                 <PrivateRoute path="/report-of-charge" exact={false} component={reportOfCharge}/>
                                 <PrivateRoute path="/report-of-bill" exact={false} component={reportOfBill}/>

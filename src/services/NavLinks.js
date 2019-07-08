@@ -38,7 +38,7 @@ const navLinks = [
         icon: "fa fa-internet-explorer",
     },
     {
-        path: "/merchant-info",
+        path: "/merchant-management",
         name: "مدیریت پذیرنده",
         icon: "fa fa-user-md",
     },
@@ -67,7 +67,7 @@ const navLinks = [
         path: "/hardwareInfo",
         name: "وضعیت سخت افزار",
         icon: "fa fa-cogs",
-    },
+    }
 ];
 
 const getNavLinks = () => {

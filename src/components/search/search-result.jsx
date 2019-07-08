@@ -78,11 +78,8 @@ class SearchResult extends Component {
                                         {headerInfo.actions.map((action) =>
                                             (
                                                 <td key={loopCounter++}>
-                                                    <button className={action.style} data-title={action.title}
-                                                            onClick={() => {
-                                                                action.onclick(searchResult)
-                                                            }}>
-                                                        <span className={action.icon}></span>
+                                                    <button className={action.style} data-title={action.title} onClick={() => {action.onclick(searchResult)}}>
+                                                        <span className={action.icon} title={action.title}></span>
                                                     </button>
                                                 </td>
                                             )

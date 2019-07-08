@@ -27,7 +27,7 @@ class SearchCriteria extends Component {
 
     render() {
 
-        const {searchCriteriaArray} = this.props;
+        const {searchCriteriaArray, extraActions} = this.props;
         let index = 1;
         return (
             <div className="col-12 justify-content-center align-items-center text-center">
@@ -91,8 +91,26 @@ class SearchCriteria extends Component {
                             }
                         }
                     )}
-                    <div className="col-12 text-center justify-content-center">
-                        <input type="button" className="btn btn-primary" value="جستجو" onClick={this.search}/>
+                    <div className="col-12">
+                        <div className="row">
+                            <div className="col-4 text-right">
+                                {extraActions && extraActions.rightActions.length !== 0 ? extraActions.rightActions.map((rightAction) => (
+                                    <button className={rightAction.style} data-title={rightAction.title} onClick={rightAction.onclick} key={index++}>
+                                        <span className={rightAction.icon}></span>
+                                    </button>
+                                )) : null}
+                            </div>
+                            <div className="col-4 text-center">
+                                <input type="button" className="btn btn-primary" value="جستجو" onClick={this.search}/>
+                            </div>
+                            <div className="col-4 text-left">
+                                {extraActions && extraActions.leftActions.length !== 0 ? extraActions.leftActions.map((leftAction) => (
+                                    <button className={leftAction.style} data-title={leftAction.title} onClick={leftAction.onclick} key={index++}>
+                                        <span className={leftAction.icon} title={leftAction.title}></span>
+                                    </button>
+                                )) : null}
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -30,6 +30,10 @@ class definitionProductCategory extends Component {
 
         return (
             <div className="rtl row w-100 m-0 text-center justify-content-center align-items-center my-3">
+                <div
+                    className=" col-12 justify-content-center align-items-center text-center header-box  text-light">
+                    <h4 className="py-2">اطلاعات تکمیلی کالا</h4>
+                </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div className="rtl m-0 float-right row w-100 justify-content-start my-3 pb-3">
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
@@ -140,8 +144,7 @@ class definitionProductCategory extends Component {
                                             (productCategory) => {
                                             return (<option
                                             value={productCategory.identifier}>{productCategory.attributeValue}</option>);
-                                            }
-                                            )}
+                                            })}
                                         </select>
                                     </div>
                                 ))

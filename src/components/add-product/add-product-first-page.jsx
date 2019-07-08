@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {loadDataOfProduct} from "../../services/productService";
 import {toast} from "react-toastify";
 import ProductPanel from "./add-product-panel";
+
 class addProductFirstPage extends Component {
 
     constructor(props) {
@@ -9,6 +10,10 @@ class addProductFirstPage extends Component {
         this.state = {
             checked: false,
             numberOfProductList: [
+                {
+                    identifier: "",
+                    productCategoryName: "انتخاب کنید..."
+                },
                 {
                     identifier: "1",
                     productCategoryName: "یک"
@@ -42,6 +47,24 @@ class addProductFirstPage extends Component {
             productCategoryList: "",
             productCategory: "",
             productItemSupplierList: "",
+            // productItemInfoList: [
+            //     {
+            //         taxation: '',
+            //         name: '',
+            //         englishName: '',
+            //         code: '',
+            //         price: '',
+            //         numberOfProduct: '',
+            //         description: '',
+            //         productItemImageBase64List: [],
+            //         productItemImageList: [],
+            //         productItemSupplier: {
+            //             identifier: '',
+            //             label: ''
+            //         },
+            //         productAttributeItemList: [],
+            //     }
+            // ]
         };
     };
 
@@ -54,7 +77,7 @@ class addProductFirstPage extends Component {
                 const productCategoryList = oldProductCategoryArray.concat(result.data.productCategoryList);
                 const productItemSupplierList = oldProductItemSupplierList.concat(result.data.productItemSupplierList);
 
-                this.setState({productCategoryList,productItemSupplierList});
+                this.setState({productCategoryList, productItemSupplierList});
                 console.log(this.state.productCategoryList)
             }
         } catch (ex) {
@@ -64,13 +87,23 @@ class addProductFirstPage extends Component {
         }
     }
 
+    showProductLabel = () => {
+        let list = [];
+        const times = x => f => {
+            if (x > 0) {
+                f();
+                times(x - 1)(f)
+            }
+        };
+        times(this.state.numberOfProduct)(() => list.push({}));
+        return list;
+    };
     handelChangeNumberOfProduct = (numberOfProduct) => {
         if (numberOfProduct === "other") {
             this.setState({checked: true});
         }
         this.setState({numberOfProduct});
     };
-
     handelChangeSelected = (identifier) => {
         const productCategory = {
             identifier: identifier
@@ -81,7 +114,7 @@ class addProductFirstPage extends Component {
     isValid = () => {
         const {productCategory, numberOfProduct} = this.state;
         let checked = false;
-        if (productCategory !== "" && productCategory.identifier !== "" && numberOfProduct !== "other") {
+        if (productCategory !== "" && productCategory.identifier !== "" && numberOfProduct !== "other" && numberOfProduct !== "" && numberOfProduct !== "0") {
             checked = true;
         }
         return checked;
@@ -130,7 +163,7 @@ class addProductFirstPage extends Component {
                                             (productCategory) => {
                                                 return (<option
                                                     value={productCategory.identifier}>{productCategory.productCategoryName}</option>);
-                                           }
+                                            }
                                         )}
                                     </select>
                                     : null
@@ -141,18 +174,17 @@ class addProductFirstPage extends Component {
 
                 {this.isValid() ?
                     <div>
-                        <div className=" col-12 justify-content-center align-items-center text-center header-box  text-light">
-                            <h4 className="py-2">اطلاعات تکمیلی کالا</h4>
-                        </div>
                         <div className="col-12 justify-content-center align-items-center text-center">
-                            <form className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
-
-                                <ProductPanel
-                                    productItemSupplierList={this.state.productItemSupplierList}
-                                    productCategoryList={this.state.productCategoryList}
-                                    productCategory={this.state.productCategory}
-                                />
-
+                            <form
+                                className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
+                                {this.showProductLabel().map(
+                                    () => (
+                                        <ProductPanel
+                                            productItemSupplierList={this.state.productItemSupplierList}
+                                            productCategoryList={this.state.productCategoryList}
+                                            productCategory={this.state.productCategory}
+                                        />
+                                    ))}
                             </form>
                         </div>
                     </div>

@@ -1,31 +1,99 @@
 import React, {Component} from 'react';
+import {loadDataOfProduct} from "../../services/productService";
+import "../../css/textArea.css"
+import {toast} from "react-toastify";
 
-class definitionProductCategory extends Component {
+class productInfo extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             productAttributeCategoryList: [],
+            productItemSupplierList: [],
+
+            productItemSupplier: "",
+            name: "",
+            englishName: "",
+            code: "",
+            numberOfProduct: "",
+            taxation: "",
+            price: "",
+            description: "",
+            productAttributeItemList: [],
         }
     };
 
-    componentDidMount() {
+    async componentDidMount() {
+        try {
+            const oldProductItemSupplierList = [{identifier: "", name: "انتخاب کنید..."}];
+            const result = await loadDataOfProduct();
+            if (result.status === 200) {
+                const productItemSupplierList = oldProductItemSupplierList.concat(result.data.productItemSupplierList);
+
+                this.setState({productItemSupplierList});
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('خطایی در دریافت اطلاعات رخ داده است.');
+            }
+        }
         const productCategoryList = this.props.productCategoryList.filter(product => product.identifier !== "");
         productCategoryList.forEach((productCategory) => {
             if (productCategory.identifier === parseInt(this.props.productCategory.identifier)) {
                 this.setState({productAttributeCategoryList: productCategory.productAttributeCategoryList});
             }
-        })
+        });
     }
 
     handelChangeInput = (value, name) => {
+        this.setState({[name]: value});
+    };
+    handelChangeAttribute = (productAttribute, productAttributeCategory) => {
+        const productAttributeItemList = [];
+        productAttributeItemList.push(
+            {
+                productAttribute: {
+                    identifier: productAttribute
+                },
+                productAttributeCategory: {
+                    identifier: productAttributeCategory
+                },
+            }
+        )
+
+        this.setState({productAttributeItemList});
+    };
+
+    madeData = () => {
+        let productCategory = {identifier: this.props.productCategory.identifier};
+        let productItemInfoList = [{
+            name: this.state.name,
+            englishName: this.state.englishName,
+            code: this.state.code,
+            numberOfProduct: this.state.numberOfProduct,
+            taxation: this.state.taxation,
+            price: this.state.price,
+            description: this.state.description,
+            productAttributeItemList: this.state.productAttributeItemList,
+            productItemSupplier: this.state.productItemSupplier,
+        }];
+        const dataInfo = {
+            productCategory: productCategory,
+            productItemInfoList: productItemInfoList,
+        };
+        console.log(dataInfo);
+        return dataInfo;
     };
 
     handelChangeSelected = (identifier) => {
+        const productItemSupplier = {
+            identifier: identifier
+        };
+        this.setState({productItemSupplier});
     };
 
     render() {
-        const productItem = this.props;
+        const productItem = this.state;
         const oldAttribute = [{identifier: "", attributeValue: "انتخاب کنید..."}];
 
         return (
@@ -91,8 +159,8 @@ class definitionProductCategory extends Component {
                             <input className="form-control text-center w-50"
                                    type={"number"}
                                    placeholder="---"
-                                   value={productItem.productItem}
-                                   name={"productItem"}
+                                   value={productItem.numberOfProduct}
+                                   name={"numberOfProduct"}
                                    onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
@@ -101,19 +169,19 @@ class definitionProductCategory extends Component {
                             <select className="form-control text-center w-50"
                                     onChange={(e) => this.handelChangeSelected(e.target.value)}
                             >
-                                {productItem.productItemSupplierList.map(
+                                {productItem.productItemSupplierList !== "" ? productItem.productItemSupplierList.map(
                                     (productCategory) => {
                                         return (<option
                                             value={productCategory.identifier}>{productCategory.name}</option>);
                                     }
-                                )}
+                                ) : null}
                             </select>
                         </div>
 
                         <div className="form-group col-12 float-right">
                             <label>توضیحات :</label>
-                            <textarea className="form-control text-center w-50"
-                                      value={this.props.description}
+                            <textarea className="form-control text-center w-50 "
+                                      value={productItem.description}
                                       name={"description"}
                                       onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
@@ -138,17 +206,16 @@ class definitionProductCategory extends Component {
                                     <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                                         <label>{productAttribute.categoryName}:</label>
                                         <select className="form-control text-center w-75"
-                                            // onChange={(e) => this.handelChangeSelected(e.target.value)}
+                                                onChange={(e) => this.handelChangeAttribute(e.target.value, productAttribute.identifier)}
                                         >
                                             {oldAttribute.concat(productAttribute.productAttributeList).map(
-                                            (productCategory) => {
-                                            return (<option
-                                            value={productCategory.identifier}>{productCategory.attributeValue}</option>);
-                                            })}
+                                                (productCategory) => {
+                                                    return (<option
+                                                        value={productCategory.identifier}>{productCategory.attributeValue}</option>);
+                                                })}
                                         </select>
                                     </div>
                                 ))
-
                             }
                         </div>
                     </div>
@@ -158,6 +225,6 @@ class definitionProductCategory extends Component {
     };
 }
 
-export default definitionProductCategory;
+export default productInfo;
 
 

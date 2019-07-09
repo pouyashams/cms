@@ -12,7 +12,7 @@ import EditCustomer from "./components/customer-management/edit-customer";
 import reportOfCharge from "./components/report/report-of-charge";
 import reportOfBill from "./components/report/report-of-bill";
 import reportOfInternetPack from "./components/report/report-of-internet-pack";
-import addProductFirstPage from "./components/add-product/add-product-first-page";
+import addProductFirstPage from "./components/add-product/add-product";
 import RegisterMerchant from "./components/register-merchant";
 import EditMerchant from "./components/edit-merchant";
 import MerchantManagement from "./components/merchant-management";

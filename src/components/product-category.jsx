@@ -47,7 +47,6 @@ class productCategory extends Component {
         const {oldProductAttributeCategoryArray} = this.state;
         oldProductAttributeCategoryArray.forEach((oldProductAttributeCategory) => {
             if (parseInt(oldProductAttributeCategory.identifier) === parseInt(id)) {
-                console.log(oldProductAttributeCategory.categoryName)
                 categoryName = oldProductAttributeCategory.categoryName;
             }
         });

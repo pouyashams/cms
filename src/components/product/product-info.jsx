@@ -84,7 +84,6 @@ class productInfo extends Component {
             productCategory: productCategory,
             productItemInfoList: productItemInfoList,
         };
-        console.log(dataInfo);
         return dataInfo;
     };
 

@@ -28,7 +28,7 @@ const navLinks = [
         icon: "fa fa-shopping-cart",
     },
     {
-        path: "/DeliveryInfos",
+        path: "/deliveryInfo-management",
         name: "مدیریت ارسال",
         icon: "fa fa-envelope-o",
     },

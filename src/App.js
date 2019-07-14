@@ -19,6 +19,8 @@ import EditMerchant from "./components/edit-merchant";
 import MerchantManagement from "./components/merchant-management";
 import productInfo from "./components/product/product-info";
 import productInfoUpdate from "./components/product/product-info-update";
+import deliveryInfoManagement from "./components/deliveryInfo-management/deliveryInfo-management";
+import editDeliveryInfo from "./components/deliveryInfo-management/edit-deliveryInfo";
 
 class App extends Component {
     render() {
@@ -51,6 +53,9 @@ class App extends Component {
                                 <PrivateRoute path="/product-info" exact={false} component={productInfo}/>
                                 <PrivateRoute path="/update-product" exact={false} component={updateProduct}/>
                                 <PrivateRoute path="/product-info-update" exact={false} component={productInfoUpdate}/>
+
+                                <PrivateRoute path="/deliveryInfo-management" exact={false} component={deliveryInfoManagement}/>
+                                <PrivateRoute path="/edit-deliveryInfo" exact={false} component={editDeliveryInfo}/>
 
                                 <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>

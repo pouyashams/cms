@@ -27,6 +27,8 @@ class editCustomer extends Component {
 
     componentDidMount() {
         const {customerInfo} = this.props.location;
+
+
         if (!customerInfo) return this.props.history.push('/customer-management');
 
         this.setState({

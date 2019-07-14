@@ -21,6 +21,7 @@ import productInfo from "./components/product/product-info";
 import productInfoUpdate from "./components/product/product-info-update";
 import deliveryInfoManagement from "./components/deliveryInfo-management/deliveryInfo-management";
 import editDeliveryInfo from "./components/deliveryInfo-management/edit-deliveryInfo";
+import hardwareInfo from "./components/hardwareInfo";
 
 class App extends Component {
     render() {
@@ -56,6 +57,8 @@ class App extends Component {
 
                                 <PrivateRoute path="/deliveryInfo-management" exact={false} component={deliveryInfoManagement}/>
                                 <PrivateRoute path="/edit-deliveryInfo" exact={false} component={editDeliveryInfo}/>
+
+                                <PrivateRoute path="/hardwareInfo" exact={false} component={hardwareInfo}/>
 
                                 <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>

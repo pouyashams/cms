@@ -76,7 +76,6 @@ class deliveryInfoManagement extends Component {
     render() {
         const headerInfo = this.getResultTableHeader();
         const {data, pageSize} = this.state;
-
         return (
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">

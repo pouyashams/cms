@@ -107,7 +107,7 @@ class editDeliveryInfo extends Component {
                     <h4 className="py-2">اصلاح اطلاعات ارسال</h4>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
-                    <form
+                    <div
                         className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>تعداد روز انتظار :</label>
@@ -168,7 +168,7 @@ class editDeliveryInfo extends Component {
                             <input type="button" className="btn btn-primary" value="ویرایش"
                                    onClick={this.updateCustomer}/>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         );

@@ -32,11 +32,11 @@ const navLinks = [
         name: "مدیریت ارسال",
         icon: "fa fa-envelope-o",
     },
-    {
-        path: "/internetInfos",
-        name: "مدیریت بسته اینترنت",
-        icon: "fa fa-internet-explorer",
-    },
+    // {
+    //     path: "/internetInfos",
+    //     name: "مدیریت بسته اینترنت",
+    //     icon: "fa fa-internet-explorer",
+    // },
     {
         path: "/merchant-management",
         name: "مدیریت پذیرنده",

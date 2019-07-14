@@ -50,13 +50,13 @@ class reportOfCharge extends Component {
                 defaultValue: ""
             },
             {
-                name: "sentDate",
+                name: "registerDateFrom",
                 element: "date",
                 placeholder: "--- ",
                 label: "از تاریخ"
             },
             {
-                name: "sentDate",
+                name: "registerDateTo",
                 element: "date",
                 placeholder: "---",
                 label: "تا تاریخ"

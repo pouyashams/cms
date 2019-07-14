@@ -17,3 +17,6 @@ export function sendListOfDefinitionProduct(data) {
 export function loadDataOfProduct() {
     return http.get("http://shop.isuncharge.com/isunshop/fetch/define-product-info" );
 }
+export function searchProduct(data) {
+    return http.post("http://shop.isuncharge.com/isunshop/fetch/search-product-item-with-details",data );
+}

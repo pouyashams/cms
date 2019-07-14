@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {loadDataOfProduct} from "../../services/productService";
 import {toast} from "react-toastify";
 import ProductInfo from "./product-info";
-
 class addProduct extends Component {
 
     constructor(props) {
@@ -10,6 +9,7 @@ class addProduct extends Component {
         this.state = {
             productCategoryList: "",
             productCategory: "",
+            checked: false,
         };
     };
 
@@ -74,9 +74,7 @@ class addProduct extends Component {
                                                     value={productCategory.identifier}>{productCategory.productCategoryName}</option>);
                                             }
                                         )}
-                                    </select>
-                                    : null
-                            }
+                                    </select> : null}
                         </div>
                     </form>
                 </div>
@@ -92,7 +90,7 @@ class addProduct extends Component {
                                 />
 
                                 <div className="col-12 text-center">
-                                    <input type="button" className="btn btn-primary mr-3" value="ثبت نهایی "
+                                    <input type="button" className="btn btn-primary mr-3" value="ثبت کالا "
                                            onClick={() => {
                                                this.madeData();
                                            }}/>

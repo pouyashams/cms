@@ -18,7 +18,7 @@ const navLinks = [
         icon: "fa fa-plus-square",
     },
     {
-        path: "/editProduct",
+        path: "/update-product",
         name: "به روز رسانی کالا",
         icon: "fa fa-refresh",
     },

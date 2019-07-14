@@ -34,7 +34,6 @@ class EditMerchant extends Component {
         const {merchantInfo} = this.props.location;
         if (!merchantInfo) return this.props.history.push('/merchant-management');
 
-        console.log(merchantInfo);
         this.setState({
             identifier: merchantInfo.identifier,
             name: this.getValue(merchantInfo.name),

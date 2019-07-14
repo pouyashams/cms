@@ -113,7 +113,6 @@ class MerchantManagement extends Component {
         try {
             const result = await searchMerchant(parameters);
             if (result.status === 200) {
-                console.log(result.data)
                 this.setState({searchResultList: result.data.data})
             }
         } catch (ex) {

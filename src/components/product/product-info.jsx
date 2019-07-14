@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {loadDataOfProduct} from "../../services/productService";
 import "../../css/textArea.css"
 import {toast} from "react-toastify";
+import Image from "../choose-image"
 
 class productInfo extends Component {
 
@@ -37,17 +38,19 @@ class productInfo extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
-        const productCategoryList = this.props.productCategoryList.filter(product => product.identifier !== "");
-        productCategoryList.forEach((productCategory) => {
-            if (productCategory.identifier === parseInt(this.props.productCategory.identifier)) {
-                this.setState({productAttributeCategoryList: productCategory.productAttributeCategoryList});
-            }
-        });
-    }
+            const productCategoryList = this.props.productCategoryList.filter(product => product.identifier !== "");
+            productCategoryList.forEach((productCategory) => {
+                if (productCategory.identifier === parseInt(this.props.productCategory.identifier)) {
+                    this.setState({productAttributeCategoryList: productCategory.productAttributeCategoryList});
+                }
+            });
+            };
 
     handelChangeInput = (value, name) => {
         this.setState({[name]: value});
     };
+
+
     handelChangeAttribute = (productAttribute, productAttributeCategory) => {
         const productAttributeItemList = [];
         productAttributeItemList.push(
@@ -59,7 +62,7 @@ class productInfo extends Component {
                     identifier: productAttributeCategory
                 },
             }
-        )
+        );
 
         this.setState({productAttributeItemList});
     };
@@ -186,14 +189,7 @@ class productInfo extends Component {
                                       onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
-
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>عکس کالا :</label>
-                            <div className="custom-file">
-                                <input type="file" className="custom-file-input" id="customFile"/>
-                                <label className="custom-file-label" for="customFile">Choose file</label>
-                            </div>
-                        </div>
+                        <Image/>
                     </div>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">

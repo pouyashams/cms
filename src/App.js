@@ -12,10 +12,13 @@ import EditCustomer from "./components/customer-management/edit-customer";
 import reportOfCharge from "./components/report/report-of-charge";
 import reportOfBill from "./components/report/report-of-bill";
 import reportOfInternetPack from "./components/report/report-of-internet-pack";
-import addProductFirstPage from "./components/add-product/add-product";
+import updateProduct from "./components/product/update-product";
+import addProduct from "./components/product/add-product";
 import RegisterMerchant from "./components/register-merchant";
 import EditMerchant from "./components/edit-merchant";
 import MerchantManagement from "./components/merchant-management";
+import productInfo from "./components/product/product-info";
+import productInfoUpdate from "./components/product/product-info-update";
 
 class App extends Component {
     render() {
@@ -44,7 +47,10 @@ class App extends Component {
                                 <PrivateRoute path="/report-of-bill" exact={false} component={reportOfBill}/>
                                 <PrivateRoute path="/report-of-internet-pack" exact={false} component={reportOfInternetPack}/>
 
-                                <PrivateRoute path="/add-product" exact={false} component={addProductFirstPage}/>
+                                <PrivateRoute path="/add-product" exact={false} component={addProduct}/>
+                                <PrivateRoute path="/product-info" exact={false} component={productInfo}/>
+                                <PrivateRoute path="/update-product" exact={false} component={updateProduct}/>
+                                <PrivateRoute path="/product-info-update" exact={false} component={productInfoUpdate}/>
 
                                 <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>

@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {updateCustomerInfo} from "../../services/userService"
 import SearchResult from "../search/search-result";
-
+import {sendDataOfDelivery} from "../../services/deliveryService";
 
 class editDeliveryInfo extends Component {
 
@@ -11,18 +10,57 @@ class editDeliveryInfo extends Component {
         super(props);
         this.state = {
             pageSize: 5,
+            identifier:"",
+            checked: false,
             waitingDay: "",
             numberOfDate: "",
             numberOfProduct: "",
             deliveryAmount: "",
+            fromTime: "",
+            toTime: "",
             timePeriodList: [],
         };
-        this.updateCustomer = this.updateCustomer.bind(this);
         this.getValue = this.getValue.bind(this);
         this.onDelete = this.onDelete.bind(this);
     }
 
 
+    addTime = () => {
+        const timePeriodList = this.state.timePeriodList.concat([{
+            fromTime: this.state.fromTime,
+            toTime: this.state.toTime,
+            dateTime: this.state.fromTime + "-" + this.state.toTime
+        }]);
+        this.setState({timePeriodList, checked: false});
+    };
+
+    sendDataOfDeliveryInfo = async() => {
+        let canSentProduct = this.state.timePeriodList.length > 0;
+        const data = [
+            {
+                "canSentProduct": canSentProduct,
+                "waitingDay": this.state.waitingDay,
+                "numberOfDate": this.state.numberOfDate,
+                "numberOfProduct": this.state.numberOfProduct,
+                "deliveryAmount": this.state.deliveryAmount,
+                "provinceInfo": {
+                    "identifier": this.state.identifier
+                },
+                "timePeriodList": this.state.timePeriodList,
+            }
+        ];
+        console.log(data)
+        const result = await sendDataOfDelivery(data);
+        try {
+            if (result.status === 200) {
+                toast.success('عملیات با موفقیت انجام شد.');
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('خطایی در دریافت اطلاعات رخ داده است.');
+            }
+        }
+    };
 
     getResultTableHeader() {
         let headerInfo = {
@@ -45,15 +83,16 @@ class editDeliveryInfo extends Component {
     }
 
     onDelete(data) {
-
+        const dataInfo = this.state.timePeriodList.filter(dataInfos => dataInfos.dateTime !== data.dateTime);
+        this.setState({timePeriodList: dataInfo});
+        console.log(this.state.timePeriodList)
     }
 
     componentDidMount() {
         let {deliveryInfo} = this.props.location;
-        console.log(deliveryInfo)
-        console.log(123245)
         if (!deliveryInfo || deliveryInfo === undefined) return this.props.history.push('/deliveryInfo-management');
         this.setState({
+            identifier: this.getValue(deliveryInfo.identifier),
             deliveryAmount: this.getValue(deliveryInfo.deliveryAmount),
             numberOfProduct: this.getValue(deliveryInfo.numberOfProduct),
             numberOfDate: this.getValue(deliveryInfo.numberOfDate),
@@ -66,23 +105,8 @@ class editDeliveryInfo extends Component {
         this.setState({[name]: value});
     };
 
-    async updateCustomer() {
-        const canUpdateCustomer = this.canUpdateCustomerInfo();
-        console.log(canUpdateCustomer);
-        if (canUpdateCustomer) {
-            try {
-                const info = this.state;
-                const result = await updateCustomerInfo(info);
-                if (result.status === 200) {
-                    toast.success('اصلاح مشتری با موفقیت انجام شد.');
-                    this.props.history.goBack();
-                }
-            } catch (ex) {
-                if (ex.response && ex.response.status === 400) {
-                    toast.error('لطفا کلیه موارد را پر کنید');
-                }
-            }
-        }
+    onCheckd = () => {
+        this.setState({checked: true});
     };
 
     hasValue(field) {
@@ -98,7 +122,7 @@ class editDeliveryInfo extends Component {
     }
 
     render() {
-        const {pageSize, timePeriodList} = this.state;
+        const {pageSize, timePeriodList, checked} = this.state;
         const headerInfo = this.getResultTableHeader();
         return (
             <div
@@ -154,9 +178,42 @@ class editDeliveryInfo extends Component {
                             />
                         </div>
                         <div className="col-12 py-2 text-center justify-content-center">
-                            <button className="btn btn-success btn-xs" data-title="اضافه کردن" onClick={console.log(1221)}>
-                                <span className="fa fa-user-plus" title="اضافه کردن"/>
-                            </button>
+                            {checked === false ?
+                                <button className="btn btn-success btn-xs" data-title="اضافه کردن"
+                                        onClick={this.onCheckd}>
+                                    <span className="fa fa-user-plus" title="اضافه کردن"/>
+                                </button> :
+                                <div className="col-12 justify-content-center align-items-center text-center">
+                                    <div className="form-group col-12 col-sm-6 col-md-3 float-right py-3">
+                                        <label>از ساعت :</label>
+                                        <input className="form-control text-center"
+                                               type="text"
+                                               step="any"
+                                               placeholder="hh:mm"
+                                               value={this.state.fromTime}
+                                               name="fromTime"
+                                               onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
+                                        />
+                                    </div>
+                                    <div className="form-group col-12 col-sm-6 col-md-3 float-right py-3 ">
+                                        <label>تا ساعت :</label>
+                                        <input className="form-control text-center"
+                                               type="text"
+                                               step="any"
+                                               placeholder="hh:mm"
+                                               value={this.state.toTime}
+                                               name="toTime"
+                                               onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
+                                        />
+                                    </div>
+                                    <div className="form-group col-12 col-sm-6 col-md-2 w-25 float-right py-5">
+                                        <input type="button" className="btn btn-success" value="افزودن زمان"
+                                               onClick={this.addTime}
+                                        />
+                                    </div>
+                                </div>
+                            }
+
                         </div>
                         <div
                             className="col-12  p-3 text-center justify-content-center ">
@@ -166,7 +223,7 @@ class editDeliveryInfo extends Component {
                         </div>
                         <div className="col-12 text-center justify-content-center">
                             <input type="button" className="btn btn-primary" value="ویرایش"
-                                   onClick={this.updateCustomer}/>
+                                   onClick={this.sendDataOfDeliveryInfo}/>
                         </div>
                     </div>
                 </div>

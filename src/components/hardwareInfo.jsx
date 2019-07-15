@@ -94,7 +94,6 @@ class hardwareInfo extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
-        console.log(123)
     };
 
     sendDataTimeInfo = async () => {

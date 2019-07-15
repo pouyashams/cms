@@ -182,7 +182,7 @@ class updateProduct extends Component {
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
-                    <h4 className="py-2">به روز رسانی کالا</h4>
+                    <h4 className="py-2">مدیریت کالا</h4>
                 </div>
                 <SearchCriteria extraActions={extraActions} onSearch={this.search}
                                 searchCriteriaArray={searchCriteriaArray}/>

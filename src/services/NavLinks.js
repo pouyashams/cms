@@ -19,7 +19,7 @@ const navLinks = [
     },
     {
         path: "/update-product",
-        name: "به روز رسانی کالا",
+        name: "مدیریت کالا",
         icon: "fa fa-refresh",
     },
     {

@@ -22,6 +22,8 @@ import productInfoUpdate from "./components/product/product-info-update";
 import deliveryInfoManagement from "./components/deliveryInfo-management/deliveryInfo-management";
 import editDeliveryInfo from "./components/deliveryInfo-management/edit-deliveryInfo";
 import hardwareInfo from "./components/hardwareInfo";
+import Confirmation from "./components/confirmation/confirmation";
+import acceptConfirmation from "./components/confirmation/accept-confirmation";
 
 class App extends Component {
     render() {
@@ -59,6 +61,9 @@ class App extends Component {
                                 <PrivateRoute path="/edit-deliveryInfo" exact={false} component={editDeliveryInfo}/>
 
                                 <PrivateRoute path="/hardwareInfo" exact={false} component={hardwareInfo}/>
+
+                                <PrivateRoute path="/confirmation" exact={false} component={Confirmation}/>
+                                <PrivateRoute path="/accept-confirmation" exact={false} component={acceptConfirmation}/>
 
                                 <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>

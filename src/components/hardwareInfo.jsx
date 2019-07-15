@@ -181,8 +181,7 @@ class hardwareInfo extends Component {
                 </div>
 
                 <div className="col-6">
-                    <div
-                        className=" border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
+                    <div className=" border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                         <div
                             className="col-12 justify-content-center align-items-center text-center header-box text-light">
                             <h6 className="col-12 py-2 font-weight-bold">افزودن زمان</h6>

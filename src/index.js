@@ -21,14 +21,18 @@ import {createBrowserHistory} from "history";
 const history = createBrowserHistory();
 
 ReactDOM.render(
-    <Router history={history}>
-        <Switch>
-            <Route path="/login" component={Login}/>
-            <Route path="/not-found" component={NotFound}/>
-            <Route path="/" component={App}/>
-            <Redirect to="/not-found"/>
-        </Switch>
-    </Router>,
+    <div>
+        <div className="loading" id="loading" style={{display:"none"}}></div>
+        <Router history={history}>
+            <Switch>
+                <Route path="/login" component={Login}/>
+                <Route path="/not-found" component={NotFound}/>
+                <Route path="/" component={App}/>
+                <Redirect to="/not-found"/>
+            </Switch>
+        </Router>
+    </div>
+    ,
     document.getElementById('root')
 );
 

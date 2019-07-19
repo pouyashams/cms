@@ -30,7 +30,6 @@ class productInfo extends Component {
             const result = await loadDataOfProduct();
             if (result.status === 200) {
                 const productItemSupplierList = oldProductItemSupplierList.concat(result.data.productItemSupplierList);
-
                 this.setState({productItemSupplierList});
             }
         } catch (ex) {
@@ -44,6 +43,7 @@ class productInfo extends Component {
                 this.setState({productAttributeCategoryList: productCategory.productAttributeCategoryList});
             }
         });
+        document.getElementById("loading").style.display = "none";
     };
 
     handelChangeInput = (value, name) => {

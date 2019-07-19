@@ -41,7 +41,6 @@ class acceptConfirmations extends Component {
     }
 
     cancelConfirmationInfo = async() => {
-
         const result = await cancelConfirmation();
         try {
             if (result.status === 200) {
@@ -52,10 +51,10 @@ class acceptConfirmations extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
+        document.getElementById("loading").style.display = "none";
     };
 
     acceptConfirmationInfo = async() => {
-
         const result = await acceptConfirmation();
         try {
             if (result.status === 200) {
@@ -66,6 +65,7 @@ class acceptConfirmations extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
+        document.getElementById("loading").style.display = "none";
     };
 
 

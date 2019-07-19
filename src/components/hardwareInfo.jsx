@@ -83,7 +83,8 @@ class hardwareInfo extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
-        this.receiveTimeInfo()
+        this.receiveTimeInfo();
+        document.getElementById("loading").style.display = "none";
     }
 
     restartTomcatInfo = async () => {
@@ -97,6 +98,7 @@ class hardwareInfo extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
+        document.getElementById("loading").style.display = "none";
     };
 
     sendDataTimeInfo = async () => {
@@ -104,8 +106,6 @@ class hardwareInfo extends Component {
             jobCode: "RESTART_ISUNIC",
             scheduledJobExecutionList: this.state.dataTime
         };
-        console.log(data)
-        console.log(12345)
         const result = await sendDataTime(data);
         try {
             if (result.status === 200) {
@@ -116,6 +116,7 @@ class hardwareInfo extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
+        document.getElementById("loading").style.display = "none";
     };
 
     killAllJavaInfo = async () => {
@@ -146,6 +147,7 @@ class hardwareInfo extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
+        document.getElementById("loading").style.display = "none";
     };
 
     DatePickerInput(props) {

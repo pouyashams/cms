@@ -113,13 +113,15 @@ class MerchantManagement extends Component {
         try {
             const result = await searchMerchant(parameters);
             if (result.status === 200) {
-                this.setState({searchResultList: result.data.data})
+                this.setState({searchResultList: result.data.data});
+                document.getElementById("loading").style.display = "none";
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
                 toast.error('لطفا کلیه موارد را پر کنید');
             }
         }
+        document.getElementById("loading").style.display = "none";
     };
 
     render() {

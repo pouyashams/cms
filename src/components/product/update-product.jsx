@@ -5,6 +5,7 @@ import {searchProduct} from "../../services/productService"
 import {toast} from 'react-toastify';
 import {withRouter} from 'react-router-dom';
 import {loadDataOfProduct} from "../../services/productService";
+import {fetchAllChildOfCurrentMerchant} from "../../services/userService";
 
 
 class updateProduct extends Component {
@@ -14,10 +15,12 @@ class updateProduct extends Component {
         this.state = {
             productCategory: [],
             pageSize: 5,
-            searchResultList: []
+            searchResultList: [],
+            merchants: []
         };
         this.onUpdate = this.onUpdate.bind(this);
         this.onAccept = this.onAccept.bind(this);
+        this.search = this.search.bind(this);
     }
 
     async componentDidMount() {
@@ -34,11 +37,20 @@ class updateProduct extends Component {
                 const productCategory = oldProductCategory.concat(productCategoryList);
                 this.setState({productCategory});
             }
+
+            const resultForFetchMerchants = await fetchAllChildOfCurrentMerchant();
+            if (resultForFetchMerchants.status === 200) {
+                const merchantArray = this.prepareMerchantSelection(resultForFetchMerchants.data.data);
+                this.setState({
+                    merchants: merchantArray
+                });
+            }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
+        document.getElementById("loading").style.display = "none";
     }
 
     onUpdate(searchResult) {
@@ -101,6 +113,39 @@ class updateProduct extends Component {
                 label: "دسته کالا",
                 options: this.state.productCategory
             },
+            {
+                name: "requesterUserId",
+                element: "select",
+                placeholder: "---",
+                defaultValue: "",
+                label: "پذیرنده",
+                options: this.state.merchants
+            },
+            {
+                name: "registrationStatusCode",
+                element: "select",
+                placeholder: "---",
+                defaultValue: "",
+                label: "وضعیت ثبت",
+                options: [
+                    {
+                        value: "",
+                        title: "---"
+                    },
+                    {
+                        value: "CONFORMED_PRODUCT_REGISTRATION_STATUS",
+                        title: "تایید شده"
+                    },
+                    {
+                        value: "REJECTED_PRODUCT_REGISTRATION_STATUS",
+                        title: "رد شده"
+                    },
+                    {
+                        value: "WAITING_FOR_CONFORM_PRODUCT_REGISTRATION_STATUS",
+                        title: "در انتظار تایید"
+                    }
+                ]
+            }
         ];
     }
 
@@ -127,7 +172,7 @@ class updateProduct extends Component {
                 {name: "name", title: "نام کالا"},
                 {name: "code", title: "شناسه کالا"},
                 {name: "numberOfProduct", title: "تعداد کالا"},
-                {name: "supplierName", title: "فروشنده محصول"},
+                {name: "status", title: "وضعیت"}
             ]
         };
         return headerInfo;
@@ -151,6 +196,8 @@ class updateProduct extends Component {
                     console.log(dataInfo,1234)
                     data.push(
                         {
+                            canConfirmOrRejectProduct: dataInfo.canConfirmOrRejectProduct,
+                            status: dataInfo.status,
                             productItemSupplierValue: dataInfo.productItemInfo.productItemSupplier.identifier,
                             supplierName: dataInfo.productItemInfo.productItemSupplier.name,
                             name: dataInfo.name,
@@ -171,7 +218,23 @@ class updateProduct extends Component {
                 toast.error('لطفا کلیه موارد را پر کنید');
             }
         }
+        document.getElementById("loading").style.display = "none";
     };
+
+    prepareMerchantSelection(merchants) {
+        let merchantArray = [{
+            value: "",
+            title: "---"
+        }];
+        merchants.forEach((merchant) => {
+            let data = {
+                value: merchant.identifier,
+                title: merchant.name
+            };
+            merchantArray.push(data);
+        });
+        return merchantArray;
+    }
 
     render() {
         const {searchResultList, pageSize} = this.state;

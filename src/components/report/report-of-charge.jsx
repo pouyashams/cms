@@ -130,6 +130,7 @@ class reportOfCharge extends Component {
                 toast.error('لطفا کلیه موارد را پر کنید');
             }
         }
+        document.getElementById("loading").style.display = "none";
     };
 
     render() {

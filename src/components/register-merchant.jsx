@@ -41,6 +41,7 @@ class RegisterMerchant extends Component {
             this.setState({
                 merchants: resultForFetchMerchants.data.data
             });
+            document.getElementById("loading").style.display = "none";
         }
     }
 
@@ -52,6 +53,7 @@ class RegisterMerchant extends Component {
             this.setState({
                 authorities: allAuthorities
             });
+            document.getElementById("loading").style.display = "none";
         }
     }
 
@@ -83,6 +85,7 @@ class RegisterMerchant extends Component {
                     toast.error('لطفا کلیه موارد را پر کنید');
                 }
             }
+            document.getElementById("loading").style.display = "none";
         }
     };
 

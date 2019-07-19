@@ -38,6 +38,7 @@ class definitionProductCategory extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
+        document.getElementById("loading").style.display = "none";
     }
 
     sendProduct = async () => {
@@ -57,6 +58,7 @@ class definitionProductCategory extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
+        document.getElementById("loading").style.display = "none";
     };
     handelChangeProductCategoryName = (productCategoryName) => {
         this.setState({productCategoryName});

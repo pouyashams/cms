@@ -56,6 +56,7 @@ class EditMerchant extends Component {
                 authorities: allAuthorities
             });
         }
+        document.getElementById("loading").style.display = "none";
     }
 
     addCheckedProperty(authorities, merchantInfo) {
@@ -93,6 +94,7 @@ class EditMerchant extends Component {
                     toast.error('لطفا کلیه موارد را پر کنید');
                 }
             }
+            document.getElementById("loading").style.display = "none";
         }
     };
 

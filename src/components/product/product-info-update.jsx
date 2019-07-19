@@ -47,7 +47,8 @@ class productInfo extends Component {
                 }
             });
         }
-        this.showProductDetails()
+        this.showProductDetails();
+        document.getElementById("loading").style.display = "none";
     }
 
     hasValue(field) {
@@ -69,8 +70,6 @@ class productInfo extends Component {
     showProductDetails = () => {
         const {productInfo} = this.props.location;
         if (!productInfo) return this.props.history.push('/update-product');
-        console.log(productInfo);
-        console.log("flgktjbrh");
         this.setState({
             name: this.getValue(productInfo.name),
             englishName: this.getValue(productInfo.englishName),

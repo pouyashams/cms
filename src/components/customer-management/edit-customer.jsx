@@ -49,7 +49,6 @@ class editCustomer extends Component {
 
     async updateCustomer() {
         const canUpdateCustomer = this.canUpdateCustomerInfo();
-        console.log(canUpdateCustomer);
         if (canUpdateCustomer) {
             try {
                 const info = this.state;
@@ -63,6 +62,7 @@ class editCustomer extends Component {
                     toast.error('لطفا کلیه موارد را پر کنید');
                 }
             }
+            document.getElementById("loading").style.display = "none";
         }
     };
 

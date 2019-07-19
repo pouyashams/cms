@@ -7,6 +7,8 @@ const history = createBrowserHistory({forceRefresh: true});
 
 
 axios.interceptors.request.use(async function (config) {
+    document.getElementById("loading").style.display = "";
+
     if (!config.url.includes("/fetch/access-token")) {
         const token = sessionStorage.getItem('token');
         if (!config.url.includes("check-client-id")) {
@@ -19,7 +21,10 @@ axios.interceptors.request.use(async function (config) {
     return Promise.reject(error);
 });
 
-axios.interceptors.response.use(null, error => {
+axios.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    document.getElementById("loading").style.display = "none";
     const expectedError =
         error.response &&
         error.response.status >= 400 &&
@@ -32,6 +37,7 @@ axios.interceptors.response.use(null, error => {
 
     return Promise.reject(error);
 });
+
 
 
 const isValidAccessToken = async () => {

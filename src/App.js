@@ -41,34 +41,28 @@ class App extends Component {
                             <Switch>
                                 <PrivateRoute path="/product-category" exact={false} component={productCategory}/>
                                 <PrivateRoute path="/definition-product-category" exact={false} component={definitionProductCategory}/>
-
                                 <PrivateRoute path="/edit-customer" exact={false} component={EditCustomer}/>
                                 <PrivateRoute path="/edit-merchant" exact={false} component={EditMerchant}/>
                                 <PrivateRoute path="/register-merchant" exact={false} component={RegisterMerchant}/>
                                 <PrivateRoute path="/customer-management" exact={false} component={CustomerManagement}/>
                                 <PrivateRoute path="/merchant-management" exact={false} component={MerchantManagement}/>
-
                                 <PrivateRoute path="/report-of-charge" exact={false} component={reportOfCharge}/>
                                 <PrivateRoute path="/report-of-bill" exact={false} component={reportOfBill}/>
                                 <PrivateRoute path="/report-of-internet-pack" exact={false} component={reportOfInternetPack}/>
-
                                 <PrivateRoute path="/add-product" exact={false} component={addProduct}/>
                                 <PrivateRoute path="/product-info" exact={false} component={productInfo}/>
                                 <PrivateRoute path="/update-product" exact={false} component={updateProduct}/>
                                 <PrivateRoute path="/product-info-update" exact={false} component={productInfoUpdate}/>
-
                                 <PrivateRoute path="/deliveryInfo-management" exact={false} component={deliveryInfoManagement}/>
                                 <PrivateRoute path="/edit-deliveryInfo" exact={false} component={editDeliveryInfo}/>
-
                                 <PrivateRoute path="/hardwareInfo" exact={false} component={hardwareInfo}/>
-
                                 <PrivateRoute path="/confirmation" exact={false} component={Confirmation}/>
                                 <PrivateRoute path="/accept-confirmation" exact={false} component={acceptConfirmation}/>
-
                                 <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>
                             </Switch>
                         </Router>
+
                     </main>
                 </div>
                 <Footer/>

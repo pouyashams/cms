@@ -40,6 +40,7 @@ class deliveryInfoManagement extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
+        document.getElementById("loading").style.display = "none";
     }
 
 

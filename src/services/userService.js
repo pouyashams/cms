@@ -24,6 +24,9 @@ export function fetchAllAuthorities() {
 export function fetchAllMerchants() {
     return http.post("http://shop.isuncharge.com/isunshop/user/fetch-all-merchants", {});
 }
+export function fetchAllChildOfCurrentMerchant() {
+    return http.post("http://shop.isuncharge.com/isunshop/user/fetch-all-child-of-current-merchant", {});
+}
 
 export function updateCustomerInfo(customerInfo) {
     return http.post("http://shop.isuncharge.com/isunshop/user/update-customer", customerInfo);

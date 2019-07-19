@@ -19,7 +19,8 @@ class definitionProductCategory extends Component {
             ],
             productCategoryName: "",
             productCategoryList: "",
-            productAttributeCategoryList: ""
+            productAttributeCategoryList: "",
+            selectedAttributeList: ""
         };
     };
 
@@ -40,10 +41,10 @@ class definitionProductCategory extends Component {
     }
 
     sendProduct = async () => {
-        const {productCategoryName, parentProductCategory} = this.state;
+        const {productCategoryName, parentProductCategory,selectedAttributeList} = this.state;
         const data = {
             productCategoryName: productCategoryName,
-            // productAttributeCategoryList : selectedAttributeList,
+            productAttributeCategoryList : selectedAttributeList,
             parentProductCategory: parentProductCategory
         };
         try {
@@ -59,6 +60,17 @@ class definitionProductCategory extends Component {
     };
     handelChangeProductCategoryName = (productCategoryName) => {
         this.setState({productCategoryName});
+    };
+    handelChangeCheckBox = (id) => {
+        const selectedAttributeList = [];
+        const checked = this.state.checked;
+        this.setState({checked: !checked});
+        let selectedAttribute = {identifier: id, checked: checked};
+        if (!this.state.checked) {
+            selectedAttributeList.push(selectedAttribute)
+        }
+        this.setState({selectedAttributeList});
+        console.log(this.state.selectedAttributeList)
     };
 
     handelChangeSelected = (identifier) => {
@@ -124,10 +136,12 @@ class definitionProductCategory extends Component {
                                             <div className="input-group addon">
                                                 <div className="py-2 custom-control custom-checkbox">
                                                     <input type="checkbox" className=" custom-control-input"
+                                                           checked={this.state.checked}
                                                            id={productAttribute.identifier}
+                                                           onChange={(e) => this.handelChangeCheckBox(e.target.id)}
                                                     />
                                                     <label className="px-4 custom-control-label"
-                                                           for={productAttribute.identifier}>{productAttribute.categoryName}</label>
+                                                           htmlFor={productAttribute.identifier}>{productAttribute.categoryName}</label>
                                                 </div>
                                             </div>
                                         </div>

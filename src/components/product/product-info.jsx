@@ -38,13 +38,13 @@ class productInfo extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
-            const productCategoryList = this.props.productCategoryList.filter(product => product.identifier !== "");
-            productCategoryList.forEach((productCategory) => {
-                if (productCategory.identifier === parseInt(this.props.productCategory.identifier)) {
-                    this.setState({productAttributeCategoryList: productCategory.productAttributeCategoryList});
-                }
-            });
-            };
+        const productCategoryList = this.props.productCategoryList.filter(product => product.identifier !== "");
+        productCategoryList.forEach((productCategory) => {
+            if (productCategory.identifier === parseInt(this.props.productCategory.identifier)) {
+                this.setState({productAttributeCategoryList: productCategory.productAttributeCategoryList});
+            }
+        });
+    };
 
     handelChangeInput = (value, name) => {
         this.setState({[name]: value});
@@ -92,6 +92,9 @@ class productInfo extends Component {
             identifier: identifier
         };
         this.setState({productItemSupplier});
+    };
+    chooseImageFile = (i) => {
+        console.log(i, 123456)
     };
 
     render() {
@@ -188,7 +191,7 @@ class productInfo extends Component {
                                       onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
-                        <Image/>
+                       <Image/>
                     </div>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">

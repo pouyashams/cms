@@ -15,6 +15,6 @@ export function receiveTime() {
     return http.post("http://shop.isuncharge.com/isunshop/operation/fetch/scheduled-jobs", {});
 }
 export function sendDataTime(data) {
-    return http.post("http://shop.isuncharge.com/isunshop/operation/change-scheduled-job", {data});
+    return http.post("http://shop.isuncharge.com/isunshop/operation/change-scheduled-job", data);
 }
 

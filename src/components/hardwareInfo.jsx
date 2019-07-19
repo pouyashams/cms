@@ -28,7 +28,10 @@ class hardwareInfo extends Component {
     };
 
     addTime = () => {
-        const dataTime = this.state.dataTime.concat([{executionDate:this.state.lastExecutionDate, executionTime: this.state.lastExecutionTime}]);
+        const dataTime = this.state.dataTime.concat([{
+            executionDate: this.state.lastExecutionDate,
+            executionTime: this.state.lastExecutionTime
+        }]);
         this.setState({dataTime});
     };
 
@@ -97,12 +100,12 @@ class hardwareInfo extends Component {
     };
 
     sendDataTimeInfo = async () => {
-        const scheduledJobExecutionList = this.state.dataTime;
         const data = {
-            "jobCode": "RESTART_ISUNIC",
-            scheduledJobExecutionList
+            jobCode: "RESTART_ISUNIC",
+            scheduledJobExecutionList: this.state.dataTime
         };
         console.log(data)
+        console.log(12345)
         const result = await sendDataTime(data);
         try {
             if (result.status === 200) {
@@ -181,7 +184,8 @@ class hardwareInfo extends Component {
                 </div>
 
                 <div className="col-6">
-                    <div className=" border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
+                    <div
+                        className=" border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                         <div
                             className="col-12 justify-content-center align-items-center text-center header-box text-light">
                             <h6 className="col-12 py-2 font-weight-bold">افزودن زمان</h6>
@@ -194,6 +198,7 @@ class hardwareInfo extends Component {
                                 id="dateTimePicker"
                                 onChange={this.pickDate}
                                 cancelOnBackgroundClick={true}
+
                             />
                         </div>
                         <div className="p-4">

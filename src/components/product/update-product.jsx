@@ -148,6 +148,7 @@ class updateProduct extends Component {
             const data = [];
             if (result.status === 200) {
                 result.data.data.forEach((dataInfo) => {
+                    console.log(dataInfo,1234)
                     data.push(
                         {
                             productItemSupplierValue: dataInfo.productItemInfo.productItemSupplier.identifier,

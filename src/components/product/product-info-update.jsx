@@ -130,6 +130,15 @@ class productInfo extends Component {
         };
         this.setState({productItemSupplier});
     };
+    // onUpdate = () => {
+    // console.log(1234)
+    // };
+    // OnCancel = () => {
+    // console.log(1234)
+    // };
+    // onAccept = () => {
+    // console.log(1234)
+    // };
 
     render() {
         const productItem = this.state;
@@ -253,29 +262,19 @@ class productInfo extends Component {
                         </div>
                     </div>
                 </div>
-                {console.log(this.props.location.productInfo,12345)}
+                {/*{console.log(this.props.location, 12345)}*/}
                 {/*{this.props.location.productInfo.CheckUpdate === true ?*/}
 
                     {/*<div className="col-12 text-center">*/}
                         {/*<input type="button" className="btn btn-primary mr-3" value="به روز رسانی "*/}
-                               {/*onClick={() => {*/}
-                                   {/*// this.onUpdate();*/}
-                               {/*}}/>*/}
-                        {/*<input type="button" className="btn btn-primary mr-3" value="لغو"*/}
-                               {/*onClick={() => {*/}
-                                   {/*// this.OnCancel();*/}
-                               {/*}}/>*/}
+                               {/*onClick={() => {""}}/>*/}
                     {/*</div>*/}
                     {/*:*/}
                     {/*<div className="col-12 text-center">*/}
                         {/*<input type="button" className="btn btn-primary mr-3" value="تایید "*/}
-                               {/*onClick={() => {*/}
-                                   {/*// this.onAccept();*/}
-                               {/*}}/>*/}
+                               {/*onClick={() => {""}}/>*/}
                         {/*<input type="button" className="btn btn-primary mr-3" value="لغو"*/}
-                               {/*onClick={() => {*/}
-                                   {/*// this.OnCancel();*/}
-                               {/*}}/>*/}
+                               {/*onClick={() => {""}}/>*/}
                     {/*</div>*/}
                 {/*}*/}
             </div>

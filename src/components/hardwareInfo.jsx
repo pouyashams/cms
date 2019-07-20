@@ -28,11 +28,16 @@ class hardwareInfo extends Component {
     };
 
     addTime = () => {
-        const dataTime = this.state.dataTime.concat([{
-            executionDate: this.state.lastExecutionDate,
-            executionTime: this.state.lastExecutionTime
-        }]);
-        this.setState({dataTime});
+        const {lastExecutionDate, lastExecutionTime} = this.state;
+        if (lastExecutionDate !== "" && lastExecutionTime !== "") {
+            const dataTime = this.state.dataTime.concat([{
+                executionDate: this.state.lastExecutionDate,
+                executionTime: this.state.lastExecutionTime
+            }]);
+            this.setState({dataTime});
+        } else {
+            toast.error('تاریخ و ساعت را انتخاب کنید');
+        }
     };
 
     getResultTableHeader() {

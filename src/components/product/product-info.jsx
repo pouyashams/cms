@@ -83,7 +83,9 @@ class productInfo extends Component {
             price: this.state.price,
             description: this.state.description,
             productAttributeItemList: this.state.productAttributeItemList,
-            productItemSupplier: this.state.productItemSupplier,
+            productItemSupplier: {
+                identifier: 1
+            },
             productItemImageBase64List: productItemImageBase64List
         }];
         const dataInfo = {

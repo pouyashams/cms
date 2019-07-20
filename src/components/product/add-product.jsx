@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {loadDataOfProduct,sendProduct} from "../../services/productService";
+import {loadDataOfProduct, sendProduct} from "../../services/productService";
 import {toast} from "react-toastify";
 import ProductInfo from "./product-info";
+
 class addProduct extends Component {
 
     constructor(props) {
@@ -39,23 +40,77 @@ class addProduct extends Component {
         };
         this.setState({productCategory});
     };
-    madeData = async() => {
-        const data = this.refs.child.madeData();
-        try {
-            const result = await sendProduct(data);
-            if (result.status === 200) {
-                toast.success('کالا با موفقیت ثبت شد');
-                this.setState({
-                    categoryValue: ""
-                });
+    madeData = async () => {
+        const canUpdate = this.canAddProduct();
+        if (canUpdate) {
+            const data = this.refs.child.madeData();
+            try {
+                const result = await sendProduct(data);
+                if (result.status === 200) {
+                    toast.success('کالا با موفقیت ثبت شد');
+                    this.setState({
+                        categoryValue: ""
+                    });
+                }
+            } catch (ex) {
+                if (ex.response && ex.response.status === 400) {
+                    toast.error('خطایی در ارسال اطلاعات رخ داده است.');
+                }
             }
-        } catch (ex) {
-            if (ex.response && ex.response.status === 400) {
-                toast.error('خطایی در ارسال اطلاعات رخ داده است.');
-            }
+            document.getElementById("loading").style.display = "none";
         }
-        document.getElementById("loading").style.display = "none";
     };
+
+    canAddProduct() {
+        const data = this.refs.child.madeData();
+
+        if (!this.hasValue(data.name)) {
+            toast.error('نام کالا را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(data.productItemInfoList[0].englishName)) {
+            toast.error('نام انگلیسی کالا را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(data.productItemInfoList[0].code)) {
+            toast.error('شناسه کالا را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(data.productItemInfoList[0].numberOfProduct)) {
+            toast.error('تعداد کالا را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(data.productItemInfoList[0].taxation)) {
+            toast.error(' مالیات را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(data.productItemInfoList[0].price)) {
+            toast.error(' قیمت را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(data.productItemInfoList[0].description)) {
+            toast.error(' توضیحات را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(data.productItemInfoList[0].productAttributeItemList[0].productAttribute)) {
+            toast.error(' حداقل یک ویژگی انتخاب کنید');
+            return false;
+        }
+        if (!this.hasValue(data.productItemInfoList[0].productAttributeItemList[0].productAttribute.identifier)) {
+            toast.error(' حداقل یک ویژگی انتخاب کنید');
+            return false;
+        }
+        if (!this.hasValue(data.productItemInfoList[0].productItemImageBase64List) || data.productItemInfoList[0].productItemImageBase64List.length === 0) {
+            toast.error('حداقل یک عکس وارد کنید');
+            return false;
+        }
+
+        return true;
+    }
+
+    hasValue(field) {
+        return field !== null && field !== undefined && field !== "";
+    }
 
     isValid = () => {
         const {productCategory} = this.state;

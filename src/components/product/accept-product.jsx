@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import "../../css/textArea.css"
-// import {toast} from "react-toastify";
 import {withRouter} from 'react-router-dom';
+import {acceptProduct, cancelProduct} from "../../services/productService";
+import {toast} from 'react-toastify';
 
-class acceptProduct extends Component {
+class confirmProduct extends Component {
 
     constructor(props) {
         super(props);
@@ -49,6 +50,39 @@ class acceptProduct extends Component {
         }
     }
 
+    acceptProductInfo = async () => {
+        try {
+            const result = await acceptProduct(this.state.identifier);
+            if (result.status === 200) {
+                toast.success('کالا با موفقیت تایید شد');
+                this.setState({searchResultList: result.data.data});
+                document.getElementById("loading").style.display = "none";
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('ارتباط با سرور برقرار نشد');
+            }
+        }
+        document.getElementById("loading").style.display = "none";
+    };
+    cancelProductInfo = async () => {
+        console.log(1234)
+        try {
+            const result = await cancelProduct(this.state.identifier);
+            if (result.status === 200) {
+                toast.success('کالا با موفقیت لغو شد');
+
+                this.setState({searchResultList: result.data.data});
+                document.getElementById("loading").style.display = "none";
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('ارتباط با سرور برقرار نشد');
+            }
+        }
+        document.getElementById("loading").style.display = "none";
+    };
+
     showProductDetails = () => {
         const {productInfo} = this.props.location;
         if (!productInfo) return this.props.history.push('/update-product');
@@ -69,12 +103,6 @@ class acceptProduct extends Component {
             }),
         });
     };
-    // OnCancel = () => {
-    // console.log(1234)
-    // };
-    // onAccept = () => {
-    // console.log(1234)
-    // };
 
     render() {
         const productItem = this.state;
@@ -189,11 +217,11 @@ class acceptProduct extends Component {
                     <div className="col-12 p-3 text-center">
                         <input type="button" className="btn btn-primary mr-3" value="تایید "
                                onClick={() => {
-                                   ""
+                                   this.acceptProductInfo()
                                }}/>
                         <input type="button" className="btn btn-primary mr-3" value="لغو"
                                onClick={() => {
-                                   ""
+                                   this.cancelProductInfo()
                                }}/>
                     </div> :
                     <div className="col-12 p-3 text-center justify-content-center">
@@ -211,6 +239,6 @@ class acceptProduct extends Component {
     };
 }
 
-export default withRouter(acceptProduct);
+export default withRouter(confirmProduct);
 
 

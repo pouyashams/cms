@@ -83,6 +83,7 @@ class productInfo extends Component {
             productItemImageBase64List: this.returnFile()
         }];
         const dataInfo = {
+            name: this.state.name,
             productCategory: productCategory,
             productItemInfoList: productItemInfoList,
         };

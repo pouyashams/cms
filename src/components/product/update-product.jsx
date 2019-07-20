@@ -63,7 +63,7 @@ class updateProduct extends Component {
     onAccept(searchResult) {
         this.props.history.push({
             pathname: '/accept-product',
-            productInfo: searchResult
+            productInfo:searchResult
             // Object.assign(searchResult,{checkUpdate: false})
         });
     }
@@ -194,10 +194,10 @@ class updateProduct extends Component {
             const data = [];
             if (result.status === 200) {
                 result.data.data.forEach((dataInfo) => {
-                    console.log(dataInfo, 1234)
+                    console.log(dataInfo,1234)
                     data.push(
                         {
-                            identifier: dataInfo.identifier,
+                            identifier:dataInfo.identifier,
                             canConfirmOrRejectProduct: dataInfo.canConfirmOrRejectProduct,
                             status: dataInfo.status,
                             productItemSupplierValue: dataInfo.productItemInfo.productItemSupplier.identifier,
@@ -215,7 +215,7 @@ class updateProduct extends Component {
                     )
                 });
                 this.setState({searchResultList: data})
-                console.log(this.state.searchResultList, 123454323)
+                console.log(this.state.searchResultList,123454323)
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {

@@ -48,7 +48,7 @@ class confirmation extends Component {
                 label: "تا تاریخ"
             },
             {
-                name: "orderStatusIdentifier",
+                name: "orderStatus",
                 element: "select",
                 placeholder: "---",
                 defaultValue: "",
@@ -117,13 +117,12 @@ class confirmation extends Component {
                             mobileNumber: dataInfo.mobileNumber,
                             identifier: dataInfo.identifier,
                             date: dataInfo.orderDeliveryInfo.date,
-                            orderStatusIdentifier: dataInfo.orderStatus.name,
+                            orderStatus: dataInfo.orderStatus.name,
                             customerReferenceNumber: dataInfo.customerReferenceNumber,
                             time: dataInfo.orderDeliveryInfo.time,
                             registerDate: dataInfo.registerDate,
                             deliveryType: dataInfo.orderDeliveryInfo.deliveryType.name,
                             address: dataInfo.addressInfo.address,
-                            productItemSellInfoList: dataInfo.productItemSellInfoList,
                             canAcceptOrReject: dataInfo.canAcceptOrReject,
                             sumOfAmount: dataInfo.sumOfAmount,
                         }

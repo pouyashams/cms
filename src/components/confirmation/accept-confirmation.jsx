@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {acceptConfirmation,cancelConfirmation} from "../../services/confirmationServise"
+import {acceptConfirmation, cancelConfirmation, productDetails} from "../../services/confirmationServise"
 import SearchResult from "../search/search-result";
 
 class acceptConfirmations extends Component {
@@ -17,7 +17,7 @@ class acceptConfirmations extends Component {
             time: "",
             mobileNumber: "",
             identifier: "",
-            orderStatusIdentifier: "",
+            orderStatus: "",
             customerReferenceNumber: "",
             productItemSellInfoList: "",
             canAcceptOrReject: "",
@@ -40,7 +40,7 @@ class acceptConfirmations extends Component {
         return headerInfo;
     }
 
-    cancelConfirmationInfo = async() => {
+    cancelConfirmationInfo = async () => {
         const result = await cancelConfirmation();
         try {
             if (result.status === 200) {
@@ -54,7 +54,7 @@ class acceptConfirmations extends Component {
         document.getElementById("loading").style.display = "none";
     };
 
-    acceptConfirmationInfo = async() => {
+    acceptConfirmationInfo = async () => {
         const result = await acceptConfirmation();
         try {
             if (result.status === 200) {
@@ -69,28 +69,45 @@ class acceptConfirmations extends Component {
     };
 
 
-    componentDidMount() {
+    async componentDidMount() {
         const {dataInfo} = this.props.location;
-
-
         if (!dataInfo) return this.props.history.push('/confirmation');
-
         this.setState({
             name: this.getValue(dataInfo.name),
             mobileNumber: this.getValue(dataInfo.mobileNumber),
             identifier: this.getValue(dataInfo.identifier),
             date: this.getValue(dataInfo.date),
-            orderStatusIdentifier: this.getValue(dataInfo.orderStatusIdentifier),
+            orderStatus: this.getValue(dataInfo.orderStatus),
             customerReferenceNumber: this.getValue(dataInfo.customerReferenceNumber),
             time: this.getValue(dataInfo.time),
             registerDate: this.getValue(dataInfo.registerDate),
             deliveryType: this.getValue(dataInfo.deliveryType),
             address: this.getValue(dataInfo.address),
-            productItemSellInfoList: this.getValue(dataInfo.productItemSellInfoList),
             canAcceptOrReject: this.getValue(dataInfo.canAcceptOrReject),
             sumOfAmount: this.getValue(dataInfo.sumOfAmount),
-
         });
+        try {
+            const result = await productDetails(this.getValue(dataInfo.identifier));
+            if (result.status === 200) {
+                const productItemSellInfoList = [];
+                result.data.data[0].productItemSellInfoList.map(productItem => (
+                    productItemSellInfoList.push(
+                        {
+                            "name": productItem.name,
+                            "price": productItem.sumPrice,
+                            "number": productItem.count,
+                        }
+                    )
+                ));
+                this.setState({productItemSellInfoList});
+                document.getElementById("loading").style.display = "none";
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('مشکلی در ارتباط با سرور به وجود امده');
+            }
+        }
+        document.getElementById("loading").style.display = "none";
     }
 
     hasValue(field) {
@@ -188,7 +205,7 @@ class acceptConfirmations extends Component {
                             />
                         </div>
                         <div className="col-12  p-5 text-center justify-content-center ">
-                            <SearchResult headerInfo={headerInfo} searchResultList={this.state.productInfoList}
+                            <SearchResult headerInfo={headerInfo} searchResultList={this.state.productItemSellInfoList}
                                           pageSize={pageSize}/>
 
                         </div>

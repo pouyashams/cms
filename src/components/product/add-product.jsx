@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {loadDataOfProduct} from "../../services/productService";
+import {loadDataOfProduct,sendProduct} from "../../services/productService";
 import {toast} from "react-toastify";
 import ProductInfo from "./product-info";
 class addProduct extends Component {
@@ -9,6 +9,7 @@ class addProduct extends Component {
         this.state = {
             productCategoryList: "",
             productCategory: "",
+            categoryValue: "",
             checked: false,
         };
     };
@@ -38,9 +39,22 @@ class addProduct extends Component {
         };
         this.setState({productCategory});
     };
-    madeData = () => {
+    madeData = async() => {
         const data = this.refs.child.madeData();
-        console.log(data,477)
+        try {
+            const result = await sendProduct(data);
+            if (result.status === 200) {
+                toast.success('کالا با موفقیت ثبت شد');
+                this.setState({
+                    categoryValue: ""
+                });
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('خطایی در ارسال اطلاعات رخ داده است.');
+            }
+        }
+        document.getElementById("loading").style.display = "none";
     };
 
     isValid = () => {
@@ -69,6 +83,7 @@ class addProduct extends Component {
                                 productCategoryList.length !== 0 ?
                                     <select className="form-control text-center w-50"
                                             onChange={(e) => this.handelChangeSelected(e.target.value)}
+                                            defaultValue={this.state.categoryValue}
                                     >
                                         {productCategoryList.map(
                                             (productCategory) => {

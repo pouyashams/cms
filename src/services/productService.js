@@ -35,3 +35,6 @@ export function acceptProduct(data) {
 export function sendProduct(data) {
     return http.post("http://shop.isuncharge.com/isunshop/register/product", data);
 }
+export function onUpdate(data) {
+    return http.post("http://shop.isuncharge.com/isunshop/update/product-item", data);
+}

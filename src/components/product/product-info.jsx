@@ -69,6 +69,10 @@ class productInfo extends Component {
     };
 
     madeData = () => {
+        const productItemImageBase64List = [];
+        this.returnFile().forEach((file) => {
+            productItemImageBase64List.push(file.substr(23))
+        });
         let productCategory = {identifier: this.props.productCategory.identifier};
         let productItemInfoList = [{
             name: this.state.name,
@@ -80,7 +84,7 @@ class productInfo extends Component {
             description: this.state.description,
             productAttributeItemList: this.state.productAttributeItemList,
             productItemSupplier: this.state.productItemSupplier,
-            productItemImageBase64List: this.returnFile()
+            productItemImageBase64List: productItemImageBase64List
         }];
         const dataInfo = {
             name: this.state.name,

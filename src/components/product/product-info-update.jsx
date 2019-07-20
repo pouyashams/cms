@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import "../../css/textArea.css"
-// import {toast} from "react-toastify";
+import {toast} from "react-toastify";
 import Image from "../choose-image"
 import {withRouter} from 'react-router-dom';
+import {onUpdate} from "../../services/productService";
 
 class productInfo extends Component {
 
@@ -11,7 +12,7 @@ class productInfo extends Component {
         this.state = {
             productAttributeCategoryList: [],
             productItemSupplierList: [],
-            productItemImageBase64List:[],
+            productItemImageBase64List: [],
             productItemSupplier: "",
             name: "",
             englishName: "",
@@ -22,6 +23,7 @@ class productInfo extends Component {
             description: "",
             checked: "",
             productAttributeItemList: [],
+            productAttributeList: [],
             identifier: "",
         }
     };
@@ -77,23 +79,26 @@ class productInfo extends Component {
 
 
     handelChangeAttribute = (productAttribute, productAttributeCategory) => {
-            // const productAttributeItemList = [];
-            // productAttributeItemList.push(
-            //     {
-            //         productAttribute: {
-            //             identifier: productAttribute
-            //         },
-            //         productAttributeCategory: {
-            //             identifier: productAttributeCategory
-            //         },
-            //     }
-            // );
-            //
-            // this.setState({productAttributeItemList});
+        const productAttributeList = [];
+        productAttributeList.push(
+            {
+                productAttribute: {
+                    identifier: productAttribute
+                },
+                productAttributeCategory: {
+                    identifier: productAttributeCategory
+                },
+            }
+        );
+
+        this.setState({productAttributeList});
     };
 
     madeData = () => {
-        let productCategory = {identifier: this.props.productCategory.identifier};
+        const productItemImageBase64List = [];
+        this.returnFile().forEach((file) => {
+            productItemImageBase64List.push(file.substr(23))
+        });
         let productItemInfoList = [{
             name: this.state.name,
             englishName: this.state.englishName,
@@ -102,26 +107,34 @@ class productInfo extends Component {
             taxation: this.state.taxation,
             price: this.state.price,
             description: this.state.description,
-            productAttributeItemList: this.state.productAttributeItemList,
+            productAttributeItemList: this.state.productAttributeList,
             productItemSupplier: this.state.productItemSupplier,
-            productItemImageBase64List: this.returnFile()
+            productItemImageBase64List: productItemImageBase64List
         }];
-        const dataInfo = {
-            productCategory: productCategory,
-            productItemInfoList: productItemInfoList,
-        };
-        return dataInfo;
+        return productItemInfoList;
     };
 
 
-    // onUpdate = () => {
-    // console.log(1234)
-    // };
+    onUpdateInfo = async() => {
+        try {
+            const result = await onUpdate(this.madeData());
+            if (result.status === 200) {
+                toast.error('کالا با موفقیت به روز رسانی شد');
+                document.getElementById("loading").style.display = "none";
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('مشکلی در ارتباط با سرور به وجود امده است');
+            }
+        }
+        document.getElementById("loading").style.display = "none";
+    };
 
     returnFile = () => {
         const data = this.refs.child.returnFile();
         return data;
     };
+
     render() {
         const productItem = this.state;
         return (
@@ -201,7 +214,7 @@ class productInfo extends Component {
                                       onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
-                        {console.log(this.state.productItemImageBase64List,"poya")}
+                        {console.log(this.state.productItemImageBase64List, "poya")}
                         <Image
                             ref="child"
                             base64Image={this.state.productItemImageBase64List}
@@ -234,12 +247,12 @@ class productInfo extends Component {
                     </div>
                 </div>
 
-                    <div className="col-12 p-3 text-center">
-                        <input type="button" className="btn btn-primary mr-3" value="به روز رسانی "
-                               onClick={() => {
-                                   ""
-                               }}/>
-                    </div>
+                <div className="col-12 p-3 text-center">
+                    <input type="button" className="btn btn-primary mr-3" value="به روز رسانی "
+                           onClick={() => {
+                               this.onUpdateInfo()
+                           }}/>
+                </div>
             </div>
         );
     };

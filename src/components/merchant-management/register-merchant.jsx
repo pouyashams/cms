@@ -1,75 +1,66 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {updateMerchant, fetchAllAuthorities} from "./../services/userService"
-import Pagination from "./search/pagination";
-import {paginate} from "../utils/paginate";
+import {persistMerchant, fetchAllAuthorities, fetchAllMerchants} from "../../services/userService"
+import Pagination from "../search/pagination";
+import {paginate} from "../../utils/paginate";
 
 
-class EditMerchant extends Component {
+class RegisterMerchant extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            identifier: '',
-            authorities: [],
-            name: '',
-            username: '',
-            password: '',
-            clientId: '',
-            clientSecret: '',
-            nationalCode: '',
-            accessTokenValidity: 900,
-            refreshTokenValidity: 2592000,
-            parent: null,
+            authorities : [],
+            merchants : [],
+            name : '',
+            username : '',
+            password : '',
+            clientId : '',
+            clientSecret : '',
+            nationalCode : '',
+            accessTokenValidity : 900,
+            refreshTokenValidity : 2592000,
+            parent: '',
             currentPage: 1,
             pageSize: 5
         };
         this.getValue = this.getValue.bind(this);
-        this.updateMerchant = this.updateMerchant.bind(this);
+        this.registerMerchant = this.registerMerchant.bind(this);
     }
 
 
     async componentDidMount() {
-        const {merchantInfo} = this.props.location;
-        if (!merchantInfo) return this.props.history.push('/merchant-management');
-
-        console.log(merchantInfo);
-        this.setState({
-            identifier: merchantInfo.identifier,
-            name: this.getValue(merchantInfo.name),
-            username: this.getValue(merchantInfo.username),
-            clientId: this.getValue(merchantInfo.merchantOAuthDetails.clientId),
-            parent: this.getValue(merchantInfo.parent),
-            nationalCode: this.getValue(merchantInfo.nationalCode)
-        });
-
-        await this.fillAuthorities(merchantInfo);
+        await this.fillAuthorities();
+        await this.fillMerchants();
     }
 
-    async fillAuthorities(merchantInfo) {
+    async fillMerchants() {
+        const resultForFetchMerchants = await fetchAllMerchants();
+        if (resultForFetchMerchants.status === 200) {
+            this.setState({
+                merchants: resultForFetchMerchants.data.data
+            });
+            document.getElementById("loading").style.display = "none";
+        }
+    }
+
+    async fillAuthorities() {
         const result = await fetchAllAuthorities();
         if (result.status === 200) {
             let allAuthorities = result.data.data;
-            allAuthorities = this.addCheckedProperty(allAuthorities, merchantInfo);
+            allAuthorities = this.addCheckedProperty(allAuthorities);
             this.setState({
                 authorities: allAuthorities
             });
+            document.getElementById("loading").style.display = "none";
         }
-        document.getElementById("loading").style.display = "none";
     }
 
-    addCheckedProperty(authorities, merchantInfo) {
-        const selectedAuthorities = merchantInfo.authorities;
+    addCheckedProperty(authorities) {
         let allAuthorities = [];
         authorities.forEach((authority) => {
-            let checked = false;
-            selectedAuthorities.forEach((selectedAuthority) => {
-                if (selectedAuthority.role.code === authority.code) {
-                    checked = true;
-                }
-            });
-            const newAuthority = Object.assign({}, {checked: checked}, authority);
+            const newAuthority = Object.assign({}, {checked: false}, authority);
             allAuthorities.push(newAuthority);
         });
         return allAuthorities;
@@ -79,12 +70,12 @@ class EditMerchant extends Component {
         this.setState({[name]: value});
     };
 
-    async updateMerchant() {
-        const canUpdate = this.canUpdateMerchant();
-        if (canUpdate) {
+    async registerMerchant() {
+        const canRegister = this.canRegisterMerchant();
+        if (canRegister) {
             try {
-                const parameters = this.prepareUpdateMerchantParameter();
-                const result = await updateMerchant(parameters);
+                const parameters = this.prepareRegisterMerchantParameter();
+                const result = await persistMerchant(parameters);
                 if (result.status === 200) {
                     toast.success('ایجاد پذیرنده با موفقیت انجام شد.');
                     this.props.history.goBack();
@@ -99,7 +90,7 @@ class EditMerchant extends Component {
     };
 
     handlePageChange = page => {
-        this.setState({currentPage: page});
+        this.setState({ currentPage: page });
     };
 
 
@@ -109,13 +100,12 @@ class EditMerchant extends Component {
         return authoritiesForThisPage;
     };
 
-    prepareUpdateMerchantParameter() {
+    prepareRegisterMerchantParameter() {
         const info = this.state;
         let merchantInfo = {};
         let authorities = this.prepareSelectedAuthorities();
         let merchantOAuthDetails = {};
 
-        merchantInfo.identifier = info.identifier;
         merchantInfo.name = info.name;
         merchantInfo.username = info.username;
         merchantInfo.password = info.password;
@@ -128,7 +118,9 @@ class EditMerchant extends Component {
         merchantOAuthDetails.refreshTokenValidity = info.refreshTokenValidity;
 
         if (this.hasValue(info.parent)) {
-            merchantInfo.parent = info.parent;
+            let parent = {};
+            parent.identifier = info.parent;
+            merchantInfo.parent = parent;
         }
 
         merchantInfo.merchantOAuthDetails = merchantOAuthDetails;
@@ -146,9 +138,9 @@ class EditMerchant extends Component {
         return selectedAuthorities;
     }
 
-    canUpdateMerchant() {
+    canRegisterMerchant() {
         let selectedAuthorities = this.prepareSelectedAuthorities();
-        const {name, username, clientId} = this.state;
+        const {name, username, password, clientId, clientSecret} = this.state;
 
         if (!this.hasValue(name)) {
             toast.error('نام پذیرنده را وارد کنید');
@@ -160,8 +152,18 @@ class EditMerchant extends Component {
             return false;
         }
 
+        if (!this.hasValue(password)) {
+            toast.error('کلمه عبور پذیرنده را وارد کنید');
+            return false;
+        }
+
         if (!this.hasValue(clientId)) {
             toast.error('شناسه کاربری پذیرنده را وارد کنید');
+            return false;
+        }
+
+        if (!this.hasValue(clientSecret)) {
+            toast.error('کلمه عبور شناسه کاربری پذیرنده را وارد کنید');
             return false;
         }
 
@@ -205,19 +207,18 @@ class EditMerchant extends Component {
 
     render() {
 
-        const {authorities, pageSize, currentPage} = this.state;
+        const {merchants, authorities, pageSize, currentPage} = this.state;
         let index = 1;
         const authoritiesForThisPage = this.getPageData();
         let authorityCounter = (currentPage - 1) * pageSize;
         return (
-            <div
-                className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
+            <div className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
                     <h4 className="py-2">افزودن پذیرنده</h4>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div className="rtl border m-0 bg-light shadow float-right w-100 justify-content-start my-3 pb-3">
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
                             <label>نام :</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -228,7 +229,7 @@ class EditMerchant extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
                             <label>نام کاربری :</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -240,7 +241,7 @@ class EditMerchant extends Component {
                         </div>
 
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
                             <label>کلمه عبور:</label>
                             <input className="form-control text-center"
                                    type="password"
@@ -254,12 +255,20 @@ class EditMerchant extends Component {
 
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>پذیرنده پدر :</label>
-                            <select className="form-control text-center disabled" disabled>
-                                {this.state.parent ? (<option>{this.state.parent.name}</option>) : (<option>---</option>)}
+                            <select
+                                className="form-control text-center"
+                                onChange={(e) => this.fillParameterValue(e.target.value, "parent")}
+                            >
+                                <option value="" key={index++}>---</option>
+                                {merchants.map(
+                                    (merchant) => {
+                                        return (<option value={merchant.identifier} key={index++}>{merchant.name}</option>);
+                                    }
+                                )}
                             </select>
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
                             <label>ایمیل :</label>
                             <input className="form-control text-center"
                                    type="email"
@@ -271,7 +280,7 @@ class EditMerchant extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
                             <label>شناسه ملی :</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -282,7 +291,7 @@ class EditMerchant extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
                             <label>Client Identifier :</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -293,7 +302,7 @@ class EditMerchant extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
                             <label>Client Secret :</label>
                             <input className="form-control text-center"
                                    type="password"
@@ -306,14 +315,12 @@ class EditMerchant extends Component {
                         </div>
                     </div>
                     <div className="rtl border m-0 bg-light shadow float-right w-100 justify-content-start my-3 pb-3">
-                        <div
-                            className="col-12 justify-content-center align-items-center text-center table-responsive my-3 ">
+                        <div className="col-12 justify-content-center align-items-center text-center table-responsive my-3 ">
                             <table className="table table-bordered table-striped ">
                                 <thead>
                                 <tr>
                                     <th className="table-checkbox">
-                                        <input type="checkbox" id="checkAll"
-                                               onChange={(e) => this.handleAllAuthoritiesChange(e.target.checked)}/>
+                                        <input type="checkbox" id="checkAll" onChange={(e) => this.handleAllAuthoritiesChange(e.target.checked)}/>
                                     </th>
                                     <th className="hidden-xs table-counter"></th>
                                     <th className="text-center">دسترسی</th>
@@ -332,8 +339,7 @@ class EditMerchant extends Component {
                                         (
                                             <tr key={index++}>
                                                 <td className="table-checkbox">
-                                                    <input type="checkbox" className="check" checked={authority.checked}
-                                                           onChange={(e) => this.changeAuthorityCheckedValue(authority, e.target.checked)}/>
+                                                    <input type="checkbox" className="check" checked={authority.checked} onChange={(e) => this.changeAuthorityCheckedValue(authority, e.target.checked)}/>
                                                 </td>
                                                 <td className="hidden-xs table-counter">
                                                     {++authorityCounter}
@@ -352,12 +358,11 @@ class EditMerchant extends Component {
                                     currentPage={currentPage}
                                     onPageChange={this.handlePageChange}
                                 />
-                            ) : null}
+                            ):null}
                         </div>
                         <hr/>
                         <div className="col-12 justify-content-center align-items-center text-center my-3 ">
-                            <input type="button" className="btn btn-primary" value="ویرایش پذیرنده"
-                                   onClick={this.updateMerchant}/>
+                            <input type="button" className="btn btn-primary" value="ثبت پذیرنده" onClick={this.registerMerchant}/>
                         </div>
                     </div>
                 </div>
@@ -367,4 +372,4 @@ class EditMerchant extends Component {
     }
 }
 
-export default withRouter(EditMerchant);
+export default withRouter(RegisterMerchant);

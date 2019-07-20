@@ -39,7 +39,8 @@ class addProduct extends Component {
         this.setState({productCategory});
     };
     madeData = () => {
-        this.refs.child.madeData();
+        const data = this.refs.child.madeData();
+        console.log(data,477)
     };
 
     isValid = () => {

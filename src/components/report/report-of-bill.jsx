@@ -4,6 +4,7 @@ import SearchResult from "../search/search-result";
 import {searchCustomerBill} from "../../services/reportService"
 import {toast} from 'react-toastify';
 import {withRouter} from 'react-router-dom';
+import {fetchAllChildOfCurrentMerchant} from "../../services/reportService";
 
 
 class reportOfBill extends Component {
@@ -12,9 +13,28 @@ class reportOfBill extends Component {
         super(props);
         this.state = {
             pageSize: 10,
-            searchResultList: []
+            searchResultList: [],
+            merchants:[]
         };
     }
+
+    async componentDidMount() {
+        try {
+            const resultForFetchMerchants = await fetchAllChildOfCurrentMerchant();
+            if (resultForFetchMerchants.status === 200) {
+                const merchantArray = this.prepareMerchantSelection(resultForFetchMerchants.data.data);
+                this.setState({
+                    merchants: merchantArray
+                });
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('خطایی در دریافت اطلاعات رخ داده است.');
+            }
+        }
+        document.getElementById("loading").style.display = "none";
+    }
+
 
     getSearchCriteriaArray() {
         return [
@@ -112,7 +132,29 @@ class reportOfBill extends Component {
                     {value: "PAID_ORDER_STATUS", title: "پرداخت شده"}
                 ]
             },
+            {
+                name: "requesterUserId",
+                element: "select",
+                placeholder: "---",
+                defaultValue: "",
+                label: "پذیرنده",
+                options: this.state.merchants
+            },
         ];
+    }
+    prepareMerchantSelection(merchants) {
+        let merchantArray = [{
+            value: "",
+            title: "انتخاب کنید..."
+        }];
+        merchants.forEach((merchant) => {
+            let data = {
+                value: merchant.identifier,
+                title: merchant.name
+            };
+            merchantArray.push(data);
+        });
+        return merchantArray;
     }
 
     getResultTableHeader() {
@@ -140,6 +182,7 @@ class reportOfBill extends Component {
             const result = await searchCustomerBill(parameters);
             if (result.status === 200) {
                 this.setState({searchResultList: result.data.data})
+                console.log(this.state.searchResultList)
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {

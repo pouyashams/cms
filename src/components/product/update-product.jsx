@@ -56,14 +56,15 @@ class updateProduct extends Component {
     onUpdate(searchResult) {
         this.props.history.push({
             pathname: '/product-info-update',
-            productInfo: Object.assign(searchResult,{checkUpdate: true})
+            productInfo: searchResult
         });
     }
 
     onAccept(searchResult) {
         this.props.history.push({
-            pathname: '/product-info-update',
-            productInfo: Object.assign(searchResult,{checkUpdate: false})
+            pathname: '/accept-product',
+            productInfo: searchResult
+            // Object.assign(searchResult,{checkUpdate: false})
         });
     }
 
@@ -193,9 +194,10 @@ class updateProduct extends Component {
             const data = [];
             if (result.status === 200) {
                 result.data.data.forEach((dataInfo) => {
-                    console.log(dataInfo,1234)
+                    console.log(dataInfo, 1234)
                     data.push(
                         {
+                            identifier: dataInfo.identifier,
                             canConfirmOrRejectProduct: dataInfo.canConfirmOrRejectProduct,
                             status: dataInfo.status,
                             productItemSupplierValue: dataInfo.productItemInfo.productItemSupplier.identifier,
@@ -207,11 +209,13 @@ class updateProduct extends Component {
                             taxation: dataInfo.productItemInfo.taxation,
                             price: dataInfo.productItemInfo.price,
                             description: dataInfo.productItemInfo.description,
-                            productAttributeItemList: dataInfo.productCategory,
+                            productAttributeItemList: dataInfo.productItemInfo.productAttributeItemList,
+                            productItemImageBase64List: dataInfo.productItemInfo.productItemImageBase64List,
                         }
                     )
                 });
                 this.setState({searchResultList: data})
+                console.log(this.state.searchResultList, 123454323)
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -224,7 +228,7 @@ class updateProduct extends Component {
     prepareMerchantSelection(merchants) {
         let merchantArray = [{
             value: "",
-            title: "---"
+            title: "انتخاب کنید..."
         }];
         merchants.forEach((merchant) => {
             let data = {

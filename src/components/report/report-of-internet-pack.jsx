@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import SearchCriteria from "../search/search-criteria";
 import SearchResult from "../search/search-result";
-import {searchCustomerInternet} from "../../services/reportService"
+import {fetchAllChildOfCurrentMerchant, searchCustomerInternet} from "../../services/reportService"
 import {toast} from 'react-toastify';
 import {withRouter} from 'react-router-dom';
 
@@ -12,7 +12,9 @@ class reportOfInternetPack extends Component {
         super(props);
         this.state = {
             pageSize: 10,
-            searchResultList: []
+            searchResultList: [],
+            merchants:[]
+
         };
     }
     getSearchCriteriaArray() {
@@ -111,7 +113,45 @@ class reportOfInternetPack extends Component {
                     {value: "PAID_ORDER_STATUS", title: "پرداخت شده"}
                 ]
             },
+            {
+                name: "requesterUserId",
+                element: "select",
+                placeholder: "---",
+                defaultValue: "",
+                label: "پذیرنده",
+                options: this.state.merchants
+            },
         ];
+    }
+    prepareMerchantSelection(merchants) {
+        let merchantArray = [{
+            value: "",
+            title: "انتخاب کنید..."
+        }];
+        merchants.forEach((merchant) => {
+            let data = {
+                value: merchant.identifier,
+                title: merchant.name
+            };
+            merchantArray.push(data);
+        });
+        return merchantArray;
+    }
+    async componentDidMount() {
+        try {
+            const resultForFetchMerchants = await fetchAllChildOfCurrentMerchant();
+            if (resultForFetchMerchants.status === 200) {
+                const merchantArray = this.prepareMerchantSelection(resultForFetchMerchants.data.data);
+                this.setState({
+                    merchants: merchantArray
+                });
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('خطایی در دریافت اطلاعات رخ داده است.');
+            }
+        }
+        document.getElementById("loading").style.display = "none";
     }
 
     getResultTableHeader() {

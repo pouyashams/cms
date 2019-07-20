@@ -17,9 +17,9 @@ class acceptConfirmations extends Component {
             time: "",
             mobileNumber: "",
             identifier: "",
-            orderStatus: "",
+            orderStatusIdentifier: "",
             customerReferenceNumber: "",
-            productInfoList: "",
+            productItemSellInfoList: "",
             canAcceptOrReject: "",
             sumOfAmount: "",
         };
@@ -33,8 +33,8 @@ class acceptConfirmations extends Component {
             actions: [],
             headerTitleInfos: [
                 {name: "name", title: "نام کالا"},
-                {name: "name", title: "تعداد"},
-                {name: "count", title: "مجموع مبالغ"},
+                {name: "count", title: "تعداد"},
+                {name: "sumPrice", title: "مجموع مبالغ"},
             ]
         };
         return headerInfo;
@@ -80,13 +80,13 @@ class acceptConfirmations extends Component {
             mobileNumber: this.getValue(dataInfo.mobileNumber),
             identifier: this.getValue(dataInfo.identifier),
             date: this.getValue(dataInfo.date),
-            orderStatus: this.getValue(dataInfo.orderStatus),
+            orderStatusIdentifier: this.getValue(dataInfo.orderStatusIdentifier),
             customerReferenceNumber: this.getValue(dataInfo.customerReferenceNumber),
             time: this.getValue(dataInfo.time),
             registerDate: this.getValue(dataInfo.registerDate),
             deliveryType: this.getValue(dataInfo.deliveryType),
             address: this.getValue(dataInfo.address),
-            productInfoList: this.getValue(dataInfo.productInfoList),
+            productItemSellInfoList: this.getValue(dataInfo.productItemSellInfoList),
             canAcceptOrReject: this.getValue(dataInfo.canAcceptOrReject),
             sumOfAmount: this.getValue(dataInfo.sumOfAmount),
 

@@ -22,6 +22,7 @@ class productInfo extends Component {
             description: "",
             productAttributeItemList: [],
         }
+
     };
 
     async componentDidMount() {
@@ -79,6 +80,7 @@ class productInfo extends Component {
             description: this.state.description,
             productAttributeItemList: this.state.productAttributeItemList,
             productItemSupplier: this.state.productItemSupplier,
+            productItemImageBase64List: this.returnFile()
         }];
         const dataInfo = {
             productCategory: productCategory,
@@ -87,14 +89,16 @@ class productInfo extends Component {
         return dataInfo;
     };
 
-    handelChangeSelected = (identifier) => {
-        const productItemSupplier = {
-            identifier: identifier
-        };
-        this.setState({productItemSupplier});
-    };
-    chooseImageFile = (i) => {
-        console.log(i, 123456)
+    // handelChangeSelected = (identifier) => {
+    //     const productItemSupplier = {
+    //         identifier: identifier
+    //     };
+    //     this.setState({productItemSupplier});
+    // };
+
+    returnFile = () => {
+        const data = this.refs.child.returnFile();
+        return data;
     };
 
     render() {
@@ -169,19 +173,19 @@ class productInfo extends Component {
                                    onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>فروشنده محصول :</label>
-                            <select className="form-control text-center w-50"
-                                    onChange={(e) => this.handelChangeSelected(e.target.value)}
-                            >
-                                {productItem.productItemSupplierList !== "" ? productItem.productItemSupplierList.map(
-                                    (productCategory) => {
-                                        return (<option
-                                            value={productCategory.identifier}>{productCategory.name}</option>);
-                                    }
-                                ) : null}
-                            </select>
-                        </div>
+                        {/*<div className="form-group col-12 col-sm-6 col-md-3 float-right">*/}
+                        {/*<label>فروشنده محصول :</label>*/}
+                        {/*<select className="form-control text-center w-50"*/}
+                        {/*onChange={(e) => this.handelChangeSelected(e.target.value)}*/}
+                        {/*>*/}
+                        {/*{productItem.productItemSupplierList !== "" ? productItem.productItemSupplierList.map(*/}
+                        {/*(productCategory) => {*/}
+                        {/*return (<option*/}
+                        {/*value={productCategory.identifier}>{productCategory.name}</option>);*/}
+                        {/*}*/}
+                        {/*) : null}*/}
+                        {/*</select>*/}
+                        {/*</div>*/}
 
                         <div className="form-group col-12 float-right">
                             <label>توضیحات :</label>
@@ -191,7 +195,9 @@ class productInfo extends Component {
                                       onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
-                       <Image/>
+                        <Image
+                            ref="child"
+                        />
                     </div>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">

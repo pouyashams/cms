@@ -200,7 +200,6 @@ class hardwareInfo extends Component {
                                 id="dateTimePicker"
                                 onChange={this.pickDate}
                                 cancelOnBackgroundClick={true}
-
                             />
                         </div>
                         <div className="p-4">

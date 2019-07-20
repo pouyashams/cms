@@ -3,7 +3,7 @@ import SearchCriteria from "../search/search-criteria";
 import SearchResult from "../search/search-result";
 import {searchDataOFConfirmation} from "../../services/confirmationServise"
 import {toast} from 'react-toastify';
-import { withRouter } from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 
 class confirmation extends Component {
@@ -109,8 +109,27 @@ class confirmation extends Component {
         try {
             const result = await searchDataOFConfirmation(parameters);
             if (result.status === 200) {
-                this.setState({searchResultList : result.data.data});
-                console.log(this.state.searchResultList)
+                const searchResultList = [];
+                result.data.data.forEach((dataInfo) => {
+                    searchResultList.push(
+                        {
+                            name: dataInfo.orderStatus.name,
+                            mobileNumber: dataInfo.mobileNumber,
+                            identifier: dataInfo.identifier,
+                            date: dataInfo.orderDeliveryInfo.date,
+                            orderStatusIdentifier: dataInfo.orderStatus.name,
+                            customerReferenceNumber: dataInfo.customerReferenceNumber,
+                            time: dataInfo.orderDeliveryInfo.time,
+                            registerDate: dataInfo.registerDate,
+                            deliveryType: dataInfo.orderDeliveryInfo.deliveryType.name,
+                            address: dataInfo.addressInfo.address,
+                            productItemSellInfoList: dataInfo.productItemSellInfoList,
+                            canAcceptOrReject: dataInfo.canAcceptOrReject,
+                            sumOfAmount: dataInfo.sumOfAmount,
+                        }
+                    )
+                });
+                this.setState({searchResultList});
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -127,11 +146,13 @@ class confirmation extends Component {
         const {searchResultList, pageSize} = this.state;
 
         return (
-            <div className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
+            <div
+                className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
                     <h4 className="py-2">بررسی فروش</h4>
                 </div>
-                <SearchCriteria extraActions={extraActions} onSearch={this.search} searchCriteriaArray={searchCriteriaArray}/>
+                <SearchCriteria extraActions={extraActions} onSearch={this.search}
+                                searchCriteriaArray={searchCriteriaArray}/>
                 <SearchResult headerInfo={headerInfo} searchResultList={searchResultList} pageSize={pageSize}/>
             </div>
         );

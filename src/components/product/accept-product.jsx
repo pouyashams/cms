@@ -1,17 +1,16 @@
 import React, {Component} from 'react';
 import "../../css/textArea.css"
 // import {toast} from "react-toastify";
-import Image from "../choose-image"
 import {withRouter} from 'react-router-dom';
 
-class productInfo extends Component {
+class acceptProduct extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             productAttributeCategoryList: [],
             productItemSupplierList: [],
-            productItemImageBase64List:[],
+            productItemImageBase64List: [],
             productItemSupplier: "",
             name: "",
             englishName: "",
@@ -26,7 +25,7 @@ class productInfo extends Component {
         }
     };
 
-    async componentDidMount() {
+    componentDidMount() {
         if (this.props.productCategoryList !== undefined) {
             const productCategoryList = this.props.productCategoryList.filter(product => product.identifier !== "");
             productCategoryList.forEach((productCategory) => {
@@ -50,10 +49,6 @@ class productInfo extends Component {
         }
     }
 
-    handelChangeInput = (value, name) => {
-        this.setState({[name]: value});
-    };
-
     showProductDetails = () => {
         const {productInfo} = this.props.location;
         if (!productInfo) return this.props.history.push('/update-product');
@@ -74,54 +69,13 @@ class productInfo extends Component {
             }),
         });
     };
-
-
-    handelChangeAttribute = (productAttribute, productAttributeCategory) => {
-            // const productAttributeItemList = [];
-            // productAttributeItemList.push(
-            //     {
-            //         productAttribute: {
-            //             identifier: productAttribute
-            //         },
-            //         productAttributeCategory: {
-            //             identifier: productAttributeCategory
-            //         },
-            //     }
-            // );
-            //
-            // this.setState({productAttributeItemList});
-    };
-
-    madeData = () => {
-        let productCategory = {identifier: this.props.productCategory.identifier};
-        let productItemInfoList = [{
-            name: this.state.name,
-            englishName: this.state.englishName,
-            code: this.state.code,
-            numberOfProduct: this.state.numberOfProduct,
-            taxation: this.state.taxation,
-            price: this.state.price,
-            description: this.state.description,
-            productAttributeItemList: this.state.productAttributeItemList,
-            productItemSupplier: this.state.productItemSupplier,
-            productItemImageBase64List: this.returnFile()
-        }];
-        const dataInfo = {
-            productCategory: productCategory,
-            productItemInfoList: productItemInfoList,
-        };
-        return dataInfo;
-    };
-
-
-    // onUpdate = () => {
+    // OnCancel = () => {
+    // console.log(1234)
+    // };
+    // onAccept = () => {
     // console.log(1234)
     // };
 
-    returnFile = () => {
-        const data = this.refs.child.returnFile();
-        return data;
-    };
     render() {
         const productItem = this.state;
         return (
@@ -139,8 +93,6 @@ class productInfo extends Component {
                                    type={"input"}
                                    placeholder="---"
                                    value={productItem.name}
-                                   name={"name"}
-                                   onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
@@ -149,8 +101,6 @@ class productInfo extends Component {
                                    type={"input"}
                                    placeholder="انگلیسی"
                                    value={productItem.englishName}
-                                   name={"englishName"}
-                                   onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
@@ -159,8 +109,6 @@ class productInfo extends Component {
                                    type={"input"}
                                    placeholder="---"
                                    value={productItem.code}
-                                   name={"code"}
-                                   onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
@@ -169,8 +117,7 @@ class productInfo extends Component {
                                    type={"number"}
                                    placeholder="---"
                                    value={productItem.price}
-                                   name={"price"}
-                                   onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
+
                             />
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
@@ -179,8 +126,7 @@ class productInfo extends Component {
                                    type={"number"}
                                    placeholder="---"
                                    value={productItem.taxation}
-                                   name={"taxation"}
-                                   onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
+
                             />
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
@@ -189,23 +135,36 @@ class productInfo extends Component {
                                    type={"number"}
                                    placeholder="---"
                                    value={productItem.numberOfProduct}
-                                   name={"numberOfProduct"}
-                                   onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
+
                             />
                         </div>
+
                         <div className="form-group col-12 float-right">
                             <label>توضیحات :</label>
                             <textarea className="form-control text-center w-50 "
                                       value={productItem.description}
-                                      name={"description"}
-                                      onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
-                        {console.log(this.state.productItemImageBase64List,"poya")}
-                        <Image
-                            ref="child"
-                            base64Image={this.state.productItemImageBase64List}
-                        />
+                        {this.state.productItemImageBase64List.length !== 0 ?
+                            <div className="col-12 justify-content-center align-items-center text-center">
+                                <div
+                                    className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
+                                    <div className="form-group col-12 ">
+                                        <label className="col-12 py-1 font-weight-bold">عکس کالا :</label>
+                                        {this.state.productItemImageBase64List.map((productItemImage) =>
+                                            (
+                                                <img
+                                                    className="p-2 rounded float-right" alt="Cinque Terre" width="180"
+                                                    height="180"
+                                                    src={"data:image/png;base64," + productItemImage}
+                                                />
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            : null
+                        }
                     </div>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
@@ -217,15 +176,8 @@ class productInfo extends Component {
                                 (
                                     <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                                         <label>{productAttribute.productAttributeCategory.categoryName}:</label>
-                                        <select className="form-control text-center w-75"
-                                                defaultValue={productAttribute.productAttribute.identifier}
-                                                onChange={(e) => this.handelChangeAttribute(e.target.value, productAttribute.identifier)}
-                                        >
-                                            {productAttribute.productAttributeCategory.productAttributeList.map(
-                                                (productCategory) => {
-                                                    return (<option
-                                                        value={productCategory.identifier}>{productCategory.attributeValue}</option>);
-                                                })}
+                                        <select className="form-control text-center w-75">
+                                            <option>{productAttribute.productAttribute.attributeValue}</option>
                                         </select>
                                     </div>
                                 ))
@@ -233,18 +185,32 @@ class productInfo extends Component {
                         </div>
                     </div>
                 </div>
-
+                {this.state.canConfirmOrRejectProduct ?
                     <div className="col-12 p-3 text-center">
-                        <input type="button" className="btn btn-primary mr-3" value="به روز رسانی "
+                        <input type="button" className="btn btn-primary mr-3" value="تایید "
                                onClick={() => {
                                    ""
                                }}/>
+                        <input type="button" className="btn btn-primary mr-3" value="لغو"
+                               onClick={() => {
+                                   ""
+                               }}/>
+                    </div> :
+                    <div className="col-12 p-3 text-center justify-content-center">
+
+
+                        <button className="btn btn-danger btn-sm">
+                            <span className="fa fa-warning"/>
+                        </button>
+                        <h6 className="p-2 font-weight-bold">(قادر به تایید یا لغو نمی باشید)</h6>
                     </div>
+                }
+
             </div>
         );
     };
 }
 
-export default withRouter(productInfo);
+export default withRouter(acceptProduct);
 
 

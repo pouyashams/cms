@@ -9,3 +9,6 @@ export function searchCustomerBill(parameters) {
 export function searchCustomerInternet(parameters) {
     return http.post("http://shop.isuncharge.com/isunshop/report/search-internet-package-order", parameters);
 }
+export function fetchAllChildOfCurrentMerchant() {
+    return http.post("http://shop.isuncharge.com/isunshop/user/fetch-all-child-of-current-merchant", {});
+}

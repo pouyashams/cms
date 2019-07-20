@@ -14,10 +14,11 @@ import reportOfBill from "./components/report/report-of-bill";
 import reportOfInternetPack from "./components/report/report-of-internet-pack";
 import updateProduct from "./components/product/update-product";
 import addProduct from "./components/product/add-product";
-import RegisterMerchant from "./components/register-merchant";
-import EditMerchant from "./components/edit-merchant";
-import MerchantManagement from "./components/merchant-management";
+import RegisterMerchant from "./components/merchant-management/register-merchant";
+import EditMerchant from "./components/merchant-management/edit-merchant";
+import MerchantManagement from "./components/merchant-management/merchant-management";
 import productInfo from "./components/product/product-info";
+import acceptProduct from "./components/product/accept-product";
 import productInfoUpdate from "./components/product/product-info-update";
 import deliveryInfoManagement from "./components/deliveryInfo-management/deliveryInfo-management";
 import editDeliveryInfo from "./components/deliveryInfo-management/edit-deliveryInfo";
@@ -53,6 +54,7 @@ class App extends Component {
                                 <PrivateRoute path="/product-info" exact={false} component={productInfo}/>
                                 <PrivateRoute path="/update-product" exact={false} component={updateProduct}/>
                                 <PrivateRoute path="/product-info-update" exact={false} component={productInfoUpdate}/>
+                                <PrivateRoute path="/accept-product" exact={false} component={acceptProduct}/>
                                 <PrivateRoute path="/deliveryInfo-management" exact={false} component={deliveryInfoManagement}/>
                                 <PrivateRoute path="/edit-deliveryInfo" exact={false} component={editDeliveryInfo}/>
                                 <PrivateRoute path="/hardwareInfo" exact={false} component={hardwareInfo}/>

@@ -18,13 +18,11 @@ class addProduct extends Component {
     async componentDidMount() {
         try {
             const oldProductCategoryArray = [{identifier: "", productCategoryName: "انتخاب کنید..."}];
-            const oldProductItemSupplierList = [{identifier: "", name: "انتخاب کنید..."}];
             const result = await await loadDataOfProduct();
             if (result.status === 200) {
                 const productCategoryList = oldProductCategoryArray.concat(result.data.productCategoryList);
-                const productItemSupplierList = oldProductItemSupplierList.concat(result.data.productItemSupplierList);
 
-                this.setState({productCategoryList, productItemSupplierList});
+                this.setState({productCategoryList});
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {

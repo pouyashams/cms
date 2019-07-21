@@ -11,9 +11,7 @@ class productInfo extends Component {
         super(props);
         this.state = {
             productAttributeCategoryList: [],
-            productItemSupplierList: [],
             productItemImageBase64List: [],
-            productItemSupplier: "",
             name: "",
             englishName: "",
             code: "",
@@ -61,7 +59,7 @@ class productInfo extends Component {
         if (!productInfo) return this.props.history.push('/update-product');
         this.setState({
             name: this.getValue(productInfo.name),
-            identifier: this.getValue(productInfo.identifier),
+            identifier: this.getValue(productInfo.productItemInfoIdentifier),
             englishName: this.getValue(productInfo.englishName),
             code: this.getValue(productInfo.code),
             numberOfProduct: this.getValue(productInfo.numberOfProduct),
@@ -70,13 +68,26 @@ class productInfo extends Component {
             description: this.getValue(productInfo.description),
             productAttributeItemList: this.getValue(productInfo.productAttributeItemList),
             productItemImageBase64List: this.getValue(productInfo.productItemImageBase64List),
-            productItemSupplier: this.getValue({
-                identifier: productInfo.productItemSupplierValue,
-                name: productInfo.supplierName
-            }),
+            productAttributeList: this.getSelectedAttribute(productInfo.productAttributeItemList)
         });
     };
 
+    getSelectedAttribute = (productAttributeItemList) => {
+        let productAttributeList= [];
+        productAttributeItemList.forEach((productAttribute) => {
+            productAttributeList.push(
+                {
+                    productAttribute: {
+                        identifier: productAttribute.productAttribute.identifier
+                    },
+                    productAttributeCategory: {
+                        identifier: productAttribute.productAttributeCategory.identifier
+                    }
+                }
+            )
+        });
+        return productAttributeList;
+    };
 
     handelChangeAttribute = (productAttribute, productAttributeCategory) => {
         const productAttributeList = [];
@@ -87,7 +98,7 @@ class productInfo extends Component {
                 },
                 productAttributeCategory: {
                     identifier: productAttributeCategory
-                },
+                }
             }
         );
 
@@ -97,9 +108,9 @@ class productInfo extends Component {
     madeData = () => {
         const productItemImageBase64List = [];
         this.returnFile().forEach((file) => {
-            productItemImageBase64List.push(file.substr(23))
+            productItemImageBase64List.push(file.substr(22))
         });
-        let productItemInfoList = [{
+        let productItemInfoList = {
             name: this.state.name,
             englishName: this.state.englishName,
             code: this.state.code,
@@ -108,11 +119,9 @@ class productInfo extends Component {
             price: this.state.price,
             description: this.state.description,
             productAttributeItemList: this.state.productAttributeList,
-            productItemSupplier: {
-                identifier: 1
-            },
+            identifier: this.state.identifier,
             productItemImageBase64List: productItemImageBase64List
-        }];
+        };
         return productItemInfoList;
     };
 
@@ -123,46 +132,55 @@ class productInfo extends Component {
             toast.error('نام کالا را وارد کنید');
             return false;
         }
+
         if (!this.hasValue(englishName)) {
             toast.error('نام انگلیسی کالا را وارد کنید');
             return false;
         }
+
         if (!this.hasValue(code)) {
             toast.error('شناسه کالا را وارد کنید');
             return false;
         }
+
         if (!this.hasValue(numberOfProduct)) {
             toast.error('تعداد کالا را وارد کنید');
             return false;
         }
+
         if (!this.hasValue(taxation)) {
             toast.error(' مالیات را وارد کنید');
             return false;
         }
+
         if (!this.hasValue(price)) {
             toast.error(' قیمت را وارد کنید');
             return false;
         }
+
         if (!this.hasValue(description)) {
             toast.error(' توضیحات را وارد کنید');
             return false;
         }
+
         if (!this.hasValue(productItemImageBase64List) || productItemImageBase64List.length === 0) {
             toast.error('حداقل یک عکس وارد کنید');
             return false;
         }
 
-        return false;
+        return true;
     }
 
-    onUpdateInfo = async () => {
+
+    async onUpdateInfo() {
         let canUpdate = this.canAddProduct();
         if (canUpdate) {
             try {
                 const result = await onUpdate(this.madeData());
                 if (result.status === 200) {
-                    toast.error('کالا با موفقیت به روز رسانی شد');
+                    toast.success('کالا با موفقیت به روز رسانی شد');
                     document.getElementById("loading").style.display = "none";
+                    return this.props.history.push('/update-product');
                 }
             } catch (ex) {
                 if (ex.response && ex.response.status === 400) {
@@ -172,6 +190,7 @@ class productInfo extends Component {
             document.getElementById("loading").style.display = "none";
         }
     };
+
     returnFile = () => {
         const data = this.refs.child.returnFile();
         return data;
@@ -264,11 +283,7 @@ class productInfo extends Component {
                             />
                         </div>
                         {base64Image.length !== 0 ?
-                            <Image
-                                p={console.log(base64Image, "qewret")}
-                                ref="child"
-                                base64Image={base64Image}
-                            /> : null
+                            <Image ref="child" base64Image={base64Image}/> : null
                         }
 
                     </div>
@@ -284,7 +299,7 @@ class productInfo extends Component {
                                         <label>{productAttribute.productAttributeCategory.categoryName}:</label>
                                         <select className="form-control text-center w-75"
                                                 defaultValue={productAttribute.productAttribute.identifier}
-                                                onChange={(e) => this.handelChangeAttribute(e.target.value, productAttribute.identifier)}
+                                                onChange={(e) => this.handelChangeAttribute(e.target.value, productAttribute.productAttributeCategory.identifier)}
                                         >
                                             {productAttribute.productAttributeCategory.productAttributeList.map(
                                                 (productCategory) => {
@@ -300,10 +315,7 @@ class productInfo extends Component {
                 </div>
 
                 <div className="col-12 p-3 text-center">
-                    <input type="button" className="btn btn-primary mr-3" value="به روز رسانی "
-                           onClick={() => {
-                               this.onUpdateInfo()
-                           }}/>
+                    <input type="button" className="btn btn-primary mr-3" value="به روز رسانی " onClick={() => {this.onUpdateInfo()}}/>
                 </div>
             </div>
         );

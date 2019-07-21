@@ -72,7 +72,6 @@ class definitionProductCategory extends Component {
             selectedAttributeList.push(selectedAttribute)
         }
         this.setState({selectedAttributeList});
-        console.log(this.state.selectedAttributeList)
     };
 
     handelChangeSelected = (identifier) => {

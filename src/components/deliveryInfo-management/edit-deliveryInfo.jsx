@@ -49,7 +49,6 @@ class editDeliveryInfo extends Component {
                 "timePeriodList": this.state.timePeriodList,
             }
         ];
-        console.log(data)
         const result = await sendDataOfDelivery(data);
         try {
             if (result.status === 200) {
@@ -86,7 +85,6 @@ class editDeliveryInfo extends Component {
     onDelete(data) {
         const dataInfo = this.state.timePeriodList.filter(dataInfos => dataInfos.dateTime !== data.dateTime);
         this.setState({timePeriodList: dataInfo});
-        console.log(this.state.timePeriodList)
     }
 
     componentDidMount() {

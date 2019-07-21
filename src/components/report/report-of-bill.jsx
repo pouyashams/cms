@@ -181,8 +181,7 @@ class reportOfBill extends Component {
         try {
             const result = await searchCustomerBill(parameters);
             if (result.status === 200) {
-                this.setState({searchResultList: result.data.data})
-                console.log(this.state.searchResultList)
+                this.setState({searchResultList: result.data.data});
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {

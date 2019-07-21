@@ -70,14 +70,12 @@ class hardwareInfo extends Component {
             lastExecutionDate: formatted.substr(5, 13).substr(2, 10),
             lastExecutionTime: formatted.substr(24),
         });
-        console.log(this.state.lastExecutionDate, this.state.lastExecutionTime)
     };
 
     async componentDidMount() {
         try {
             const result = await loadDataOfhardware();
             if (result.status === 200) {
-                console.log(result.data.data)
                 this.setState({
                     cpuusagePercent: result.data.data.cpuusagePercent,
                     ramusagePercent: result.data.data.ramusagePercent
@@ -134,7 +132,6 @@ class hardwareInfo extends Component {
             const result = await receiveTime();
             if (result.status === 200) {
                 const dataTime = [];
-                console.log(result.data.data);
                 result.data.data.forEach((data) => {
                     data.scheduledJobExecutionList.forEach((dataInfo) => {
                         dataTime.push(

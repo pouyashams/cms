@@ -10,9 +10,7 @@ class confirmProduct extends Component {
         super(props);
         this.state = {
             productAttributeCategoryList: [],
-            productItemSupplierList: [],
             productItemImageBase64List: [],
-            productItemSupplier: "",
             name: "",
             englishName: "",
             code: "",
@@ -23,6 +21,7 @@ class confirmProduct extends Component {
             checked: "",
             productAttributeItemList: [],
             identifier: "",
+            canConfirmOrRejectProduct: false
         }
     };
 
@@ -52,11 +51,12 @@ class confirmProduct extends Component {
 
     acceptProductInfo = async () => {
         try {
-            const result = await acceptProduct(this.state.identifier);
+            let data = {identifier : this.state.identifier};
+            const result = await acceptProduct(data);
             if (result.status === 200) {
                 toast.success('کالا با موفقیت تایید شد');
-                this.setState({searchResultList: result.data.data});
                 document.getElementById("loading").style.display = "none";
+                return this.props.history.push('/update-product');
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -66,14 +66,13 @@ class confirmProduct extends Component {
         document.getElementById("loading").style.display = "none";
     };
     cancelProductInfo = async () => {
-        console.log(1234)
         try {
-            const result = await cancelProduct(this.state.identifier);
+            let data = {identifier : this.state.identifier};
+            const result = await cancelProduct(data);
             if (result.status === 200) {
                 toast.success('کالا با موفقیت لغو شد');
-
-                this.setState({searchResultList: result.data.data});
                 document.getElementById("loading").style.display = "none";
+                return this.props.history.push('/update-product');
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -87,6 +86,7 @@ class confirmProduct extends Component {
         const {productInfo} = this.props.location;
         if (!productInfo) return this.props.history.push('/update-product');
         this.setState({
+            canConfirmOrRejectProduct: this.getValue(productInfo.canConfirmOrRejectProduct),
             name: this.getValue(productInfo.name),
             identifier: this.getValue(productInfo.identifier),
             englishName: this.getValue(productInfo.englishName),
@@ -96,11 +96,7 @@ class confirmProduct extends Component {
             price: this.getValue(productInfo.price),
             description: this.getValue(productInfo.description),
             productAttributeItemList: this.getValue(productInfo.productAttributeItemList),
-            productItemImageBase64List: this.getValue(productInfo.productItemImageBase64List),
-            productItemSupplier: this.getValue({
-                identifier: productInfo.productItemSupplierValue,
-                name: productInfo.supplierName
-            }),
+            productItemImageBase64List: this.getValue(productInfo.productItemImageBase64List)
         });
     };
 

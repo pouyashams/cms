@@ -71,7 +71,7 @@ class productInfo extends Component {
     madeData = () => {
         const productItemImageBase64List = [];
         this.returnFile().forEach((file) => {
-            productItemImageBase64List.push(file.substr(23))
+            productItemImageBase64List.push(file.substr(22))
         });
         let productCategory = {identifier: this.props.productCategory.identifier};
         let productItemInfoList = [{

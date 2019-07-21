@@ -191,17 +191,15 @@ class updateProduct extends Component {
     search = async (parameters) => {
         try {
             const result = await searchProduct(parameters);
-            const data = [];
+            let searchResultList = [];
             if (result.status === 200) {
                 result.data.data.forEach((dataInfo) => {
-                    console.log(dataInfo,1234)
-                    data.push(
+                    searchResultList.push(
                         {
-                            identifier:dataInfo.identifier,
+                            identifier: dataInfo.identifier,
+                            productItemInfoIdentifier: dataInfo.productItemInfo.identifier,
                             canConfirmOrRejectProduct: dataInfo.canConfirmOrRejectProduct,
                             status: dataInfo.status,
-                            productItemSupplierValue: dataInfo.productItemInfo.productItemSupplier.identifier,
-                            supplierName: dataInfo.productItemInfo.productItemSupplier.name,
                             name: dataInfo.name,
                             englishName: dataInfo.productItemInfo.englishName,
                             code: dataInfo.productItemInfo.code,
@@ -210,12 +208,11 @@ class updateProduct extends Component {
                             price: dataInfo.productItemInfo.price,
                             description: dataInfo.productItemInfo.description,
                             productAttributeItemList: dataInfo.productItemInfo.productAttributeItemList,
-                            productItemImageBase64List: dataInfo.productItemInfo.productItemImageBase64List,
+                            productItemImageBase64List: dataInfo.productItemInfo.productItemImageBase64List
                         }
                     )
                 });
-                this.setState({searchResultList: data})
-                console.log(this.state.searchResultList,123454323)
+                this.setState({searchResultList});
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {

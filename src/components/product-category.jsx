@@ -67,7 +67,6 @@ class productCategory extends Component {
             categoryName: categoryName,
             productAttributeList: productAttributeList
         };
-        console.log(data)
         try {
             const result = await await sendListOfProduct(data);
             if (result.status === 200) {

@@ -14,7 +14,6 @@ class chooseImage extends Component {
 
     componentDidMount() {
         const {base64Image} = this.props;
-        console.log(base64Image)
         if (base64Image !== "" && base64Image !== null && base64Image !== undefined) {
             this.setState({productItemImageBase64List: base64Image})
 

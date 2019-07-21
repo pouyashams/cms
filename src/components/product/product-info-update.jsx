@@ -109,29 +109,69 @@ class productInfo extends Component {
             description: this.state.description,
             productAttributeItemList: this.state.productAttributeList,
             productItemSupplier: {
-                        identifier: 1
-                    },
+                identifier: 1
+            },
             productItemImageBase64List: productItemImageBase64List
         }];
         return productItemInfoList;
     };
 
+    canAddProduct() {
+        const {name, englishName, code, numberOfProduct, taxation, price, description, productItemImageBase64List} = this.state;
 
-    onUpdateInfo = async() => {
-        try {
-            const result = await onUpdate(this.madeData());
-            if (result.status === 200) {
-                toast.error('کالا با موفقیت به روز رسانی شد');
-                document.getElementById("loading").style.display = "none";
-            }
-        } catch (ex) {
-            if (ex.response && ex.response.status === 400) {
-                toast.error('مشکلی در ارتباط با سرور به وجود امده است');
-            }
+        if (!this.hasValue(name)) {
+            toast.error('نام کالا را وارد کنید');
+            return false;
         }
-        document.getElementById("loading").style.display = "none";
-    };
+        if (!this.hasValue(englishName)) {
+            toast.error('نام انگلیسی کالا را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(code)) {
+            toast.error('شناسه کالا را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(numberOfProduct)) {
+            toast.error('تعداد کالا را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(taxation)) {
+            toast.error(' مالیات را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(price)) {
+            toast.error(' قیمت را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(description)) {
+            toast.error(' توضیحات را وارد کنید');
+            return false;
+        }
+        if (!this.hasValue(productItemImageBase64List) || productItemImageBase64List.length === 0) {
+            toast.error('حداقل یک عکس وارد کنید');
+            return false;
+        }
 
+        return false;
+    }
+
+    onUpdateInfo = async () => {
+        let canUpdate = this.canAddProduct();
+        if (canUpdate) {
+            try {
+                const result = await onUpdate(this.madeData());
+                if (result.status === 200) {
+                    toast.error('کالا با موفقیت به روز رسانی شد');
+                    document.getElementById("loading").style.display = "none";
+                }
+            } catch (ex) {
+                if (ex.response && ex.response.status === 400) {
+                    toast.error('مشکلی در ارتباط با سرور به وجود امده است');
+                }
+            }
+            document.getElementById("loading").style.display = "none";
+        }
+    };
     returnFile = () => {
         const data = this.refs.child.returnFile();
         return data;
@@ -139,6 +179,13 @@ class productInfo extends Component {
 
     render() {
         const productItem = this.state;
+        const base64Image = [];
+        const productItemImageBase64List = this.state.productItemImageBase64List;
+        productItemImageBase64List.forEach((file) => {
+            base64Image.push(
+                "data:image/png;base64," + file
+            )
+        });
         return (
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
@@ -216,11 +263,14 @@ class productInfo extends Component {
                                       onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
-                        {console.log(this.state.productItemImageBase64List, "poya")}
-                        <Image
-                            ref="child"
-                            base64Image={this.state.productItemImageBase64List}
-                        />
+                        {base64Image.length !== 0 ?
+                            <Image
+                                p={console.log(base64Image, "qewret")}
+                                ref="child"
+                                base64Image={base64Image}
+                            /> : null
+                        }
+
                     </div>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">

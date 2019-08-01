@@ -20,7 +20,6 @@ class definitionProductCategory extends Component {
             productCategoryName: "",
             productCategoryList: "",
             productAttributeCategoryList: "",
-            selectedAttributeList: ""
         };
     };
 
@@ -29,9 +28,19 @@ class definitionProductCategory extends Component {
             const {oldProductCategoryArray} = this.state;
             const result = await await loadData();
             if (result.status === 200) {
+                const CategoryList = [];
                 const productCategoryList = oldProductCategoryArray.concat(result.data.productCategoryList);
                 const productAttributeCategoryList = result.data.productAttributeCategoryList;
-                this.setState({productCategoryList, productAttributeCategoryList});
+                productAttributeCategoryList.forEach((productCategory) => {
+                    CategoryList.push(
+                        {
+                            identifier: productCategory.identifier,
+                            categoryName: productCategory.categoryName,
+                            checked: false
+                        }
+                    )
+                });
+                this.setState({productCategoryList, productAttributeCategoryList: CategoryList});
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -42,10 +51,18 @@ class definitionProductCategory extends Component {
     }
 
     sendProduct = async () => {
-        const {productCategoryName, parentProductCategory,selectedAttributeList} = this.state;
+        const {productCategoryName, parentProductCategory,productAttributeCategoryList} = this.state;
+        const categoryList=[];
+        productAttributeCategoryList.forEach((productCategory) => {
+            if(productCategory.checked===true){
+                categoryList.push(
+                    {identifier: productCategory.identifier}
+                )
+            }
+        });
         const data = {
             productCategoryName: productCategoryName,
-            productAttributeCategoryList : selectedAttributeList,
+            productAttributeCategoryList: categoryList,
             parentProductCategory: parentProductCategory
         };
         try {
@@ -63,15 +80,30 @@ class definitionProductCategory extends Component {
     handelChangeProductCategoryName = (productCategoryName) => {
         this.setState({productCategoryName});
     };
-    handelChangeCheckBox = (id) => {
-        const selectedAttributeList = [];
-        const checked = this.state.checked;
-        this.setState({checked: !checked});
-        let selectedAttribute = {identifier: id, checked: checked};
-        if (!this.state.checked) {
-            selectedAttributeList.push(selectedAttribute)
-        }
-        this.setState({selectedAttributeList});
+    handelChangeCheckBox = (id, checked) => {
+        const productAttributeCategoryList = [];
+        this.state.productAttributeCategoryList.forEach((productCategory) => {
+            if (productCategory.identifier === parseInt(id)) {
+                productAttributeCategoryList.push(
+                    {
+                        identifier: productCategory.identifier,
+                        checked: checked,
+                        categoryName: productCategory.categoryName
+                    }
+                )
+            }
+            else {
+                productAttributeCategoryList.push(
+                    {
+                        identifier: productCategory.identifier,
+                        checked: productCategory.checked,
+                        categoryName: productCategory.categoryName
+
+                    }
+                )
+            }
+        });
+        this.setState({productAttributeCategoryList});
     };
 
     handelChangeSelected = (identifier) => {
@@ -137,9 +169,9 @@ class definitionProductCategory extends Component {
                                             <div className="input-group addon">
                                                 <div className="py-2 custom-control custom-checkbox">
                                                     <input type="checkbox" className=" custom-control-input"
-                                                           checked={this.state.checked}
+                                                           checked={productAttribute.checked}
                                                            id={productAttribute.identifier}
-                                                           onChange={(e) => this.handelChangeCheckBox(e.target.id)}
+                                                           onChange={(e) => this.handelChangeCheckBox(e.target.id, e.target.checked)}
                                                     />
                                                     <label className="px-4 custom-control-label"
                                                            htmlFor={productAttribute.identifier}>{productAttribute.categoryName}</label>

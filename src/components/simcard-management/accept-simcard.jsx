@@ -4,24 +4,21 @@ import {withRouter} from 'react-router-dom';
 import {acceptProduct, cancelProduct} from "../../services/productService";
 import {toast} from 'react-toastify';
 
-class confirmProduct extends Component {
+class acceptSimcard extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            productAttributeCategoryList: [],
-            productItemImageBase64List: [],
             name: "",
-            englishName: "",
-            code: "",
-            numberOfProduct: "",
-            taxation: "",
+            firstName: "",
+            lastName: "",
+            mobileNumber: "",
+            status: "",
+            dealType: "",
             price: "",
-            description: "",
-            checked: "",
             productAttributeItemList: [],
             identifier: "",
-            canConfirmOrRejectProduct: ""
+            canConfirmOrRejectProduct: "",
         }
     };
 
@@ -51,7 +48,7 @@ class confirmProduct extends Component {
 
     acceptProductInfo = async () => {
         try {
-            let data = {identifier : this.state.identifier};
+            let data = {identifier: this.state.identifier};
             const result = await acceptProduct(data);
             if (result.status === 200) {
                 toast.success('کالا با موفقیت تایید شد');
@@ -67,7 +64,7 @@ class confirmProduct extends Component {
     };
     cancelProductInfo = async () => {
         try {
-            let data = {identifier : this.state.identifier};
+            let data = {identifier: this.state.identifier};
             const result = await cancelProduct(data);
             if (result.status === 200) {
                 toast.success('کالا با موفقیت لغو شد');
@@ -84,19 +81,19 @@ class confirmProduct extends Component {
 
     showProductDetails = () => {
         const {productInfo} = this.props.location;
-        if (!productInfo) return this.props.history.push('/update-product');
+        if (!productInfo) return this.props.history.push('/simcard-management');
+        console.log(productInfo)
         this.setState({
             canConfirmOrRejectProduct: this.getValue(productInfo.canConfirmOrRejectProduct),
             name: this.getValue(productInfo.name),
+            firstName: this.getValue(productInfo.firstName),
+            dealType: this.getValue(productInfo.dealType),
+            status: this.getValue(productInfo.status),
+            lastName: this.getValue(productInfo.lastName),
+            mobileNumber: this.getValue(productInfo.mobileNumber),
             identifier: this.getValue(productInfo.identifier),
-            englishName: this.getValue(productInfo.englishName),
-            code: this.getValue(productInfo.code),
-            numberOfProduct: this.getValue(productInfo.numberOfProduct),
-            taxation: this.getValue(productInfo.taxation),
             price: this.getValue(productInfo.price),
-            description: this.getValue(productInfo.description),
             productAttributeItemList: this.getValue(productInfo.productAttributeItemList),
-            productItemImageBase64List: this.getValue(productInfo.productItemImageBase64List)
         });
     };
 
@@ -107,102 +104,101 @@ class confirmProduct extends Component {
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div
                     className=" col-12 justify-content-center align-items-center text-center header-box  text-light">
-                    <h4 className="py-2">تایید و لغو کالا</h4>
+                    <h4 className="py-2">تایید و لغو سیمکارت</h4>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div className="rtl m-0 float-right row w-100 justify-content-start my-3 pb-3">
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>نام کالا :</label>
-                            <input className="form-control text-center w-50"
+                            <label>نام مشتری :</label>
+                            <input className="form-control text-center w-75"
+                                   type={"input"}
+                                   placeholder="---"
+                                   value={productItem.firstName}
+                            />
+                        </div>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                            <label>نام خانوادگی مشتری :</label>
+                            <input className="form-control text-center w-75"
+                                   type={"input"}
+                                   placeholder="---"
+                                   value={productItem.lastName}
+                            />
+                        </div>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                            <label>عنوان :</label>
+                            <input className="form-control text-center w-75"
                                    type={"input"}
                                    placeholder="---"
                                    value={productItem.name}
                             />
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>نام کالا :</label>
-                            <input className="form-control text-center w-50"
-                                   type={"input"}
-                                   placeholder="انگلیسی"
-                                   value={productItem.englishName}
-                            />
-                        </div>
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>شناسه کالا :</label>
-                            <input className="form-control text-center w-50"
-                                   type={"input"}
-                                   placeholder="---"
-                                   value={productItem.code}
-                            />
-                        </div>
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>قیمت :</label>
-                            <input className="form-control text-center w-50"
-                                   type={"number"}
+                            <input className="form-control text-center w-75"
+                                   type={"input"}
                                    placeholder="---"
                                    value={productItem.price}
 
                             />
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>مالیات :</label>
-                            <input className="form-control text-center w-50"
-                                   type={"number"}
+                            <label>وضعیات :</label>
+                            <input className="form-control text-center w-75"
+                                   type={"input"}
                                    placeholder="---"
-                                   value={productItem.taxation}
+                                   value={productItem.status}
 
                             />
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>تعداد کالا :</label>
-                            <input className="form-control text-center w-50"
-                                   type={"number"}
+                            <label>شماره مشتری :</label>
+                            <input className="form-control text-center w-75"
+                                   type={"input"}
                                    placeholder="---"
-                                   value={productItem.numberOfProduct}
+                                   value={productItem.mobileNumber}
 
                             />
                         </div>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                            <label>نوع معامله :</label>
+                            <input className="form-control text-center w-75"
+                                   type={"input"}
+                                   placeholder="---"
+                                   value={productItem.dealType}
 
-                        <div className="form-group col-12 float-right">
-                            <label>توضیحات :</label>
-                            <textarea className="form-control text-center w-50 "
-                                      value={productItem.description}
                             />
                         </div>
-                        {this.state.productItemImageBase64List.length !== 0 ?
-                            <div className="col-12 justify-content-center align-items-center text-center">
-                                <div
-                                    className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
-                                    <div className="form-group col-12 ">
-                                        <label className="col-12 py-1 font-weight-bold">عکس کالا :</label>
-                                        {this.state.productItemImageBase64List.map((productItemImage) =>
-                                            (
-                                                <img
-                                                    className="p-2 rounded float-right" alt="Cinque Terre" width="180"
-                                                    height="180"
-                                                    src={"data:image/png;base64," + productItemImage}
-                                                />
-                                            ))
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            : null
-                        }
                     </div>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div
                         className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
                         <div className="form-group col-12 ">
-                            <h4 className="py-3">تعریف ویژگی کالا :</h4>
+                            <h4 className="py-3">مشخصات سیمکارت :</h4>
+                            {console.log(this.state.productAttributeItemList, 1234)}
                             {this.state.productAttributeItemList.map((productAttribute) =>
                                 (
-                                    <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                                        <label>{productAttribute.productAttributeCategory.categoryName}:</label>
-                                        <select className="form-control text-center w-75">
-                                            <option>{productAttribute.productAttribute.attributeValue}</option>
-                                        </select>
+                                    <div>
+                                        {productAttribute.value !== null ?
+                                            <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+
+                                                <label>{productAttribute.productAttributeCategory.categoryName}:</label>
+                                                <input className="form-control text-center w-75"
+                                                       type={"input"}
+                                                       placeholder="---"
+                                                       value={productAttribute.value}
+                                                />
+                                            </div> :
+                                            <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+
+                                                <label>{productAttribute.productAttributeCategory.categoryName}:</label>
+                                                <input className="form-control text-center w-75"
+                                                       type={"input"}
+                                                       placeholder="---"
+                                                       value={productAttribute.productAttribute.attributeValue}
+                                                />
+                                            </div>
+                                        }
                                     </div>
                                 ))
                             }
@@ -235,6 +231,6 @@ class confirmProduct extends Component {
     };
 }
 
-export default withRouter(confirmProduct);
+export default withRouter(acceptSimcard);
 
 

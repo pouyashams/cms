@@ -18,8 +18,13 @@ const navLinks = [
         icon: "fa fa-plus-square",
     },
     {
-        path: "/update-product",
+        path: "/product-management",
         name: "مدیریت کالا",
+        icon: "fa fa-refresh",
+    },
+    {
+        path: "/simcard-management",
+        name: "مدیریت سیمکارت",
         icon: "fa fa-refresh",
     },
     {

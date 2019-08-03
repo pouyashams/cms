@@ -25,6 +25,8 @@ import editDeliveryInfo from "./components/deliveryInfo-management/edit-delivery
 import hardwareInfo from "./components/hardwareInfo";
 import Confirmation from "./components/confirmation/confirmation";
 import acceptConfirmation from "./components/confirmation/accept-confirmation";
+import simcardManagement from "./components/simcard-management/simcard-management";
+import acceptSimcard from "./components/simcard-management/accept-simcard";
 
 class App extends Component {
     render() {
@@ -52,7 +54,9 @@ class App extends Component {
                                 <PrivateRoute path="/report-of-internet-pack" exact={false} component={reportOfInternetPack}/>
                                 <PrivateRoute path="/add-product" exact={false} component={addProduct}/>
                                 <PrivateRoute path="/product-info" exact={false} component={productInfo}/>
-                                <PrivateRoute path="/update-product" exact={false} component={updateProduct}/>
+                                <PrivateRoute path="/product-management" exact={false} component={updateProduct}/>
+                                <PrivateRoute path="/simcard-management" exact={false} component={simcardManagement}/>
+                                <PrivateRoute path="/accept-simcard" exact={false} component={acceptSimcard}/>
                                 <PrivateRoute path="/product-info-update" exact={false} component={productInfoUpdate}/>
                                 <PrivateRoute path="/accept-product" exact={false} component={acceptProduct}/>
                                 <PrivateRoute path="/deliveryInfo-management" exact={false} component={deliveryInfoManagement}/>

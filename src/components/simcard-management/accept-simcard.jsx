@@ -107,6 +107,10 @@ class acceptSimcard extends Component {
                     <h4 className="py-2">تایید و لغو سیمکارت</h4>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
+                    <div
+                        className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
+                        <div className="form-group col-12 ">
+                            <h4 className="py-2">مشخصات مشتری :</h4>
                     <div className="rtl m-0 float-right row w-100 justify-content-start my-3 pb-3">
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>نام مشتری :</label>
@@ -142,7 +146,7 @@ class acceptSimcard extends Component {
                             />
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>وضعیات :</label>
+                            <label>وضعیت :</label>
                             <input className="form-control text-center w-75"
                                    type={"input"}
                                    placeholder="---"
@@ -169,6 +173,8 @@ class acceptSimcard extends Component {
                             />
                         </div>
                     </div>
+                </div>
+                </div>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div

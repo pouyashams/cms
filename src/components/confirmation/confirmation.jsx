@@ -21,7 +21,7 @@ class confirmation extends Component {
     onUpdate(searchResult) {
         this.props.history.push({
             pathname: '/accept-confirmation',
-            customerInfo: searchResult
+            dataInfo: searchResult
         });
     }
 
@@ -48,7 +48,7 @@ class confirmation extends Component {
                 label: "تا تاریخ"
             },
             {
-                name: "orderStatus",
+                name: "orderStatusCode",
                 element: "select",
                 placeholder: "---",
                 defaultValue: "",
@@ -110,21 +110,17 @@ class confirmation extends Component {
             const result = await searchDataOFConfirmation(parameters);
             if (result.status === 200) {
                 const searchResultList = [];
+                console.log(result.data.data)
                 result.data.data.forEach((dataInfo) => {
                     searchResultList.push(
                         {
-                            name: dataInfo.orderStatus.name,
-                            mobileNumber: dataInfo.mobileNumber,
-                            identifier: dataInfo.identifier,
-                            date: dataInfo.orderDeliveryInfo.date,
-                            orderStatus: dataInfo.orderStatus.name,
-                            customerReferenceNumber: dataInfo.customerReferenceNumber,
-                            time: dataInfo.orderDeliveryInfo.time,
-                            registerDate: dataInfo.registerDate,
-                            deliveryType: dataInfo.orderDeliveryInfo.deliveryType.name,
-                            address: dataInfo.addressInfo.address,
-                            canAcceptOrReject: dataInfo.canAcceptOrReject,
-                            sumOfAmount: dataInfo.sumOfAmount,
+                            "name": dataInfo.orderStatus.name,
+                            "mobileNumber": dataInfo.mobileNumber,
+                            "identifier": dataInfo.identifier,
+                            "orderStatus": dataInfo.orderStatus.name,
+                            "customerReferenceNumber": dataInfo.customerReferenceNumber,
+                            "registerDate": dataInfo.registerDate,
+                            "sumOfAmount": dataInfo.sumOfAmount
                         }
                     )
                 });

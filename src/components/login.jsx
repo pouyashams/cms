@@ -12,11 +12,11 @@ class Login extends Component {
         e.preventDefault();
 
         try {
-            const access_token = await login(this.state.username, this.state.password);
-            if (access_token !== null) {
-                sessionStorage.setItem('token', access_token);
+            const loginInfo = await login(this.state.username, this.state.password);
+            if (loginInfo !== null) {
+                sessionStorage.setItem('token', loginInfo.access_token);
+                sessionStorage.setItem('authorities', JSON.stringify(loginInfo.authorityList));
                 sessionStorage.removeItem("login-message");
-                // await getUserInfo();
                 this.props.history.replace('/');
             } else {
                 toast.error('نام کاربری یا کلمه عبور اشتباه هست');

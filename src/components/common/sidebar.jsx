@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 // import { getCourseCount } from '../../services/courseService';
 import getNavLinks from './../../services/NavLinks';
 
 class Sidebar extends Component {
-
 
 
     state = {
@@ -23,6 +22,19 @@ class Sidebar extends Component {
         window.location = '/';
     };
 
+    hasAuthority = (authority) => {
+        const authorities = JSON.parse(sessionStorage.getItem('authorities'));
+        let foundAuthority = false;
+        if (authorities !== undefined && authorities !== null) {
+            authorities.forEach((authorityInfo) => {
+                if (authorityInfo.authority === authority) {
+                    foundAuthority = true;
+                }
+            });
+        }
+        return foundAuthority;
+    };
+
     render() {
         let count = 1;
         const navLinks = getNavLinks();
@@ -37,14 +49,14 @@ class Sidebar extends Component {
                         </div>
                     </div>
                     <ul className="nav flex-column">
-                        {navLinks.map(nav => (
+                        {navLinks.map(nav => this.hasAuthority(nav.authority) ? (
                             <li className="nav-item sidebar-dropdown" key={count++}>
                                 <Link className="nav-link" to={nav.path}>
-                                    <span className={nav.icon} />
+                                    <span className={nav.icon}/>
                                     <span className="icon-title m-2">{nav.name}</span>
                                 </Link>
                             </li>
-                        ))}
+                        ) : null)}
                     </ul>
                 </div>
             </nav>

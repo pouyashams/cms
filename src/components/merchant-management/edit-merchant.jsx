@@ -38,6 +38,7 @@ class EditMerchant extends Component {
             identifier: merchantInfo.identifier,
             name: this.getValue(merchantInfo.name),
             username: this.getValue(merchantInfo.username),
+            appName: this.getValue(merchantInfo.appName),
             clientId: this.getValue(merchantInfo.merchantOAuthDetails.clientId),
             parent: this.getValue(merchantInfo.parent),
             nationalCode: this.getValue(merchantInfo.nationalCode)
@@ -121,6 +122,7 @@ class EditMerchant extends Component {
         merchantInfo.email = info.email;
         merchantInfo.nationalCode = info.nationalCode;
         merchantInfo.authorities = authorities;
+        merchantInfo.appName = info.appName;
         merchantOAuthDetails.clientId = info.clientId;
         merchantOAuthDetails.clientSecret = info.clientSecret;
         merchantOAuthDetails.accessTokenValidity = info.accessTokenValidity;
@@ -147,7 +149,7 @@ class EditMerchant extends Component {
 
     canUpdateMerchant() {
         let selectedAuthorities = this.prepareSelectedAuthorities();
-        const {name, username, clientId} = this.state;
+        const {name, username, clientId, appName} = this.state;
 
         if (!this.hasValue(name)) {
             toast.error('نام پذیرنده را وارد کنید');
@@ -166,6 +168,11 @@ class EditMerchant extends Component {
 
         if (!this.hasValue(selectedAuthorities) || selectedAuthorities.length === 0) {
             toast.error('حداقل یک دسترسی به پذیرنده تخصیص دهید');
+            return false;
+        }
+
+        if (!this.hasValue(appName)) {
+            toast.error('نام نرم افزار را وارد کنید');
             return false;
         }
 
@@ -212,7 +219,7 @@ class EditMerchant extends Component {
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
-                    <h4 className="py-2">افزودن پذیرنده</h4>
+                    <h4 className="py-2">ویرایش پذیرنده</h4>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div className="rtl border m-0 bg-light shadow float-right w-100 justify-content-start my-3 pb-3">
@@ -301,6 +308,17 @@ class EditMerchant extends Component {
                                    value={this.state.clientSecret}
                                    name="clientSecret"
                                    onChange={(e) => this.fillParameterValue(e.target.value, "clientSecret")}
+                            />
+                        </div>
+
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
+                            <label>نام نرم افزار:</label>
+                            <input className="form-control text-center"
+                                   type="text"
+                                   placeholder="نام نرم افزار"
+                                   value={this.state.appName}
+                                   name="name"
+                                   onChange={(e) => this.fillParameterValue(e.target.value, "appName")}
                             />
                         </div>
                     </div>

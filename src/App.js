@@ -27,6 +27,9 @@ import Confirmation from "./components/confirmation/confirmation";
 import acceptConfirmation from "./components/confirmation/accept-confirmation";
 import simcardManagement from "./components/simcard-management/simcard-management";
 import acceptSimcard from "./components/simcard-management/accept-simcard";
+import menuProductInfoManagement from "./components/menu-product-info-management/menu-product-info-management";
+import acceptRejectReturnProduct from "./components/menu-product-info-management/accept-reject-return-product";
+import returnConfirmation from "./components/confirmation/return-confirmation";
 
 class App extends Component {
     render() {
@@ -64,6 +67,11 @@ class App extends Component {
                                 <PrivateRoute path="/hardwareInfo" exact={false} component={hardwareInfo}/>
                                 <PrivateRoute path="/confirmation" exact={false} component={Confirmation}/>
                                 <PrivateRoute path="/accept-confirmation" exact={false} component={acceptConfirmation}/>
+                                <PrivateRoute path="/return-confirmation" exact={false} component={returnConfirmation}/>
+                                <PrivateRoute path="/menu-product-info-management" exact={false} component={menuProductInfoManagement}/>
+                                <PrivateRoute path="/menu-product-info-management" exact={false} component={menuProductInfoManagement}/>
+                                <PrivateRoute path="/accept-reject-return-product" exact={false} component={acceptRejectReturnProduct}/>
+
                                 <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>
                             </Switch>

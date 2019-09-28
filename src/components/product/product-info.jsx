@@ -11,7 +11,6 @@ class productInfo extends Component {
         this.state = {
             productAttributeCategoryList: [],
             productItemSupplierList: [],
-
             productItemSupplier: "",
             name: "",
             englishName: "",

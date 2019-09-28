@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import SearchCriteria from "../search/search-criteria";
 import SearchResult from "../search/search-result";
-import {searchDataOFConfirmation} from "../../services/confirmationServise"
+import {searchDataOFConfirmation} from "../../services/menu-product-info-management"
 import {toast} from 'react-toastify';
 import {withRouter} from 'react-router-dom';
-import {fetchAllChildOfCurrentMerchant} from "../../services/confirmationServise"
+import {fetchAllChildOfCurrentMerchant} from "../../services/menu-product-info-management"
 
-class confirmation extends Component {
+class menuProductInfoManagement extends Component {
 
     constructor(props) {
         super(props);
@@ -16,7 +16,6 @@ class confirmation extends Component {
             registrarMerchantId: []
         };
         this.onUpdate = this.onUpdate.bind(this);
-        this.onReturn = this.onReturn.bind(this);
     }
 
 
@@ -26,12 +25,7 @@ class confirmation extends Component {
             customerInfo: searchResult
         });
     };
-    onReturn(searchResult) {
-        this.props.history.push({
-            pathname: '/return-confirmation',
-            customerInfo: searchResult
-        });
-    }
+
 
     getSearchCriteriaArray() {
         return [
@@ -100,13 +94,6 @@ class confirmation extends Component {
                     style: 'btn btn-success btn-xs',
                     onclick: this.onUpdate
                 },
-                {
-                    name: 'return',
-                    title: 'درخواست عودت',
-                    icon: 'fa fa-check-square',
-                    style: 'btn btn-success btn-xs',
-                    onclick: this.onReturn
-                }
             ],
             headerTitleInfos: [
                 {name: "identifier", title: "شناسه سفارش"},
@@ -180,7 +167,7 @@ class confirmation extends Component {
                             deliveryType: dataInfo.orderDeliveryInfo.deliveryType.name,
                             address: dataInfo.addressInfo.address,
                             canAcceptOrReject: dataInfo.canAcceptOrReject,
-                            canSendReturnProduct: dataInfo.canSendReturnProduct,
+                            canAcceptOrRejectReturnProduct: dataInfo.canAcceptOrRejectReturnProduct,
                             sumOfAmount: dataInfo.sumOfAmount,
                         }
                     )
@@ -205,7 +192,8 @@ class confirmation extends Component {
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
-                    <h4 className="py-2">بررسی فروش</h4>
+                    <h4 className="py-2">مدریت فروش کالا
+                    </h4>
                 </div>
                 <SearchCriteria extraActions={extraActions} onSearch={this.search}
                                 searchCriteriaArray={searchCriteriaArray}/>
@@ -215,4 +203,4 @@ class confirmation extends Component {
     }
 }
 
-export default withRouter(confirmation);
+export default withRouter(menuProductInfoManagement);

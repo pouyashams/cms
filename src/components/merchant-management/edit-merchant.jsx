@@ -75,7 +75,7 @@ class EditMerchant extends Component {
     }
 
     fillParameterValue = (value, name) => {
-        this.setState({[name]: value});
+        // this.setState({[name]: value});
     };
 
     async updateMerchant() {

@@ -23,14 +23,9 @@ const navLinks = [
         icon: "fa fa-refresh",
     },
     {
-        path: "/menu-product-info-management",
-        name: "مدیریت فروش کالا",
-        icon: "fa fa-bar-chart",
-    },
-    {
         path: "/simcard-management",
         name: "مدیریت سیمکارت",
-        icon: "fa fa-book",
+        icon: "fa fa-refresh",
     },
     {
         path: "/Confirmation",

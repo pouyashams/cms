@@ -5,7 +5,7 @@ export async function login(username, password) {
         username: username,
         password: password
     };
-    let access_token = null;
+    let loginInfo = null;
     await axios({
         method: 'POST',
         url: `http://shop.isuncharge.com/isunshop/fetch/access-token`,
@@ -14,9 +14,9 @@ export async function login(username, password) {
         },
         data: data
     }).then(response => {
-        access_token = response.data.access_token;
+        loginInfo = response.data;
     }).catch((error) => {
         throw error
     });
-    return access_token;
+    return loginInfo;
 }

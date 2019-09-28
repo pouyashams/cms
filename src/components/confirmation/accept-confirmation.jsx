@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {acceptConfirmation, cancelConfirmation, productDetails} from "../../services/confirmationServise"
+import {
+    acceptConfirmation,
+    cancelConfirmation,
+    productDetails
+} from "../../services/confirmationServise"
 import SearchResult from "../search/search-result";
 
 class acceptConfirmations extends Component {
@@ -41,10 +45,11 @@ class acceptConfirmations extends Component {
     }
 
     cancelConfirmationInfo = async () => {
-        const result = await cancelConfirmation();
+        const result = await cancelConfirmation({identifier : this.state.identifier});
         try {
             if (result.status === 200) {
                 toast.success('عملیات با موفقیت انجام شد.');
+                this.props.history.push('/confirmation');
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -55,7 +60,7 @@ class acceptConfirmations extends Component {
     };
 
     acceptConfirmationInfo = async () => {
-        const result = await acceptConfirmation();
+        const result = await acceptConfirmation({identifier : this.state.identifier});
         try {
             if (result.status === 200) {
                 toast.success('عملیات با موفقیت انجام شد.');
@@ -72,34 +77,35 @@ class acceptConfirmations extends Component {
     async componentDidMount() {
         const {dataInfo} = this.props.location;
         if (!dataInfo) return this.props.history.push('/confirmation');
-        this.setState({
-            name: this.getValue(dataInfo.name),
-            mobileNumber: this.getValue(dataInfo.mobileNumber),
-            identifier: this.getValue(dataInfo.identifier),
-            date: this.getValue(dataInfo.date),
-            orderStatus: this.getValue(dataInfo.orderStatus),
-            customerReferenceNumber: this.getValue(dataInfo.customerReferenceNumber),
-            time: this.getValue(dataInfo.time),
-            registerDate: this.getValue(dataInfo.registerDate),
-            deliveryType: this.getValue(dataInfo.deliveryType),
-            address: this.getValue(dataInfo.address),
-            canAcceptOrReject: this.getValue(dataInfo.canAcceptOrReject),
-            sumOfAmount: this.getValue(dataInfo.sumOfAmount),
-        });
         try {
-            const result = await productDetails(this.getValue(dataInfo.identifier));
+            const result = await productDetails(this.getValue({identifier : dataInfo.identifier}));
             if (result.status === 200) {
                 const productItemSellInfoList = [];
-                result.data.data[0].productItemSellInfoList.map(productItem => (
+                let resultInfo = result.data.data[0];
+                resultInfo.productItemSellInfoList.map(productItem => (
                     productItemSellInfoList.push(
                         {
                             "name": productItem.name,
-                            "price": productItem.sumPrice,
-                            "number": productItem.count,
+                            "sumPrice": productItem.sumPrice,
+                            "count": productItem.count,
                         }
                     )
                 ));
-                this.setState({productItemSellInfoList});
+                this.setState({
+                    name: this.getValue(resultInfo.orderStatus.name,),
+                    mobileNumber: this.getValue(resultInfo.mobileNumber),
+                    identifier: this.getValue(resultInfo.identifier),
+                    date: this.getValue(resultInfo.orderDeliveryInfo.date),
+                    orderStatus: this.getValue(resultInfo.orderStatus.name),
+                    customerReferenceNumber: this.getValue(resultInfo.customerReferenceNumber),
+                    time: this.getValue(resultInfo.orderDeliveryInfo.time),
+                    registerDate: this.getValue(resultInfo.registerDate),
+                    deliveryType: this.getValue(resultInfo.orderDeliveryInfo.deliveryType.name),
+                    address: this.getValue(resultInfo.addressInfo.address),
+                    canAcceptOrReject: this.getValue(resultInfo.canAcceptOrReject),
+                    sumOfAmount: this.getValue(resultInfo.sumOfAmount),
+                    productItemSellInfoList: productItemSellInfoList
+                });
                 document.getElementById("loading").style.display = "none";
             }
         } catch (ex) {

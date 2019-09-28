@@ -89,7 +89,7 @@ class menuProductInfoManagement extends Component {
             actions: [
                 {
                     name: 'update',
-                    title: 'تایید لغو',
+                    title: 'تایید لغو عودت',
                     icon: 'fa fa-th-list',
                     style: 'btn btn-success btn-xs',
                     onclick: this.onUpdate

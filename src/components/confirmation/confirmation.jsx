@@ -4,7 +4,7 @@ import SearchResult from "../search/search-result";
 import {searchDataOFConfirmation} from "../../services/confirmationServise"
 import {toast} from 'react-toastify';
 import {withRouter} from 'react-router-dom';
-
+import {fetchAllChildOfCurrentMerchant} from "../../services/confirmationServise"
 
 class confirmation extends Component {
 
@@ -12,15 +12,23 @@ class confirmation extends Component {
         super(props);
         this.state = {
             pageSize: 5,
-            searchResultList: []
+            searchResultList: [],
+            registrarMerchantId: []
         };
         this.onUpdate = this.onUpdate.bind(this);
+        this.onReturn = this.onReturn.bind(this);
     }
 
 
     onUpdate(searchResult) {
         this.props.history.push({
             pathname: '/accept-confirmation',
+            customerInfo: searchResult
+        });
+    };
+    onReturn(searchResult) {
+        this.props.history.push({
+            pathname: '/return-confirmation',
             customerInfo: searchResult
         });
     }
@@ -63,6 +71,14 @@ class confirmation extends Component {
                 ]
             },
             {
+                name: "requesterUserId",
+                element: "select",
+                placeholder: "---",
+                defaultValue: "",
+                label: "پذیرنده",
+                options: this.state.registrarMerchantId,
+            },
+            {
                 name: "customerReferenceNumber",
                 element: "input",
                 type: "text",
@@ -83,6 +99,13 @@ class confirmation extends Component {
                     icon: 'fa fa-th-list',
                     style: 'btn btn-success btn-xs',
                     onclick: this.onUpdate
+                },
+                {
+                    name: 'return',
+                    title: 'درخواست عودت',
+                    icon: 'fa fa-check-square',
+                    style: 'btn btn-success btn-xs',
+                    onclick: this.onReturn
                 }
             ],
             headerTitleInfos: [
@@ -96,6 +119,21 @@ class confirmation extends Component {
         };
         return headerInfo;
     }
+    prepareMerchantSelection(merchants) {
+        let merchantArray = [{
+            value: "",
+            title: "انتخاب کنید..."
+        }];
+        merchants.forEach((merchant) => {
+            let data = {
+                value: merchant.identifier,
+                title: merchant.name
+            };
+            merchantArray.push(data);
+        });
+        return merchantArray;
+    }
+
 
     getExtraActions() {
         let extraActions = {
@@ -104,6 +142,24 @@ class confirmation extends Component {
         };
         return extraActions;
     }
+
+    async componentDidMount() {
+        try {
+            const resultForFetchMerchants = await fetchAllChildOfCurrentMerchant();
+            if (resultForFetchMerchants.status === 200) {
+                const merchantArray = this.prepareMerchantSelection(resultForFetchMerchants.data.data);
+                this.setState({
+                    registrarMerchantId: merchantArray
+                });
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('خطایی در دریافت اطلاعات رخ داده است.');
+            }
+        }
+        document.getElementById("loading").style.display = "none";
+    }
+
 
     search = async (parameters) => {
         try {
@@ -124,6 +180,7 @@ class confirmation extends Component {
                             deliveryType: dataInfo.orderDeliveryInfo.deliveryType.name,
                             address: dataInfo.addressInfo.address,
                             canAcceptOrReject: dataInfo.canAcceptOrReject,
+                            canSendReturnProduct: dataInfo.canSendReturnProduct,
                             sumOfAmount: dataInfo.sumOfAmount,
                         }
                     )

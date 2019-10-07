@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {sendRequestReturnOrder, productDetails} from "../../services/confirmationServise"
+import {
+    acceptReturnConfirmation,
+    productDetails
+} from "../../services/confirmationServise"
 import SearchResult from "../search/search-result";
 
-class returnConfirmations extends Component {
+class acceptReturnConfirmations extends Component {
 
     constructor(props) {
         super(props);
@@ -20,7 +23,7 @@ class returnConfirmations extends Component {
             orderStatus: "",
             customerReferenceNumber: "",
             productItemSellInfoList: "",
-            canSendReturnProduct: "",
+            canAcceptOrRejectReturnProduct: "",
             sumOfAmount: "",
         };
 
@@ -40,14 +43,8 @@ class returnConfirmations extends Component {
         return headerInfo;
     }
 
-    cancelConfirmationInfo = async () => {
-        this.props.history.push({
-            pathname: '/Confirmation',
-        });
-    };
-
-    sendRequestReturnOrderInfo = async () => {
-        const result = await sendRequestReturnOrder({identifier : this.state.identifier});
+    acceptConfirmationInfo = async () => {
+        const result = await acceptReturnConfirmation({identifier : this.state.identifier});
         try {
             if (result.status === 200) {
                 toast.success('عملیات با موفقیت انجام شد.');
@@ -63,15 +60,12 @@ class returnConfirmations extends Component {
 
     async componentDidMount() {
         const {dataInfo} = this.props.location;
-        if (!dataInfo) return this.props.history.push('/confirmation');
+        if (!dataInfo) return this.props.history.push('/return-confirmation');
         try {
             const result = await productDetails(this.getValue({identifier : dataInfo.identifier}));
-
             if (result.status === 200) {
                 const productItemSellInfoList = [];
                 let resultInfo = result.data.data[0];
-                console.log("hi")
-                console.log(resultInfo)
                 resultInfo.productItemSellInfoList.map(productItem => (
                     productItemSellInfoList.push(
                         {
@@ -81,6 +75,7 @@ class returnConfirmations extends Component {
                         }
                     )
                 ));
+                console.log(resultInfo)
                 this.setState({
                     name: this.getValue(resultInfo.orderStatus.name,),
                     mobileNumber: this.getValue(resultInfo.mobileNumber),
@@ -92,8 +87,7 @@ class returnConfirmations extends Component {
                     registerDate: this.getValue(resultInfo.registerDate),
                     deliveryType: this.getValue(resultInfo.orderDeliveryInfo.deliveryType.name),
                     address: this.getValue(resultInfo.addressInfo.address),
-                    canAcceptOrReject: this.getValue(resultInfo.canAcceptOrReject),
-                    canSendReturnProduct: this.getValue(resultInfo.canSendReturnProduct),
+                    canAcceptOrRejectReturnProduct: this.getValue(resultInfo.canAcceptOrRejectReturnProduct),
                     sumOfAmount: this.getValue(resultInfo.sumOfAmount),
                     productItemSellInfoList: productItemSellInfoList
                 });
@@ -126,7 +120,7 @@ class returnConfirmations extends Component {
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
-                    <h4 className="py-2">درخواست عودت</h4>
+                    <h4 className="py-2">تایید درخواست عودت سفارش</h4>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div
@@ -213,16 +207,12 @@ class returnConfirmations extends Component {
                                    value={this.state.sumOfAmount}
                             />
                         </div>
-                        {this.state.canSendReturnProduct === true ?
+                        {this.state.canAcceptOrRejectReturnProduct === true ?
                             <div className="col-12 text-center justify-content-center row align-items-center my-3">
                                 <div className="px-3">
 
-                                    <input type="button" className="btn btn-primary" value="درخواست عودت"
-                                           onClick={this.sendRequestReturnOrderInfo}/>
-                                </div>
-                                <div className="px-3">
-                                    <input type="button" className="btn btn-primary" value="لغو"
-                                           onClick={this.cancelConfirmationInfo}/>
+                                    <input type="button" className="btn btn-primary" value="تایید"
+                                           onClick={this.acceptConfirmationInfo}/>
                                 </div>
                             </div>
                             :
@@ -232,7 +222,7 @@ class returnConfirmations extends Component {
                                 <button className="btn btn-danger btn-sm">
                                     <span className="fa fa-warning"/>
                                 </button>
-                                <h6 className="p-2 font-weight-bold">(قادر به درخواست عودت نمی باشید)</h6>
+                                <h6 className="p-2 font-weight-bold">(قادر به تایید  نمی باشید)</h6>
                             </div>
                         }
 
@@ -244,4 +234,4 @@ class returnConfirmations extends Component {
     }
 }
 
-export default withRouter(returnConfirmations);
+export default withRouter(acceptReturnConfirmations);

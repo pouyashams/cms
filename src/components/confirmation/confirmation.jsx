@@ -21,15 +21,17 @@ class confirmation extends Component {
 
 
     onUpdate(searchResult) {
+        console.log(searchResult)
         this.props.history.push({
             pathname: '/accept-confirmation',
-            customerInfo: searchResult
+            dataInfo: searchResult
         });
     };
+
     onReturn(searchResult) {
         this.props.history.push({
             pathname: '/return-confirmation',
-            customerInfo: searchResult
+            dataInfo: searchResult
         });
     }
 
@@ -56,7 +58,7 @@ class confirmation extends Component {
                 label: "تا تاریخ"
             },
             {
-                name: "orderStatus",
+                name: "orderStatusCode",
                 element: "select",
                 placeholder: "---",
                 defaultValue: "",
@@ -68,10 +70,12 @@ class confirmation extends Component {
                     {value: "CANCELED_ORDER_STATUS", title: "لغو شده"},
                     {value: "PAID_ORDER_STATUS", title: "پرداخت شده"},
                     {value: "REVERSED_ORDER_STATUS", title: "برگشت خورده"},
+                    {value: "WAITING_FOR_RETURN_CHECK_ORDER_STATUS", title: "در انتظار بررسی درخواست عودت"},
+                    {value: "RETURNED_ORDER_STATUS", title: "عودت داده شده"}
                 ]
             },
             {
-                name: "requesterUserId",
+                name: "registrarMerchantId",
                 element: "select",
                 placeholder: "---",
                 defaultValue: "",
@@ -166,21 +170,23 @@ class confirmation extends Component {
             const result = await searchDataOFConfirmation(parameters);
             if (result.status === 200) {
                 const searchResultList = [];
+                console.log(result.data.data)
                 result.data.data.forEach((dataInfo) => {
+                    console.log(dataInfo)
                     searchResultList.push(
                         {
                             name: dataInfo.orderStatus.name,
                             mobileNumber: dataInfo.mobileNumber,
                             identifier: dataInfo.identifier,
-                            date: dataInfo.orderDeliveryInfo.date,
+                            // date: dataInfo.orderDeliveryInfo.date,
                             orderStatus: dataInfo.orderStatus.name,
                             customerReferenceNumber: dataInfo.customerReferenceNumber,
-                            time: dataInfo.orderDeliveryInfo.time,
+                            // time: dataInfo.orderDeliveryInfo.time,
                             registerDate: dataInfo.registerDate,
-                            deliveryType: dataInfo.orderDeliveryInfo.deliveryType.name,
-                            address: dataInfo.addressInfo.address,
-                            canAcceptOrReject: dataInfo.canAcceptOrReject,
-                            canSendReturnProduct: dataInfo.canSendReturnProduct,
+                            // deliveryType: dataInfo.orderDeliveryInfo.deliveryType.name,
+                            // address: dataInfo.addressInfo.address,
+                            // canAcceptOrReject: dataInfo.canAcceptOrReject,
+                            // canSendReturnProduct: dataInfo.canSendReturnProduct,
                             sumOfAmount: dataInfo.sumOfAmount,
                         }
                     )
@@ -188,6 +194,7 @@ class confirmation extends Component {
                 this.setState({searchResultList});
             }
         } catch (ex) {
+            console.log(ex)
             if (ex.response && ex.response.status === 400) {
                 toast.error('لطفا کلیه موارد را پر کنید');
             }

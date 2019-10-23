@@ -53,7 +53,7 @@ class acceptSimcard extends Component {
             if (result.status === 200) {
                 toast.success('کالا با موفقیت تایید شد');
                 document.getElementById("loading").style.display = "none";
-                return this.props.history.push('/update-product');
+                return this.props.history.push('/simcard-management');
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -69,7 +69,7 @@ class acceptSimcard extends Component {
             if (result.status === 200) {
                 toast.success('کالا با موفقیت لغو شد');
                 document.getElementById("loading").style.display = "none";
-                return this.props.history.push('/update-product');
+                return this.props.history.push('/simcard-management');
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {

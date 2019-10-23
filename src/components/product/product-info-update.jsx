@@ -180,7 +180,7 @@ class productInfo extends Component {
                 if (result.status === 200) {
                     toast.success('کالا با موفقیت به روز رسانی شد');
                     document.getElementById("loading").style.display = "none";
-                    return this.props.history.push('/update-product');
+                    return this.props.history.push('/product-management');
                 }
             } catch (ex) {
                 if (ex.response && ex.response.status === 400) {

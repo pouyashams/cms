@@ -64,6 +64,9 @@ class acceptConfirmations extends Component {
         try {
             if (result.status === 200) {
                 toast.success('عملیات با موفقیت انجام شد.');
+                this.props.history.push({
+                    pathname: '/confirmation',
+                });
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {

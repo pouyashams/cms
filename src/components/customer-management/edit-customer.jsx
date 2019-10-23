@@ -60,6 +60,7 @@ class editCustomer extends Component {
             } catch (ex) {
                 if (ex.response && ex.response.status === 400) {
                     toast.error('لطفا کلیه موارد را پر کنید');
+                    this.props.history.goBack();
                 }
             }
             document.getElementById("loading").style.display = "none";

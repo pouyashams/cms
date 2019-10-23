@@ -48,6 +48,9 @@ class acceptReturnConfirmations extends Component {
         try {
             if (result.status === 200) {
                 toast.success('عملیات با موفقیت انجام شد.');
+                this.props.history.push({
+                    pathname:'/menu-product-info-management',
+                });
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -60,7 +63,7 @@ class acceptReturnConfirmations extends Component {
 
     async componentDidMount() {
         const {dataInfo} = this.props.location;
-        if (!dataInfo) return this.props.history.push('/return-confirmation');
+        if (!dataInfo) return this.props.history.push('/menu-product-info-management');
         try {
             const result = await productDetails(this.getValue({identifier : dataInfo.identifier}));
             if (result.status === 200) {

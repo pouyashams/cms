@@ -53,10 +53,17 @@ class editDeliveryInfo extends Component {
         try {
             if (result.status === 200) {
                 toast.success('عملیات با موفقیت انجام شد.');
+                this.props.history.push({
+                    pathname: '/deliveryInfo-management',
+                });
+
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
+                this.props.history.push({
+                    pathname: '/deliveryInfo-management',
+                });
             }
         }
         document.getElementById("loading").style.display = "none";

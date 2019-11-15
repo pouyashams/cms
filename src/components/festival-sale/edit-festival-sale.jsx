@@ -25,7 +25,7 @@ class editFestivalSale extends Component {
             statute: {
                 identifier: "",
             },
-            boardOfDirectors: [],
+            imageItem: [],
             identifier: "",
             id: "",
             name: "",
@@ -61,16 +61,16 @@ class editFestivalSale extends Component {
             isForShop: dataInfo.isForShop,
             fileInfoList: dataInfo.fileInfoList
         });
-        const boardOfDirectors = [];
+        const imageItem = [];
         if (dataInfo.fileInfoList !== null && dataInfo.fileInfoList !== "" && dataInfo.fileInfoList !== undefined) {
             dataInfo.fileInfoList.forEach((img) => {
-                boardOfDirectors.push(
+                imageItem.push(
                     {
-                        number: boardOfDirectors.length + 1,
+                        number: imageItem.length + 1,
                         identifier: img,
                     }
                 );
-                this.setState({boardOfDirectors});
+                this.setState({imageItem});
             });
 
         }
@@ -82,6 +82,14 @@ class editFestivalSale extends Component {
         });
     }
 
+    validate(id) {
+        if (id !== "" && id !== null && id !== undefined) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     fillDateParameterValue = (value, name) => {
         this.setState({[name]: value});
     };
@@ -89,7 +97,8 @@ class editFestivalSale extends Component {
     fillParameterValue = (e) => {
         if (e.target.name === "amountInfo") {
             this.setState({percentInfo: 0});
-        }if (e.target.name === "percentInfo") {
+        }
+        if (e.target.name === "percentInfo") {
             this.setState({amountInfo: 0});
         }
         this.setState({[e.target.name]: e.target.value});
@@ -99,24 +108,39 @@ class editFestivalSale extends Component {
     };
 
     deleteBoardOfDirectors = (number) => {
-        const newBoardOfDirectors = this.state.boardOfDirectors.filter(dataInfo => dataInfo.number !== number);
-        this.setState({boardOfDirectors: newBoardOfDirectors});
+        this.setState({imageItem: this.state.imageItem.filter(dataInfo => dataInfo.number !== number)});
+        // const list=[];
+        // this.state.imageItem.forEach((item) => {
+        //     if(item.number!==number){
+        //         list.push(
+        //             {
+        //                 number:list.length+1,
+        //                 identifier:item.identifier
+        //             }
+        //         )
+        //         console.log(list,123)
+        //         this.setState({imageItem: list});
+        //
+        //     }else{
+        //         console.log(item,"pouya")
+        //     }
+        // });
     };
 
     addBoardOfDirectors = () => {
-        const {boardOfDirectors} = this.state;
-        boardOfDirectors.push({
-            number: boardOfDirectors.length + 1,
+        const {imageItem} = this.state;
+        imageItem.push({
+            number: imageItem.length + 1,
             identifier: "",
             fullName: ""
         });
-        this.setState({boardOfDirectors: boardOfDirectors});
+        this.setState({imageItem: imageItem});
     };
 
     registerFestival = async () => {
         let fileInfoList = [];
-        this.state.boardOfDirectors.forEach((boardOfDirector) => {
-            fileInfoList.push(boardOfDirector.identifier);
+        this.state.imageItem.forEach((item) => {
+            fileInfoList.push(item.identifier);
         });
         const data = {
             "identifier": this.state.id,
@@ -307,20 +331,21 @@ class editFestivalSale extends Component {
                             className="col-12 justify-content-center align-items-center text-center header-box text-light panel-header">
                             <h4 className="py-2"> تصاویر</h4>
                         </div>
-                        {this.state.boardOfDirectors.map((dataInfo) =>
+                        {this.state.imageItem.map((dataInfo) =>
                             (
                                 <div className="form-group col-12 col-sm-6 col-md-3 float-right ">
                                     <div
                                         className="border bg-light shadow row justify-content-center px-5  mx-2 mt-4 radius">
                                         <div className="col-12 text-light text-left card-wrap ">
-                                            {console.log(dataInfo)}
                                             <i className="mt-4 fa fa-trash text-left close" aria-hidden="true"
                                                onClick={() => this.deleteBoardOfDirectors(dataInfo.number)}/>
                                         </div>
+
                                         <div className="pr-5 justify-content-center ">
                                             <Upload
                                                 label=""
                                                 ref="child"
+                                                upOrDl={this.validate(dataInfo.identifier)}
                                                 isImage={true}
                                                 dataInfo={dataInfo}
                                             />

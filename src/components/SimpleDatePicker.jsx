@@ -23,9 +23,11 @@ export default class SimpleDatePicker extends React.Component {
                 inputComponent={this.DatePickerInput}
                 placeholder={this.props.placeholder}
                 name={this.props.name}
+                preSelected={this.props.preSelected}
                 format="jYYYY/jMM/jDD"
                 onChange={this.change}
                 id="datePicker"
+                controllValue={true}
             />
         );
     }

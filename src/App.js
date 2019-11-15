@@ -30,6 +30,8 @@ import simcardManagement from "./components/simcard-management/simcard-managemen
 import acceptSimcard from "./components/simcard-management/accept-simcard";
 import menuProductInfoManagement from "./components/menu-product-info-management/menu-product-info-management";
 import returnConfirmation from "./components/confirmation/return-confirmation";
+import festivalSale from "./components/festival-sale/festival-sale";
+import editFestivalSale from "./components/festival-sale/edit-festival-sale";
 
 class App extends Component {
     render() {
@@ -71,11 +73,13 @@ class App extends Component {
                                 <PrivateRoute path="/return-confirmation" exact={false} component={returnConfirmation}/>
                                 <PrivateRoute path="/menu-product-info-management" exact={false} component={menuProductInfoManagement}/>
 
+                                <PrivateRoute path="/festival-sale" exact={false} component={festivalSale}/>
+                                <PrivateRoute path="/edit-festival-sale" exact={false} component={editFestivalSale}/>
+
                                 <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>
                             </Switch>
                         </Router>
-
                     </main>
                 </div>
                 <Footer/>

@@ -85,6 +85,11 @@ const navLinks = [
         name: "گزارش بسته اینترنت",
         icon: "fa fa-align-right",
         authority: "MENU_INTERNET_PACKAGE_REPORT"
+    }, {
+        path: "/festival-sale",
+        name: "وضعیت تخفیف ها",
+        icon: "fa fa-align-right",
+        authority: "MENU_INTERNET_PACKAGE_REPORT"
     },
 
     {

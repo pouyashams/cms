@@ -13,7 +13,7 @@ class festivalSale extends Component {
             data: [],
         };
         this.onUpdate = this.onUpdate.bind(this);
-        }
+    }
 
     async componentDidMount() {
         try {
@@ -21,37 +21,62 @@ class festivalSale extends Component {
             if (result.status === 200) {
                 const data = [];
                 result.data.data.forEach((dataInfo) => {
-                    let isForChargeShow ="";
-                    let isForInternetPackageShow ="";
-                    let isForShopShow ="";
-                    let amountInfo ="";
-                    let percentInfo ="";
-                    if(dataInfo.isForCharge===true){
-                        isForChargeShow="فعال"
-                    }else{
-                        isForChargeShow="غیر فعال"
-                    } if(dataInfo.isForInternetPackage===true){
-                        isForInternetPackageShow="فعال"
-                    }else{
-                        isForInternetPackageShow="غیر فعال"
-                    } if(dataInfo.isForShop===true){
-                        isForShopShow="فعال"
-                    }else{
-                        isForShopShow="غیر فعال"
+                    console.log(result.data.data)
+                    let isForChargeShow = "";
+                    let isForInternetPackageShow = "";
+                    let isForShopShow = "";
+                    let amountForCharge = "";
+                    let amountForInternetPackage = "";
+                    let amountForShop = "";
+                    let percentForCharge = "";
+                    let percentForInternetPackage = "";
+                    let percentForShop = "";
+
+                    if (dataInfo.isForCharge === true) {
+                        isForChargeShow = "فعال"
+                    } else {
+                        isForChargeShow = "غیر فعال"
                     }
-                   if(dataInfo.isForShop===true){
-                        isForShopShow="فعال"
-                    }else{
-                        isForShopShow="غیر فعال"
+                    if (dataInfo.isForInternetPackage === true) {
+                        isForInternetPackageShow = "فعال"
+                    } else {
+                        isForInternetPackageShow = "غیر فعال"
                     }
-                    if(dataInfo.amount===null){
-                        amountInfo=0
-                    }else{
-                        amountInfo=dataInfo.amount
-                    }if(dataInfo.percent===null){
-                        percentInfo=0
-                    }else{
-                        percentInfo=dataInfo.percent
+                    if (dataInfo.isForShop === true) {
+                        isForShopShow = "فعال"
+                    } else {
+                        isForShopShow = "غیر فعال"
+                    }
+                    if (dataInfo.amountForCharge === null) {
+                        amountForCharge = 0
+
+                    } else {
+                        amountForCharge = dataInfo.amountForCharge
+                    }
+                    if (dataInfo.amountForShop === null) {
+                        amountForShop = 0
+                    } else {
+                        amountForShop = dataInfo.amountForShop
+                    }
+                    if (dataInfo.amountForInternetPackage === null) {
+                        amountForInternetPackage = 0
+                    } else {
+                        amountForInternetPackage = dataInfo.amountForInternetPackage
+                    }
+                    if (dataInfo.percentForCharge === null) {
+                        percentForCharge = 0
+                    } else {
+                        percentForCharge = dataInfo.percentForCharge
+                    }
+                    if (dataInfo.percentForInternetPackage === null) {
+                        percentForInternetPackage = 0
+                    } else {
+                        percentForInternetPackage = dataInfo.percentForInternetPackage
+                    }
+                    if (dataInfo.percentForShop === null) {
+                        percentForShop = 0
+                    } else {
+                        percentForShop = dataInfo.percentForShop
                     }
 
                     data.push(
@@ -59,8 +84,9 @@ class festivalSale extends Component {
                             identifier: dataInfo.merchantInfo.identifier,
                             id: dataInfo.identifier,
                             name: dataInfo.merchantInfo.name,
-                            percent: dataInfo.percent,
-                            amount: dataInfo.amount,
+                            amountForCharge: amountForCharge,
+                            amountForInternetPackage: amountForInternetPackage,
+                            amountForShop: amountForShop,
                             fromDate: dataInfo.fromDate,
                             toDate: dataInfo.toDate,
                             isForCharge: dataInfo.isForCharge,
@@ -69,9 +95,10 @@ class festivalSale extends Component {
                             isForChargeShow: isForChargeShow,
                             isForInternetPackageShow: isForInternetPackageShow,
                             isForShopShow: isForShopShow,
-                            amountInfo: amountInfo,
-                            percentInfo: percentInfo,
-                            fileInfoList:dataInfo.fileInfoList
+                            percentForCharge: percentForCharge,
+                            percentForInternetPackage: percentForInternetPackage,
+                            percentForShop: percentForShop,
+                            fileInfoList: dataInfo.fileInfoList
                             // statusCode:dataInfo.status.code,
                             // statusName:dataInfo.status.code,
                         }
@@ -109,10 +136,14 @@ class festivalSale extends Component {
             ],
             headerTitleInfos: [
                 {name: "name", title: "نام پذیرنده"},
-                {name: "percentInfo", title: "درصد تخفیف"},
-                {name: "amountInfo", title: "مقدار تخفیف"},
-                {name: "fromDate", title: "از تاریخ"},
-                {name: "toDate", title: "تا تاریخ"},
+                {name: "fromDate", title: " تاریخ شروع تخفیف"},
+                {name: "toDate", title: " تاریخ پایان تخفیف"},
+                {name: "percentForCharge", title: "درصد شارژ"},
+                {name: "amountForCharge", title: "مقدار شارژ"},
+                {name: "percentForInternetPackage", title: "درصد اینترنت"},
+                {name: "amountForInternetPackage", title: "مقدار اینترنت"},
+                {name: "percentForShop", title: "درصد فروشگاه"},
+                {name: "amountForShop", title: "مقدار فروشگاه"},
                 {name: "isForChargeShow", title: "تخفیف شارژ"},
                 {name: "isForInternetPackageShow", title: "تخفیف اینترنت"},
                 {name: "isForShopShow", title: "تخفیف فروشگاه"},

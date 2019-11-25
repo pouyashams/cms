@@ -29,8 +29,12 @@ class editFestivalSale extends Component {
             identifier: "",
             id: "",
             name: "",
-            percentInfo: "",
-            amountInfo: "",
+            percentForShop: "",
+            percentForInternetPackage: "",
+            percentForCharge: "",
+            amountForCharge: "",
+            amountForShop: "",
+            amountForInternetPackage: "",
             fromDate: "",
             toDate: "",
             isForCharge: "",
@@ -52,8 +56,12 @@ class editFestivalSale extends Component {
             identifier: dataInfo.identifier,
             id: dataInfo.id,
             name: dataInfo.name,
-            percentInfo: dataInfo.percentInfo,
-            amountInfo: dataInfo.amountInfo,
+            percentForShop: dataInfo.percentForShop,
+            percentForInternetPackage: dataInfo.percentForInternetPackage,
+            percentForCharge: dataInfo.percentForCharge,
+            amountForCharge: dataInfo.amountForCharge,
+            amountForInternetPackage: dataInfo.amountForInternetPackage,
+            amountForShop: dataInfo.amountForShop,
             fromDate: dataInfo.fromDate,
             toDate: dataInfo.toDate,
             isForCharge: dataInfo.isForCharge,
@@ -95,11 +103,21 @@ class editFestivalSale extends Component {
     };
 
     fillParameterValue = (e) => {
-        if (e.target.name === "amountInfo") {
-            this.setState({percentInfo: 0});
+        if (e.target.name === "amountForShop") {
+            this.setState({percentForShop: 0});
         }
-        if (e.target.name === "percentInfo") {
-            this.setState({amountInfo: 0});
+        if (e.target.name === "percentForShop") {
+            this.setState({amountForShop: 0});
+        }if (e.target.name === "amountForInternetPackage") {
+            this.setState({percentForInternetPackage: 0});
+        }
+        if (e.target.name === "percentForInternetPackage") {
+            this.setState({amountForInternetPackage: 0});
+        }if (e.target.name === "amountForCharge") {
+            this.setState({percentForCharge: 0});
+        }
+        if (e.target.name === "percentForCharge") {
+            this.setState({amountForCharge: 0});
         }
         this.setState({[e.target.name]: e.target.value});
     };
@@ -147,8 +165,12 @@ class editFestivalSale extends Component {
             "title": "تخقیفات",
             "fromDate": this.state.fromDate,
             "toDate": this.state.toDate,
-            "amount": this.state.amountInfo,
-            "percent": this.state.percentInfo,
+            "amountForCharge": this.state.amountForCharge,
+            "percentForCharge": this.state.percentForCharge,
+            "amountForInternetPackage": this.state.amountForInternetPackage,
+            "percentForInternetPackage": this.state.percentForInternetPackage,
+            "amountForShop": this.state.amountForShop,
+            "percentForShop": this.state.percentForShop,
             "status": {
                 "code": "ACTIVE_FESTIVAL_SALE_STATUS"
             },
@@ -163,7 +185,7 @@ class editFestivalSale extends Component {
         try {
             const result = await sendFestival(data);
             if (result.status === 200) {
-                toast.success(' با موفقیت انجام شد.');
+                toast.success(' با موفقیت انجام شد');
                 this.props.history.goBack();
             }
         } catch (ex) {
@@ -199,25 +221,73 @@ class editFestivalSale extends Component {
 
 
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right pt-4">
-                            <label>درصد تخفیف :</label>
+                            <label>درصد تخفیف شارژ:</label>
                             <input className="form-control text-center "
                                    type="number"
                                    step="any"
                                    placeholder="---"
-                                   value={this.state.percentInfo}
-                                   name="percentInfo"
+                                   value={this.state.percentForCharge}
+                                   name="percentForCharge"
                                    onChange={(e) => this.fillParameterValue(e)}
                             />
                         </div>
 
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right pt-4">
-                            <label>مقدار تخفیف :</label>
+                            <label>مقدار تخفیف شارژ:</label>
                             <input className="form-control text-center "
                                    type="number"
                                    step="any"
                                    placeholder="---"
-                                   value={this.state.amountInfo}
-                                   name="amountInfo"
+                                   value={this.state.amountForCharge}
+                                   name="amountForCharge"
+                                   onChange={(e) => this.fillParameterValue(e)}
+                            />
+                        </div>
+
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right pt-4">
+                            <label>درصد تخفیف اینترنت :</label>
+                            <input className="form-control text-center "
+                                   type="number"
+                                   step="any"
+                                   placeholder="---"
+                                   value={this.state.percentForInternetPackage}
+                                   name="percentForInternetPackage"
+                                   onChange={(e) => this.fillParameterValue(e)}
+                            />
+                        </div>
+
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right pt-4">
+                            <label>مقدار تخفیف اینترنت:</label>
+                            <input className="form-control text-center "
+                                   type="number"
+                                   step="any"
+                                   placeholder="---"
+                                   value={this.state.amountForInternetPackage}
+                                   name="amountForInternetPackage"
+                                   onChange={(e) => this.fillParameterValue(e)}
+                            />
+                        </div>
+
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right pt-4">
+                            <label>درصد تخفیف فروشگاه:</label>
+                            <input className="form-control text-center "
+                                   type="number"
+                                   step="any"
+                                   placeholder="---"
+                                   value={this.state.percentForShop}
+                                   name="percentForShop"
+                                   onChange={(e) => this.fillParameterValue(e)}
+                            />
+                        </div>
+
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right pt-4">
+                            <label>مقدار تخفیف فروشگاه:</label>
+                            <input className="form-control text-center "
+                                   type="number"
+                                   step="any"
+                                   placeholder="---"
+                                   value={this.state.amountForShop}
+                                   name="amountForShop"
                                    onChange={(e) => this.fillParameterValue(e)}
                             />
                         </div>

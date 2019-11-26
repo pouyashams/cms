@@ -125,24 +125,9 @@ class editFestivalSale extends Component {
         this.setState({[name]: value});
     };
 
-    deleteBoardOfDirectors = (number) => {
-        this.setState({imageItem: this.state.imageItem.filter(dataInfo => dataInfo.number !== number)});
-        // const list=[];
-        // this.state.imageItem.forEach((item) => {
-        //     if(item.number!==number){
-        //         list.push(
-        //             {
-        //                 number:list.length+1,
-        //                 identifier:item.identifier
-        //             }
-        //         )
-        //         console.log(list,123)
-        //         this.setState({imageItem: list});
-        //
-        //     }else{
-        //         console.log(item,"pouya")
-        //     }
-        // });
+    deleteImage = (number) => {
+        let newItems = this.state.imageItem.filter(dataInfo => dataInfo.number !== number);
+        this.setState({imageItem: newItems});
     };
 
     addBoardOfDirectors = () => {
@@ -158,7 +143,9 @@ class editFestivalSale extends Component {
     registerFestival = async () => {
         let fileInfoList = [];
         this.state.imageItem.forEach((item) => {
-            fileInfoList.push(item.identifier);
+            if (item.identifier !== "") {
+                fileInfoList.push(item.identifier);
+            }
         });
         const data = {
             "identifier": this.state.id,
@@ -215,7 +202,6 @@ class editFestivalSale extends Component {
                                    placeholder="---"
                                    value={this.state.name}
                                    name="name"
-                                   onChange={(e) => this.fillParameterValue(e)}
                             />
                         </div>
 
@@ -233,7 +219,7 @@ class editFestivalSale extends Component {
                         </div>
 
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right pt-4">
-                            <label>مقدار تخفیف شارژ:</label>
+                            <label>مبلغ تخفیف شارژ:</label>
                             <input className="form-control text-center "
                                    type="number"
                                    step="any"
@@ -257,7 +243,7 @@ class editFestivalSale extends Component {
                         </div>
 
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right pt-4">
-                            <label>مقدار تخفیف اینترنت:</label>
+                            <label>مبلغ تخفیف اینترنت:</label>
                             <input className="form-control text-center "
                                    type="number"
                                    step="any"
@@ -281,7 +267,7 @@ class editFestivalSale extends Component {
                         </div>
 
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right pt-4">
-                            <label>مقدار تخفیف فروشگاه:</label>
+                            <label>مبلغ تخفیف فروشگاه:</label>
                             <input className="form-control text-center "
                                    type="number"
                                    step="any"
@@ -403,12 +389,12 @@ class editFestivalSale extends Component {
                         </div>
                         {this.state.imageItem.map((dataInfo) =>
                             (
-                                <div className="form-group col-12 col-sm-6 col-md-3 float-right ">
+                                <div className="form-group col-12 col-sm-6 col-md-3 float-right " key={dataInfo.number}>
                                     <div
                                         className="border bg-light shadow row justify-content-center px-5  mx-2 mt-4 radius">
                                         <div className="col-12 text-light text-left card-wrap ">
                                             <i className="mt-4 fa fa-trash text-left close" aria-hidden="true"
-                                               onClick={() => this.deleteBoardOfDirectors(dataInfo.number)}/>
+                                               onClick={() => this.deleteImage(dataInfo.number)}/>
                                         </div>
 
                                         <div className="pr-5 justify-content-center ">

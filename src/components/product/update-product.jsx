@@ -190,7 +190,7 @@ class updateProduct extends Component {
 
     search = async (parameters) => {
         try {
-            const result = await searchProduct(parameters);
+            const result = await searchProduct(Object.assign(parameters, {onlyForCustomer: false , searchForCMS : true}));
             let searchResultList = [];
             if (result.status === 200) {
                 result.data.data.forEach((dataInfo) => {

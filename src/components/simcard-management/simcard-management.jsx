@@ -156,7 +156,7 @@ class SimcardManagement extends Component {
 
     search = async (parameters) => {
         try {
-            const result = await searchProduct(Object.assign(parameters, {onlyForCustomer: true}));
+            const result = await searchProduct(Object.assign(parameters, {onlyForCustomer: true , searchForCMS : true}));
             let searchResultList = [];
             if (result.status === 200) {
                 console.log(result.data.data)

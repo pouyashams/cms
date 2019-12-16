@@ -40,9 +40,9 @@ export function onUpdate(data) {
     return http.post("http://shop.isuncharge.com/isunshop/update/product-item", data);
 }
 export function reportProduct(data) {
-    return http.post("http://10.8.235.41:40080/isunshop/update/reject-product-for-report", data);
+    return http.post("http://shop.isuncharge.com/isunshop/update/reject-product-for-report", data);
 }
 
 export function loadAllProductReport() {
-    return http.post("http://10.8.235.41:40080/isunshop/fetch/all-product-report", {});
+    return http.post("http://shop.isuncharge.com/isunshop/fetch/all-product-report", {});
 }

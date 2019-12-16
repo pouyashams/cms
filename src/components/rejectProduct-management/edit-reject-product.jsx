@@ -143,7 +143,7 @@ class editRejectProduct extends Component {
                         </div>
 
                         <div className="form-group col-6 float-right">
-                            <label>توضیحات :</label>
+                            <label>گزارش تخلف :</label>
                             <textarea className="form-control text-center w-75 "
                                       value={productItem.description}
                             />

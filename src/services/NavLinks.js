@@ -87,7 +87,7 @@ const navLinks = [
         authority: "MENU_INTERNET_PACKAGE_REPORT"
     }, {
         path: "/festival-sale",
-        name: "وضعیت تخفیف ها",
+        name: "مدیریت تخفیفات",
         icon: "fa fa-align-right",
         authority: "FESTIVAL_SALE_MANAGEMENT"
 

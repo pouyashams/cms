@@ -92,7 +92,12 @@ const navLinks = [
         authority: "FESTIVAL_SALE_MANAGEMENT"
 
     },
-
+    {
+        path: "/product-reject",
+        name: "گزارش تخلف سیم کارت",
+        icon: "fa fa-align-right",
+        authority: "FESTIVAL_SALE_MANAGEMENT"
+    },
     {
         path: "/hardwareInfo",
         name: "وضعیت سخت افزار",

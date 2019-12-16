@@ -32,6 +32,8 @@ import menuProductInfoManagement from "./components/menu-product-info-management
 import returnConfirmation from "./components/confirmation/return-confirmation";
 import festivalSale from "./components/festival-sale/festival-sale";
 import editFestivalSale from "./components/festival-sale/edit-festival-sale";
+import rejectProduct from "./components/rejectProduct-management/rejectProduct";
+import editRejectProduct from "./components/rejectProduct-management/edit-reject-product";
 
 class App extends Component {
     render() {
@@ -72,10 +74,10 @@ class App extends Component {
                                 <PrivateRoute path="/accept-return-confirmation" exact={false} component={acceptReturnConfirmation}/>
                                 <PrivateRoute path="/return-confirmation" exact={false} component={returnConfirmation}/>
                                 <PrivateRoute path="/menu-product-info-management" exact={false} component={menuProductInfoManagement}/>
-
+                                <PrivateRoute path="/product-reject" exact={false} component={rejectProduct}/>
+                                <PrivateRoute path="/edit-product-reject" exact={false} component={editRejectProduct}/>
                                 <PrivateRoute path="/festival-sale" exact={false} component={festivalSale}/>
                                 <PrivateRoute path="/edit-festival-sale" exact={false} component={editFestivalSale}/>
-
                                 <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>
                             </Switch>
@@ -87,5 +89,4 @@ class App extends Component {
         );
     }
 }
-
 export default withRouter(App);

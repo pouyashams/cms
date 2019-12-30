@@ -34,6 +34,11 @@ import festivalSale from "./components/festival-sale/festival-sale";
 import editFestivalSale from "./components/festival-sale/edit-festival-sale";
 import rejectProduct from "./components/rejectProduct-management/rejectProduct";
 import editRejectProduct from "./components/rejectProduct-management/edit-reject-product";
+import requirementsAudit from "./components/requirements-audit/requirements-audit";
+import acceptRequirementsAudit from "./components/requirements-audit/accept-requirements-audit";
+import manageLimitation from "./components/manage-limitation/manage-limitation";
+import editManageLimitation from "./components/manage-limitation/edit-limitation";
+import addManageLimitation from "./components/manage-limitation/add-limitation";
 
 class App extends Component {
     render() {
@@ -78,6 +83,11 @@ class App extends Component {
                                 <PrivateRoute path="/edit-product-reject" exact={false} component={editRejectProduct}/>
                                 <PrivateRoute path="/festival-sale" exact={false} component={festivalSale}/>
                                 <PrivateRoute path="/edit-festival-sale" exact={false} component={editFestivalSale}/>
+                                <PrivateRoute path="/requirements-audit" exact={false} component={requirementsAudit}/>
+                                <PrivateRoute path="/accept-requirements-audit" exact={false} component={acceptRequirementsAudit}/>
+                                <PrivateRoute path="/manage-limitation" exact={false} component={manageLimitation}/>
+                                <PrivateRoute path="/edit-limitation" exact={false} component={editManageLimitation}/>
+                                <PrivateRoute path="/add-limitation" exact={false} component={addManageLimitation}/>
                                 <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>
                             </Switch>

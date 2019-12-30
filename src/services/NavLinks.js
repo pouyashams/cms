@@ -37,6 +37,11 @@ const navLinks = [
         name: "مدیریت سیمکارت",
         icon: "fa fa-book",
         authority: "MENU_SIM_CARD_MANAGEMENT"
+    }, {
+        path: "/requirements-audit",
+        name: "ممیزی نیازمندی ها",
+        icon: "fa fa-book",
+        authority: "MENU_SIM_CARD_MANAGEMENT"
     },
     {
         path: "/Confirmation",
@@ -88,6 +93,12 @@ const navLinks = [
     }, {
         path: "/festival-sale",
         name: "مدیریت تخفیفات",
+        icon: "fa fa-align-right",
+        authority: "FESTIVAL_SALE_MANAGEMENT"
+
+    }, {
+        path: "/manage-limitation",
+        name: "مدیریت محدودیت ها",
         icon: "fa fa-align-right",
         authority: "FESTIVAL_SALE_MANAGEMENT"
 

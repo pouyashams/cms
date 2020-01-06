@@ -9,10 +9,14 @@ class addLimitation extends Component {
         super(props);
         this.state = {
             mobileNumber: "",
-            iranCellLimitation: "",
-            mciLimitation: "",
-            rightelLimitation: "",
-            samantelLimitation: "",
+            chargeIranCellLimitation: "",
+            chargeMCILimitation: "",
+            chargeRightelLimitation: "",
+            chargeSamantelLimitation: "",
+            internetIranCellLimitation: "",
+            internetMCILimitation: "",
+            internetRightelLimitation: "",
+            internetSamantelLimitation: "",
         };
     }
 
@@ -20,11 +24,15 @@ class addLimitation extends Component {
     sendData = async () => {
         const data = [
             {
-                "mobileNumber": this.state.mobileNumber,
-                "iranCellLimitation": this.state.iranCellLimitation,
-                "mciLimitation": this.state.mciLimitation,
-                "rightelLimitation": this.state.rightelLimitation,
-                "samantelLimitation": this.state.samantelLimitation
+                chargeIranCellLimitation: this.state.chargeIranCellLimitation,
+                chargeMCILimitation: this.state.chargeMCILimitation,
+                chargeRightelLimitation: this.state.chargeRightelLimitation,
+                chargeSamantelLimitation: this.state.chargeSamantelLimitation,
+                internetIranCellLimitation: this.state.internetIranCellLimitation,
+                internetMCILimitation: this.state.internetMCILimitation,
+                internetRightelLimitation: this.state.internetRightelLimitation,
+                internetSamantelLimitation: this.state.internetSamantelLimitation,
+                mobileNumber: this.state.mobileNumber,
             },
         ];
         const result = await sendlimitation(data);
@@ -64,53 +72,103 @@ class addLimitation extends Component {
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div
                         className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+
+                        <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
                             <label>شماره موبایل :</label>
                             <input className="form-control text-center"
                                    type="number"
                                    step="any"
-                                   name="mobileNumber"
+                                   placeholder=""
                                    value={this.state.mobileNumber}
+                                   name="mobileNumber"
                                    onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
                             />
                         </div>
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>ایرانسل (ریال) :</label>
+
+                        <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                            <label>شارژ ایرانسل (ریال) :</label>
                             <input className="form-control text-center"
                                    type="number"
                                    step="any"
-                                   value={this.state.iranCellLimitation}
-                                   name="iranCellLimitation"
+                                   placeholder=""
+                                   value={this.state.chargeIranCellLimitation}
+                                   name="chargeIranCellLimitation"
                                    onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
                             />
                         </div>
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>همراه اول (ریال) :</label>
+
+                        <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                            <label>شارژ همراه اول (ریال) :</label>
                             <input className="form-control text-center"
                                    type="number"
                                    step="any"
-                                   value={this.state.mciLimitation}
-                                   name="mciLimitation"
+                                   value={this.state.chargeMCILimitation}
+                                   name="chargeMCILimitation"
                                    onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
                             />
                         </div>
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>رایتل (ریال) :</label>
+
+                        <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                            <label>شارژ رایتل (ریال) :</label>
                             <input className="form-control text-center"
                                    type="number"
-                                   step="any"
-                                   value={this.state.rightelLimitation}
-                                   name="rightelLimitation"
+                                   step="any" value={this.state.chargeRightelLimitation}
+                                   name="chargeRightelLimitation"
                                    onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
                             />
                         </div>
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>سامانتل (ریال) :</label>
+
+                        <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                            <label>شارژ سامانتل (ریال) :</label>
                             <input className="form-control text-center"
                                    type="number"
                                    step="any"
-                                   value={this.state.samantelLimitation}
-                                   name="samantelLimitation"
+                                   value={this.state.chargeSamantelLimitation}
+                                   name="chargeSamantelLimitation"
+                                   onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
+                            />
+                        </div>
+
+                        <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                            <label>اینترنت ایرانسل (ریال) :</label>
+                            <input className="form-control text-center"
+                                   type="number"
+                                   step="any"
+                                   placeholder=""
+                                   value={this.state.internetIranCellLimitation}
+                                   name="internetIranCellLimitation"
+                                   onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
+                            />
+                        </div>
+
+                        <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                            <label>اینرنت همراه اول (ریال) :</label>
+                            <input className="form-control text-center"
+                                   type="number"
+                                   step="any"
+                                   value={this.state.internetMCILimitation}
+                                   name="internetMCILimitation"
+                                   onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
+                            />
+                        </div>
+
+                        <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                            <label>اینترنت رایتل (ریال) :</label>
+                            <input className="form-control text-center"
+                                   type="number"
+                                   step="any" value={this.state.internetRightelLimitation}
+                                   name="internetRightelLimitation"
+                                   onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
+                            />
+                        </div>
+
+                        <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                            <label>اینترنت سامانتل (ریال) :</label>
+                            <input className="form-control text-center"
+                                   type="number"
+                                   step="any"
+                                   value={this.state.internetSamantelLimitation}
+                                   name="internetSamantelLimitation"
                                    onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
                             />
                         </div>

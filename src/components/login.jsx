@@ -35,7 +35,7 @@ class Login extends Component {
                 className="rtl form-signin border rounded m-2 mx-auto bg-light shadow text-center"
             >
                 <ToastContainer/>
-                <h5 className="alert py-3 mb-3 font-weight-normal text-center bg-dark text-light">سیستم مدیریت محتوا آیسان</h5>
+                <h5 className="alert py-3 mb-3 font-weight-normal text-center bg-dark text-light">سیستم مدیریت محتوا آیسانیک</h5>
                 {
                     sessionStorage.getItem("login-message") ? (<span className="alert alert-danger py-2 mb-3 font-weight-normal text-center">{sessionStorage.getItem("login-message")}</span>) : null
 

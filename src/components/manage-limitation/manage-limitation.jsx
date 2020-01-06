@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
 import SearchResult from '../search/search-result';
 import {toast} from 'react-toastify';
-import {loadAllSaleLimitation, sendlimitation, loadOperatorLimitation,sendOperatorslimitation} from "../../services/saleLimitation";
+import {
+    loadAllSaleLimitation,
+    sendlimitation,
+    loadOperatorLimitation,
+    sendOperatorslimitation,
+    removeOperatorslimitation
+} from "../../services/saleLimitation";
 import {withRouter} from "react-router-dom";
 
 class manageConstraints extends Component {
@@ -12,10 +18,14 @@ class manageConstraints extends Component {
             pageSize: 5,
             data: [],
             mobileNumber: "",
-            iranCellLimitation: "",
-            mciLimitation: "",
-            rightelLimitation: "",
-            samantelLimitation: "",
+            chargeIranCellLimitation: "",
+            chargeMCILimitation: "",
+            chargeRightelLimitation: "",
+            chargeSamantelLimitation: "",
+            internetIranCellLimitation: "",
+            internetMCILimitation: "",
+            internetRightelLimitation: "",
+            internetSamantelLimitation: "",
             isActiveIranCell: "",
             isActiveMCI: "",
             isActiveRightel: "",
@@ -44,7 +54,6 @@ class manageConstraints extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
-
         try {
             const result = await loadAllSaleLimitation();
             if (result.status === 200) {
@@ -52,16 +61,19 @@ class manageConstraints extends Component {
                 result.data.data.forEach((dataInfo) => {
                     if (dataInfo.mobileNumber === "" || dataInfo.mobileNumber === undefined || dataInfo.mobileNumber === null) {
                         this.setState({
-                            iranCellLimitation: dataInfo.iranCellLimitation,
-                            mciLimitation: dataInfo.mciLimitation,
-                            rightelLimitation: dataInfo.rightelLimitation,
-                            samantelLimitation: dataInfo.samantelLimitation,
+                            chargeIranCellLimitation: dataInfo.chargeIranCellLimitation,
+                            chargeMCILimitation: dataInfo.chargeMCILimitation,
+                            chargeRightelLimitation: dataInfo.chargeRightelLimitation,
+                            chargeSamantelLimitation: dataInfo.chargeSamantelLimitation,
+                            internetIranCellLimitation: dataInfo.internetIranCellLimitation,
+                            internetMCILimitation: dataInfo.internetMCILimitation,
+                            internetRightelLimitation: dataInfo.internetRightelLimitation,
+                            internetSamantelLimitation: dataInfo.internetSamantelLimitation
                         });
                     } else {
                         data.push(dataInfo)
                     }
                 });
-                console.log(data, 1234)
                 this.setState({data});
             }
         } catch (ex) {
@@ -72,17 +84,21 @@ class manageConstraints extends Component {
         document.getElementById("loading").style.display = "none";
     }
 
-    sendData = async () => {
-        const {data} = this.state;
-        console.log(data)
-        const result = await sendlimitation(data);
+    removeLimition = async () => {
+        const result = await removeOperatorslimitation({});
         try {
             if (result.status === 200) {
-                toast.success('عملیات با موفقیت انجام شد.');
-                this.props.history.push({
-                    pathname: '/manage-limitation',
+                this.setState({
+                    chargeIranCellLimitation: "",
+                    chargeMCILimitation: "",
+                    chargeRightelLimitation: "",
+                    chargeSamantelLimitation: "",
+                    internetIranCellLimitation: "",
+                    internetMCILimitation: "",
+                    internetRightelLimitation: "",
+                    internetSamantelLimitation: "",
                 });
-
+                toast.success('عملیات با موفقیت انجام شد.');
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -94,11 +110,14 @@ class manageConstraints extends Component {
 
     sendAllLimitedData = async () => {
         const data = [{
-            mobileNumber: this.state.mobileNumber,
-            iranCellLimitation: this.state.iranCellLimitation,
-            mciLimitation: this.state.mciLimitation,
-            rightelLimitation: this.state.rightelLimitation,
-            samantelLimitation: this.state.samantelLimitation,
+            chargeIranCellLimitation: this.state.chargeIranCellLimitation,
+            chargeMCILimitation: this.state.chargeMCILimitation,
+            chargeRightelLimitation: this.state.chargeRightelLimitation,
+            chargeSamantelLimitation: this.state.chargeSamantelLimitation,
+            internetIranCellLimitation: this.state.internetIranCellLimitation,
+            internetMCILimitation: this.state.internetMCILimitation,
+            internetRightelLimitation: this.state.internetRightelLimitation,
+            internetSamantelLimitation: this.state.internetSamantelLimitation
         }];
         const result = await sendlimitation(data);
         try {
@@ -120,9 +139,9 @@ class manageConstraints extends Component {
     sendOperatorsLimitation = async () => {
         const data = {
             isActiveIranCell: this.state.isActiveIranCell,
-            isActiveMCI:  this.state.isActiveMCI,
-            isActiveRightel:  this.state.isActiveRightel,
-            isActiveSamantel:  this.state.isActiveSamantel
+            isActiveMCI: this.state.isActiveMCI,
+            isActiveRightel: this.state.isActiveRightel,
+            isActiveSamantel: this.state.isActiveSamantel
         };
         console.log(data)
         const result = await sendOperatorslimitation(data);
@@ -143,10 +162,24 @@ class manageConstraints extends Component {
     };
 
 
-    onDelete(data) {
+    async onDelete(data) {
         const dataInfo = this.state.data.filter(dataInfos => dataInfos.mobileNumber !== data.mobileNumber);
         this.setState({data: dataInfo});
-        console.log(this.state.data);
+        const dataId = {
+            mobileNumber: data.mobileNumber
+        };
+        const result = await removeOperatorslimitation(dataId);
+        try {
+            if (result.status === 200) {
+                toast.success('عملیات با موفقیت انجام شد.');
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('خطایی در دریافت اطلاعات رخ داده است.');
+            }
+        }
+        document.getElementById("loading").style.display = "none";
+
     }
 
     fillParameterValue = (value, name) => {
@@ -186,11 +219,15 @@ class manageConstraints extends Component {
                 }
             ],
             headerTitleInfos: [
-                {name: "mobileNumber", title: "شماره موبایل"},
-                {name: "iranCellLimitation", title: "ایرانسل"},
-                {name: "mciLimitation", title: "همراه اول"},
-                {name: "rightelLimitation", title: "رایتل"},
-                {name: "samantelLimitation", title: "سامانتل"},
+                {name: "mobileNumber", title: "شماره تلفن همراه"},
+                {name: "chargeIranCellLimitation", title: "شارژ ایرانسل"},
+                {name: "chargeMCILimitation", title: "شارژ همراه اول"},
+                {name: "chargeRightelLimitation", title: "شارژ رایتل"},
+                {name: "chargeSamantelLimitation", title: "شارژ سامانتل"},
+                {name: "internetIranCellLimitation", title: "اینترنت ایرانسل"},
+                {name: "internetMCILimitation", title: "اینترنت همراه اول"},
+                {name: "internetRightelLimitation", title: "اینترنت رایتل"},
+                {name: "internetSamantelLimitation", title: "اینترنت سامانتل"},
             ]
         };
         return headerInfo;
@@ -207,7 +244,6 @@ class manageConstraints extends Component {
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
                     <h4 className="py-2">مدیریت محدودیت ها</h4>
                 </div>
-
                 <div className="mt-3 col-11">
                     <div
                         className=" border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
@@ -286,7 +322,7 @@ class manageConstraints extends Component {
                             </div>
                             <div className="form-group float-right pt-3 ">
                                 <input type="button" className="btn btn-success" value="اعمال تغییرات"
-                                    onClick={this.sendOperatorsLimitation}
+                                       onClick={this.sendOperatorsLimitation}
                                 />
                             </div>
                         </div>
@@ -306,48 +342,102 @@ class manageConstraints extends Component {
                         <div className="rtl border m-0 bg-light shadow row w-100 justify-content-center my-3 pb-3">
 
                             <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
-                                <label>ایرانسل :</label>
+                                <label>شارژ ایرانسل :</label>
                                 <input className="form-control text-center"
                                        type="number"
                                        step="any"
                                        placeholder=""
-                                       value={this.state.iranCellLimitation}
-                                       name="iranCellLimitation"
+                                       value={this.state.chargeIranCellLimitation}
+                                       name="chargeIranCellLimitation"
                                        onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
                                 />
                             </div>
+
                             <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
-                                <label>همراه اول :</label>
+                                <label>شارژ همراه اول :</label>
                                 <input className="form-control text-center"
                                        type="number"
                                        step="any"
-                                       value={this.state.mciLimitation}
-                                       name="mciLimitation"
+                                       value={this.state.chargeMCILimitation}
+                                       name="chargeMCILimitation"
                                        onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
                                 />
                             </div>
+
                             <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
-                                <label>رایتل :</label>
+                                <label>شارژ رایتل :</label>
                                 <input className="form-control text-center"
                                        type="number"
-                                       step="any" value={this.state.rightelLimitation}
-                                       name="rightelLimitation"
+                                       step="any" value={this.state.chargeRightelLimitation}
+                                       name="chargeRightelLimitation"
                                        onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
                                 />
                             </div>
+
                             <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
-                                <label>سامانتل :</label>
+                                <label>شارژ سامانتل :</label>
                                 <input className="form-control text-center"
                                        type="number"
                                        step="any"
-                                       value={this.state.samantelLimitation}
-                                       name="samantelLimitation"
+                                       value={this.state.chargeSamantelLimitation}
+                                       name="chargeSamantelLimitation"
                                        onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
                                 />
                             </div>
+
+                            <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                                <label>اینترنت ایرانسل :</label>
+                                <input className="form-control text-center"
+                                       type="number"
+                                       step="any"
+                                       placeholder=""
+                                       value={this.state.internetIranCellLimitation}
+                                       name="internetIranCellLimitation"
+                                       onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
+                                />
+                            </div>
+
+                            <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                                <label>اینرنت همراه اول :</label>
+                                <input className="form-control text-center"
+                                       type="number"
+                                       step="any"
+                                       value={this.state.internetMCILimitation}
+                                       name="internetMCILimitation"
+                                       onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
+                                />
+                            </div>
+
+                            <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                                <label>اینترنت رایتل :</label>
+                                <input className="form-control text-center"
+                                       type="number"
+                                       step="any" value={this.state.internetRightelLimitation}
+                                       name="internetRightelLimitation"
+                                       onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
+                                />
+                            </div>
+
+                            <div className="form-group mt-3 col-sm-6 col-md-3 float-right">
+                                <label>اینترنت سامانتل :</label>
+                                <input className="form-control text-center"
+                                       type="number"
+                                       step="any"
+                                       value={this.state.internetSamantelLimitation}
+                                       name="internetSamantelLimitation"
+                                       onChange={(e) => this.fillParameterValue(e.target.value, e.target.name)}
+                                />
+                            </div>
+
+
                             <div className="form-group float-right pt-3 ">
                                 <input type="button" className="btn btn-success" value="اعمال تغییرات"
                                        onClick={this.sendAllLimitedData}
+                                />
+                            </div>
+                            <div className="form-group float-right pt-3 px-4 ">
+                                <input type="button" className="btn btn-danger" value="حذف محدودیت ها"
+                                       onClick={this.removeLimition}
                                 />
                             </div>
 
@@ -367,11 +457,6 @@ class manageConstraints extends Component {
 
                             <SearchResult headerInfo={headerInfo} searchResultList={data} pageSize={pageSize}/>
 
-                            <div className="form-group float-right pt-3 px-4 ">
-                                <input type="button" className="btn btn-success" value="اعمال تغییرات"
-                                       onClick={this.sendData}
-                                />
-                            </div>
                             <div className="form-group float-right pt-3 px-4 ">
                                 <input type="button" className="btn btn-warning" value="اضافه کردن"
                                        onClick={this.onAdd}

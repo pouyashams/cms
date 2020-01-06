@@ -44,7 +44,7 @@ class Sidebar extends Component {
                     <div className="sidebar-header pb-3 pt-1 justify-content-center">
                         <div className="user-info justify-content-center text-center">
                             <span className="user-name justify-content-center">
-                                <strong>شرکت آیسان</strong>
+                                <strong>شرکت آیسانیک</strong>
                             </span>
                         </div>
                     </div>

@@ -21,11 +21,41 @@ class confirmProduct extends Component {
             checked: "",
             productAttributeItemList: [],
             identifier: "",
-            canConfirmOrRejectProduct: ""
+            canConfirmOrRejectProduct: "",
+            checkbox: []
         }
     };
 
+    handelChangeCheckBox = (id, checked) => {
+        const checkbox = [];
+        this.state.checkbox.forEach((merchant) => {
+            if (merchant.id === parseInt(id)) {
+                checkbox.push(
+                    {
+                        id: merchant.id,
+                        checked: checked,
+                        name: merchant.name
+                    }
+                )
+            }
+            else {
+                checkbox.push(
+                    {
+                        id: merchant.id,
+                        checked: merchant.checked,
+                        name: merchant.name
+
+                    }
+                )
+            }
+        });
+        this.setState({checkbox});
+    };
+
+
     componentDidMount() {
+
+
         if (this.props.productCategoryList !== undefined) {
             const productCategoryList = this.props.productCategoryList.filter(product => product.identifier !== "");
             productCategoryList.forEach((productCategory) => {
@@ -34,6 +64,7 @@ class confirmProduct extends Component {
                 }
             });
         }
+        this.makeCheckBox();
         this.showProductDetails();
     }
 
@@ -50,8 +81,14 @@ class confirmProduct extends Component {
     }
 
     acceptProductInfo = async () => {
+        const allowedMerchants = [];
+        this.state.checkbox.forEach((merchant) => {
+            if (merchant.checked === true) {
+                allowedMerchants.push(merchant.id);
+            }
+        });
         try {
-            let data = {identifier : this.state.identifier};
+            let data = {identifier: this.state.identifier, allowedMerchants: allowedMerchants};
             const result = await acceptProduct(data);
             if (result.status === 200) {
                 toast.success('کالا با موفقیت تایید شد');
@@ -67,7 +104,7 @@ class confirmProduct extends Component {
     };
     cancelProductInfo = async () => {
         try {
-            let data = {identifier : this.state.identifier};
+            let data = {identifier: this.state.identifier};
             const result = await cancelProduct(data);
             if (result.status === 200) {
                 toast.success('کالا با موفقیت لغو شد');
@@ -84,7 +121,7 @@ class confirmProduct extends Component {
 
     showProductDetails = () => {
         const {productInfo} = this.props.location;
-        if (!productInfo) return this.props.history.push('/update-product');
+        if (!productInfo) return this.props.history.push('/product-management');
         this.setState({
             canConfirmOrRejectProduct: this.getValue(productInfo.canConfirmOrRejectProduct),
             name: this.getValue(productInfo.name),
@@ -97,6 +134,41 @@ class confirmProduct extends Component {
             description: this.getValue(productInfo.description),
             productAttributeItemList: this.getValue(productInfo.productAttributeItemList),
             productItemImageBase64List: this.getValue(productInfo.productItemImageBase64List)
+        });
+    };
+
+    makeCheckBox = () => {
+        const {productInfo} = this.props.location;
+        if (!productInfo) return this.props.history.push('/product-management');
+        const merchants = [];
+        const allowedMerchants = [];
+        const allowed = this.getValue(productInfo.allowedMerchants);
+        allowed.forEach((allow) => {
+            let data = {
+                id: allow.identifier,
+                checked: true,
+                name: allow.name
+            };
+            allowedMerchants.push(data);
+        });
+        const merchantArray = this.getValue(productInfo.merchants.filter(merchant => merchant.value !== ""));
+        merchantArray.forEach((merchant) => {
+            let data = {
+                id: merchant.value,
+                checked: false,
+                name: merchant.title
+            };
+            merchants.push(data);
+        });
+        let s = new Set();
+        const data = [...allowedMerchants, ...merchants].filter(d => {
+                let avail = s.has(d.id);
+                !avail && s.add(d.id);
+                return !avail
+            }
+        );
+        this.setState({
+            checkbox: data
         });
     };
 
@@ -209,13 +281,42 @@ class confirmProduct extends Component {
                         </div>
                     </div>
                 </div>
+                {this.state.checkbox.length !== 0 ? (
+                    <div className="col-12 justify-content-center align-items-center text-center">
+                        <div
+                            className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
+                            <div className="form-group col-12 ">
+                                <h4 className="py-3"> پذیرنده ها:</h4>
+                            </div>
+                            {this.state.checkbox.map((merchant) =>
+                                (
+                                    <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                                        <div className="input-group">
+                                            <div className="input-group addon">
+                                                <div className="py-2 custom-control custom-checkbox">
+                                                    <input type="checkbox" className=" custom-control-input"
+                                                           checked={merchant.checked}
+                                                           id={merchant.id}
+                                                           onChange={(e) => this.handelChangeCheckBox(e.target.id, e.target.checked)}
+                                                    />
+                                                    <label className="px-4 custom-control-label"
+                                                           htmlFor={merchant.id}>{merchant.name}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            )}
+                        </div>
+                    </div>
+                ) : null}
                 {this.state.canConfirmOrRejectProduct ?
                     <div className="col-12 p-3 text-center">
-                        <input type="button" className="btn btn-primary mr-3" value="تایید "
+                        <input type="button" className="btn btn-success mr-3" value="تایید "
                                onClick={() => {
                                    this.acceptProductInfo()
                                }}/>
-                        <input type="button" className="btn btn-primary mr-3" value="لغو"
+                        <input type="button" className="btn btn-danger mr-3" value="لغو"
                                onClick={() => {
                                    this.cancelProductInfo()
                                }}/>

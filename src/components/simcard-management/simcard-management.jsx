@@ -159,7 +159,7 @@ class SimcardManagement extends Component {
             const result = await searchProduct(Object.assign(parameters, {onlyForCustomer: true , searchForCMS : true}));
             let searchResultList = [];
             if (result.status === 200) {
-                console.log(result.data.data)
+                console.log(result.data.data,12345)
                 result.data.data.forEach((dataInfo) => {
                     searchResultList.push(
                         {
@@ -173,8 +173,8 @@ class SimcardManagement extends Component {
                             status: dataInfo.status,
                             price: dataInfo.productItemInfo.price,
                             productAttributeItemList: dataInfo.productItemInfo.productAttributeItemList,
-
-
+                            allowedMerchants: dataInfo.allowedMerchants,
+                            merchants: this.state.merchants,
                         }
                     )
                 });

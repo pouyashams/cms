@@ -208,7 +208,9 @@ class updateProduct extends Component {
                             price: dataInfo.productItemInfo.price,
                             description: dataInfo.productItemInfo.description,
                             productAttributeItemList: dataInfo.productItemInfo.productAttributeItemList,
-                            productItemImageBase64List: dataInfo.productItemInfo.productItemImageBase64List
+                            productItemImageBase64List: dataInfo.productItemInfo.productItemImageBase64List,
+                            allowedMerchants: dataInfo.allowedMerchants,
+                            merchants: this.state.merchants,
                         }
                     )
                 });

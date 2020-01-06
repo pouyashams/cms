@@ -178,8 +178,8 @@ class requirementsAudit extends Component {
                             status: dataInfo.status,
                             price: dataInfo.productItemInfo.price,
                             productAttributeItemList: dataInfo.productItemInfo.productAttributeItemList,
-
-
+                            allowedMerchants: dataInfo.allowedMerchants,
+                            merchants: this.state.merchants,
                         }
                     )
                 });

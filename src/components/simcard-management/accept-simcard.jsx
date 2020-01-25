@@ -166,7 +166,6 @@ class acceptSimcard extends Component {
         });
     };
 
-
     render() {
         const productItem = this.state;
         return (
@@ -278,6 +277,17 @@ class acceptSimcard extends Component {
                                     </div>
                                 ))
                             }
+                        </div>
+                    </div>
+                </div>
+                <div className="col-12 justify-content-center align-items-center text-center">
+                    <div
+                        className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
+                        <h4 className="py-3 col-12">علت لغو کالا :</h4>
+                        <div className="form-group col-6 float-right">
+                            <textarea className="form-control text-center textarea-style  "
+                                      value={productItem.description}
+                            />
                         </div>
                     </div>
                 </div>

@@ -133,6 +133,9 @@
         transform: rotate(360deg);
     }
 }
+.textarea-style{
+    height: 20px;
+}
 
 .header-box {
     background-color: var(--header-color);

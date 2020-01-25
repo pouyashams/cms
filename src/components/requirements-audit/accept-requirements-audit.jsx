@@ -87,7 +87,7 @@ class acceptSimcard extends Component {
             if (result.status === 200) {
                 toast.success('کالا با موفقیت تایید شد');
                 document.getElementById("loading").style.display = "none";
-                return this.props.history.push('/simcard-management');
+                this.props.history.goBack();
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -103,7 +103,7 @@ class acceptSimcard extends Component {
             if (result.status === 200) {
                 toast.success('کالا با موفقیت لغو شد');
                 document.getElementById("loading").style.display = "none";
-                return this.props.history.push('/simcard-management');
+                this.props.history.goBack();
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -173,7 +173,7 @@ class acceptSimcard extends Component {
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div
                     className=" col-12 justify-content-center align-items-center text-center header-box  text-light">
-                    <h4 className="py-2">تایید و لغو سیمکارت</h4>
+                    <h4 className="py-2">ممیزی نیازمندی ها</h4>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div
@@ -249,7 +249,7 @@ class acceptSimcard extends Component {
                     <div
                         className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
                         <div className="form-group col-12 ">
-                            <h4 className="py-3">مشخصات سیمکارت :</h4>
+                            <h4 className="py-3">اطلاعات تکمیلی :</h4>
                             {console.log(this.state.productAttributeItemList, 1234)}
                             {this.state.productAttributeItemList.map((productAttribute) =>
                                 (
@@ -280,6 +280,17 @@ class acceptSimcard extends Component {
                         </div>
                     </div>
                 </div>
+                    <div className="col-12 justify-content-center align-items-center text-center">
+                        <div
+                            className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
+                            <h4 className="py-3 col-12">علت لغو کالا :</h4>
+                            <div className="form-group col-6 float-right">
+                                <textarea className="form-control text-center textarea-style  "
+                                          value={productItem.description}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 {this.state.checkbox.length !== 0 ? (
                     <div className="col-12 justify-content-center align-items-center text-center">
                         <div

@@ -11,11 +11,12 @@ class menuProductInfoManagement extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pageSize: 5,
+            pageSize: 10,
             searchResultList: [],
-            registrarMerchantId: []
+            registrarMerchantId: [],
         };
         this.onUpdate = this.onUpdate.bind(this);
+        this.search = this.search.bind(this);
     }
 
 
@@ -108,6 +109,7 @@ class menuProductInfoManagement extends Component {
         };
         return headerInfo;
     }
+
     prepareMerchantSelection(merchants) {
         let merchantArray = [{
             value: "",
@@ -133,6 +135,7 @@ class menuProductInfoManagement extends Component {
     }
 
     async componentDidMount() {
+        setInterval(this.search, 60000);
         try {
             const resultForFetchMerchants = await fetchAllChildOfCurrentMerchant();
             if (resultForFetchMerchants.status === 200) {
@@ -149,15 +152,23 @@ class menuProductInfoManagement extends Component {
         document.getElementById("loading").style.display = "none";
     }
 
-
     search = async (parameters) => {
+        if (parameters === undefined) {
+            parameters = {
+                customerReferenceNumber: "",
+                registrarMerchantId: "",
+                orderStatusCode: "",
+                registerDateTo: new Date().toLocaleDateString('fa-IR'),
+                registerDateFrom: new Date().toLocaleDateString('fa-IR'),
+                identifier: "",
+            }
+        }
+        console.log(parameters)
         try {
             const result = await searchDataOFConfirmation(parameters);
             if (result.status === 200) {
                 const searchResultList = [];
-                console.log(result.data.data)
                 result.data.data.forEach((dataInfo) => {
-                    console.log(dataInfo)
                     searchResultList.push(
                         {
                             name: dataInfo.orderStatus.name,

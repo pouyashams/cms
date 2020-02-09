@@ -115,17 +115,6 @@ class productCategory extends Component {
         }
     };
 
-
-    handelChangeProductAttribute = (newValue, attributeInfo) => {
-        const {productAttributeList} = this.state;
-        productAttributeList.forEach((productAttribute) => {
-            if (productAttribute.index === attributeInfo.index) {
-                productAttribute.attributeValue = newValue;
-                this.setState({productAttributeList});
-            }
-        });
-    };
-
     handelChangeNewCategoryName = (categoryName) => {
         const {selectedOldProductAttributeCategory, productAttributeList} = this.state;
         const rawAttribute = this.getRawAttributeInfo();
@@ -177,90 +166,88 @@ class productCategory extends Component {
 
     render() {
         const {oldProductAttributeCategoryArray, productAttributeList} = this.state;
-
         return (
-            <div
-                className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
-                <div
-                    className="col-6 justify-content-center align-items-center text-center header-box text-light border-left">
-                    <h4 className="py-2">اصلاح ویژگی</h4>
-                </div>
-                <div className="col-6 justify-content-center align-items-center text-center header-box text-light">
-                    <h4 className="py-2">تعریف ویژگی</h4>
-                </div>
-                <div className="col-12 justify-content-center align-items-center text-center">
-                    <form
-                        className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
-
-                        <div className="form-group col-12 col-sm-6 col-md-6 float-right border-left">
-                            <label>نوع ویژگی:</label>
-                            <select className="form-control text-center w-50"
-                                    value={this.state.selectedOldProductAttributeCategory}
-                                    onChange={(e) => this.handelChangeOldProductAttributeCategory(e.target.value)}
-                            >
-                                {oldProductAttributeCategoryArray.map(
-                                    (productAttributeCategory) => {
-                                        return (<option
-                                            value={productAttributeCategory.identifier}>{productAttributeCategory.categoryName}</option>);
-                                    }
-                                )}
-                            </select>
-                        </div>
-                        <div className="form-group col-12 col-sm-6 col-md-6 float-right">
-                            <label>نام ویژگی جدید:</label>
-                            <input className="form-control text-center w-50"
-                                   type={"input"}
-                                   placeholder="---"
-                                   value={this.state.categoryName}
-                                   name={"categoryName"}
-                                   onChange={(e) => this.handelChangeNewCategoryName(e.target.value)}
-                            />
-                        </div>
-                    </form>
-                </div>
-                {productAttributeList.length !== 0 ? (
+            <div className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
+                    <div
+                        className="col-6 justify-content-center align-items-center text-center header-box text-light border-left">
+                        <h4 className="py-2">اصلاح ویژگی</h4>
+                    </div>
+                    <div className="col-6 justify-content-center align-items-center text-center header-box text-light">
+                        <h4 className="py-2">تعریف ویژگی</h4>
+                    </div>
                     <div className="col-12 justify-content-center align-items-center text-center">
                         <form
                             className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
-                            {productAttributeList.map((productAttribute) =>
-                                (
-                                    <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                                        <label> مقدار ویژگی :</label>
-                                        <div className="input-group">
-                                            <div className="input-group addon">
-                                                <input className="form-control text-center"
-                                                       type={"input"}
-                                                       placeholder="---"
-                                                       name="productAttribute"
-                                                       value={productAttribute.attributeValue}
-                                                       onChange={(e) => this.handelChangeProductAttribute(e.target.value, productAttribute)}
-                                                />
-                                                <span
-                                                    className={
-                                                        productAttribute.canBeDelete ? "fa fa-remove bg-danger text-light h-100 p-0 m-0  remove-attribute-icon" : "fa fa-remove bg-danger text-light h-100 p-0 m-0  disabled-remove-attribute-icon"
-                                                    }
-                                                    onClick={() => this.removeProductAttribute(productAttribute)}/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )
-                            )}
-                            <div className="col-12 text-center justify-content-center">
-                                <input type="button" className="btn btn-primary mr-3" value="ثبت نهایی "
-                                       onClick={() => {
-                                           this.sendProduct();
-                                       }}/>
-                                <input type="button" className="btn btn-primary" value="اضافه کردن" onClick={() => {
-                                    this.addNewAttribute();
-                                }}/>
+
+                            <div className="form-group col-12 col-sm-6 col-md-6 float-right border-left">
+                                <label>نوع ویژگی:</label>
+                                <select className="form-control text-center w-50"
+                                        value={this.state.selectedOldProductAttributeCategory}
+                                        onChange={(e) => this.handelChangeOldProductAttributeCategory(e.target.value)}
+                                >
+                                    {oldProductAttributeCategoryArray.map(
+                                        (productAttributeCategory) => {
+                                            return (<option
+                                                value={productAttributeCategory.identifier}>{productAttributeCategory.categoryName}</option>);
+                                        }
+                                    )}
+                                </select>
+                            </div>
+                            <div className="form-group col-12 col-sm-6 col-md-6 float-right">
+                                <label>نام ویژگی جدید:</label>
+                                <input className="form-control text-center w-50"
+                                       type={"input"}
+                                       placeholder="---"
+                                       value={this.state.categoryName}
+                                       name={"categoryName"}
+                                       onChange={(e) => this.handelChangeNewCategoryName(e.target.value)}
+                                />
                             </div>
                         </form>
                     </div>
-                ) : null}
-            </div>
+                    {productAttributeList.length !== 0 ? (
+                        <div className="col-12 justify-content-center align-items-center text-center">
+                            <form
+                                className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
+                                {productAttributeList.map((productAttribute) =>
+                                    (
+                                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                                            <label> مقدار ویژگی :</label>
+                                            <div className="input-group">
+                                                <div className="input-group addon">
+                                                    <input className="form-control text-center"
+                                                           type={"input"}
+                                                           placeholder="---"
+                                                           name="productAttribute"
+                                                           value={productAttribute.attributeValue}
+                                                        // onChange={(e) => this.handelChangeProductAttribute(e.target.value, productAttribute)}
+                                                    />
+                                                    <span
+                                                        className={
+                                                            productAttribute.canBeDelete ? "fa fa-remove bg-danger text-light h-100 p-0 m-0  remove-attribute-icon" : "fa fa-remove bg-danger text-light h-100 p-0 m-0  disabled-remove-attribute-icon"
+                                                        }
+                                                        onClick={() => this.removeProductAttribute(productAttribute)}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                )}
+                                <div className="col-12 text-center justify-content-center">
+                                    <input type="button" className="btn btn-primary mr-3" value="ثبت نهایی "
+                                           onClick={() => {
+                                               this.sendProduct();
+                                           }}/>
+                                    <input type="button" className="btn btn-primary" value="اضافه کردن" onClick={() => {
+                                        this.addNewAttribute();
+                                    }}/>
+                                </div>
+                            </form>
+                        </div>
+                    ) : null}
+                </div>
         );
     };
-};
+}
 
 export default productCategory;
 

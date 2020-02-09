@@ -40,7 +40,7 @@ const navLinks = [
     }, {
         path: "/requirements-audit",
         name: "ممیزی نیازمندی ها",
-        icon: "fa fa-book",
+        icon: "fa fa-edit",
         authority: "MENU_SIM_CARD_MANAGEMENT"
     },
     {
@@ -93,20 +93,20 @@ const navLinks = [
     }, {
         path: "/festival-sale",
         name: "مدیریت تخفیفات",
-        icon: "fa fa-align-right",
+        icon: "fa fa-briefcase",
         authority: "FESTIVAL_SALE_MANAGEMENT"
 
     }, {
         path: "/manage-limitation",
         name: "مدیریت محدودیت ها",
-        icon: "fa fa-align-right",
+        icon: "fa fa-crop",
         authority: "FESTIVAL_SALE_MANAGEMENT"
 
     },
     {
         path: "/product-reject",
         name: "گزارش تخلف سیم کارت",
-        icon: "fa fa-align-right",
+        icon: "fa fa-calendar-times-o",
         authority: "FESTIVAL_SALE_MANAGEMENT"
     },
     {

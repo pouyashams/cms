@@ -287,7 +287,6 @@ class confirmProduct extends Component {
                         <h4 className="py-3 col-12">علت لغو کالا :</h4>
                         <div className="form-group col-6 float-right">
                             <textarea className="form-control text-center textarea-style  "
-                                      value={""}
                             />
                         </div>
                     </div>

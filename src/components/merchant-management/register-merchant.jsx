@@ -109,7 +109,7 @@ class RegisterMerchant extends Component {
 
         merchantInfo.name = info.name;
         merchantInfo.username = info.username;
-        merchantInfo.password = info.password;
+        merchantInfo.realPassword = info.password;
         merchantInfo.email = info.email;
         merchantInfo.nationalCode = info.nationalCode;
         merchantInfo.authorities = authorities;

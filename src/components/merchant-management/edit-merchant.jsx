@@ -118,7 +118,7 @@ class EditMerchant extends Component {
         merchantInfo.identifier = info.identifier;
         merchantInfo.name = info.name;
         merchantInfo.username = info.username;
-        merchantInfo.password = info.password;
+        merchantInfo.realPassword = info.password;
         merchantInfo.email = info.email;
         merchantInfo.nationalCode = info.nationalCode;
         merchantInfo.authorities = authorities;

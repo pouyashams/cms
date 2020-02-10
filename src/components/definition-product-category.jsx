@@ -234,7 +234,7 @@ class definitionProductCategory extends Component {
                 <div className="col-11 border shadow my-5 ">
                     <div
                         className="col-12 justify-content-center align-items-center text-center header-box text-light border-left">
-                        <h4 className="py-2">نمایش ویژگی</h4>
+                        <h4 className="py-2">نمایش دسته ها</h4>
                     </div>
                     <Tree
                         data={this.state.data}

@@ -153,13 +153,25 @@ class menuProductInfoManagement extends Component {
     }
 
     search = async (parameters) => {
+
         if (parameters === undefined) {
+            const registerDate = new Date().toLocaleDateString('fa-IR')
+                .split("۰").join("0")
+                .split("۱").join("1")
+                .split("۲").join("2")
+                .split("۳").join("3")
+                .split("۴").join("4")
+                .split("۵").join("5")
+                .split("۶").join("6")
+                .split("۷").join("7")
+                .split("۸").join("8")
+                .split("۹").join("9");
             parameters = {
                 customerReferenceNumber: "",
                 registrarMerchantId: "",
                 orderStatusCode: "",
-                registerDateTo: new Date().toLocaleDateString('fa-IR'),
-                registerDateFrom: new Date().toLocaleDateString('fa-IR'),
+                registerDateTo: registerDate,
+                registerDateFrom: registerDate,
                 identifier: "",
             }
         }

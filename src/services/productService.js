@@ -1,7 +1,9 @@
 import http from './httpService';
 
 export function loadAllProductAttributeCategory() {
-    return http.post("http://shop.isuncharge.com/isunshop//fetch/product-attribute-category", {});
+    return http.post("http://shop.isuncharge.com/isunshop/fetch/product-attribute-category", {});
+}export function loadSuperCategories() {
+    return http.post("http://shop.isuncharge.com/isunshop/fetch/super-categories", {});
 }
 
 export function sendListOfProduct(categoryInfo) {

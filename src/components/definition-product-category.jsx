@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {loadData, sendListOfDefinitionProduct} from "../services/productService";
+import {loadData, loadSuperCategories, sendListOfDefinitionProduct} from "../services/productService";
 import {toast} from "react-toastify";
+import Tree from 'react-tree-graph';
 
 class definitionProductCategory extends Component {
 
@@ -20,6 +21,7 @@ class definitionProductCategory extends Component {
             productCategoryName: "",
             productCategoryList: "",
             productAttributeCategoryList: "",
+            data: [],
         };
     };
 
@@ -47,9 +49,48 @@ class definitionProductCategory extends Component {
                 toast.error('خطایی در دریافت اطلاعات رخ داده است.');
             }
         }
+        try {
+            const result = await loadSuperCategories();
+            if (result.status === 200) {
+                this.fillTreeCategories(result.data.data);
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('خطایی در دریافت اطلاعات رخ داده است.');
+            }
+        }
         document.getElementById("loading").style.display = "none";
     }
 
+    fillTreeCategories = (superCategories) => {
+        let superCategory = {name: ""};
+        let childList = [];
+        superCategories.forEach((category) => {
+            childList.push(category)
+        });
+        superCategory.childList = childList;
+        let data = this.getCategoryInfo(superCategory);
+        this.setState({
+            data
+        });
+    };
+
+
+    getCategoryInfo = (category) => {
+        let categoryInfo = {
+            name : category.name
+        };
+        if (category.childList.length !== 0) {
+            let children = [];
+            category.childList.forEach((child) => {
+                children.push(this.getCategoryInfo(child))
+            });
+            categoryInfo.children = children;
+        } else {
+            categoryInfo.children = [];
+        }
+        return categoryInfo;
+    };
     sendProduct = async () => {
         const {productCategoryName, parentProductCategory,productAttributeCategoryList} = this.state;
         const categoryList=[];
@@ -190,6 +231,20 @@ class definitionProductCategory extends Component {
                         </form>
                     </div>
                 ) : null}
+                <div className="col-11 border shadow my-5 ">
+                    <div
+                        className="col-12 justify-content-center align-items-center text-center header-box text-light border-left">
+                        <h4 className="py-2">نمایش ویژگی</h4>
+                    </div>
+                    <Tree
+                        data={this.state.data}
+                        height={500}
+                        width={1100}
+                        svgProps={{
+                            className: 'custom'
+                        }}
+                    />
+                </div>
             </div>
         );
     };

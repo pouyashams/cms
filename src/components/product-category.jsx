@@ -3,6 +3,7 @@ import {loadAllProductAttributeCategory} from "../services/productService";
 import {sendListOfProduct} from "../services/productService";
 import {toast} from "react-toastify";
 
+
 class productCategory extends Component {
 
     constructor(props) {
@@ -43,7 +44,9 @@ class productCategory extends Component {
         document.getElementById("loading").style.display = "none";
     }
 
-    getSelectedProductCategoryName = (id) => {
+
+
+        getSelectedProductCategoryName = (id) => {
         let categoryName = "";
         const {oldProductAttributeCategoryArray} = this.state;
         oldProductAttributeCategoryArray.forEach((oldProductAttributeCategory) => {
@@ -115,6 +118,23 @@ class productCategory extends Component {
         }
     };
 
+    chooseSuperCategory = (identifier) => {
+        console.log(identifier)
+        if (this.hasValue(identifier)) {
+            this.state.superCategories.forEach((categories) => {
+                if (categories.identifier.toString() === identifier) {
+                    const data = [];
+                    // categories.childList
+                    this.setState({
+                        data
+                    });
+                }
+            });
+        } else {
+
+        }
+    };
+
     handelChangeNewCategoryName = (categoryName) => {
         const {selectedOldProductAttributeCategory, productAttributeList} = this.state;
         const rawAttribute = this.getRawAttributeInfo();
@@ -167,7 +187,9 @@ class productCategory extends Component {
     render() {
         const {oldProductAttributeCategoryArray, productAttributeList} = this.state;
         return (
-            <div className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
+            <div>
+                <div
+                    className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                     <div
                         className="col-6 justify-content-center align-items-center text-center header-box text-light border-left">
                         <h4 className="py-2">اصلاح ویژگی</h4>
@@ -245,6 +267,7 @@ class productCategory extends Component {
                         </div>
                     ) : null}
                 </div>
+            </div>
         );
     };
 }

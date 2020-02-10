@@ -241,3 +241,33 @@ code {
     font-size: 37px;
     background-color: #ccc !important;
 }
+
+
+
+div.custom-container {
+    /*background-color: #f3f3f3;*/
+}
+
+svg.custom .node circle {
+    fill: rgba(243, 243, 255, 0.51);
+    stroke: rgba(37, 147, 184, 0.5);
+    stroke-width: 1.5px;
+}
+
+svg.custom .node text {
+    font-size: 17px;
+    background-color: #dee2e6;
+    fill: #000000;
+    font-weight: bold;
+    /*text-shadow: 0 1px 4px black;*/
+}
+
+svg.custom .node {
+    cursor: pointer;
+}
+
+svg.custom path.link {
+    fill: none;
+    stroke: rgba(37, 147, 184, 0.51);
+    stroke-width: 1.5px;
+}

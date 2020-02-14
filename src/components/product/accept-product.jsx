@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import "../../css/textArea.css"
 import {withRouter} from 'react-router-dom';
-import {acceptProduct, cancelProduct} from "../../services/productService";
+import {acceptProduct, cancelProduct, getIban} from "../../services/productService";
 import {toast} from 'react-toastify';
 
 class confirmProduct extends Component {
@@ -11,6 +11,7 @@ class confirmProduct extends Component {
         this.state = {
             productAttributeCategoryList: [],
             productItemImageBase64List: [],
+            typeOfPay: "onlinePay",
             name: "",
             englishName: "",
             code: "",
@@ -22,9 +23,41 @@ class confirmProduct extends Component {
             productAttributeItemList: [],
             identifier: "",
             canConfirmOrRejectProduct: "",
+            ibanMerchant: "",
+            amount: "",
+            iban: "",
+            percent: "",
+            multiplexedSaleInfoList: "",
             checkbox: []
         }
     };
+
+    onCheckd = () => {
+        const {multiplexedSaleInfoList, iban, amount, percent} = this.state;
+        if (this.isCorrect(this.state.iban)) {
+            multiplexedSaleInfoList.push(
+                {
+                    iban: iban,
+                    amount: amount,
+                    percent: percent,
+                    id: multiplexedSaleInfoList.length,
+                }
+            );
+            this.setState({
+                multiplexedSaleInfoList,
+                iban:"",
+                amount:"",
+                percent:"",
+            });
+        } else {
+            toast.error('شماره شبا را درست وارد کنید');
+        }
+    };
+
+
+    isCorrect(field) {
+        return field.length === 26 && field.charAt(0) === 'I' && field.charAt(1) === 'R';
+    }
 
     handelChangeCheckBox = (id, checked) => {
         const checkbox = [];
@@ -52,6 +85,49 @@ class confirmProduct extends Component {
         this.setState({checkbox});
     };
 
+    fillParameterValue = (value, name) => {
+        this.setState({[name]: value});
+    };
+
+    addIban = (value, name) => {
+        if (name === "percent") {
+            this.setState({[name]: value, amount: ""});
+
+        } else if (name === "amount") {
+            this.setState({[name]: value, percent: ""});
+        } else {
+            this.setState({[name]: value});
+        }
+    };
+
+    updateIban = (value, id) => {
+        const {multiplexedSaleInfoList} = this.state;
+        multiplexedSaleInfoList[id].iban = value;
+        this.setState({
+            multiplexedSaleInfoList
+        });
+        console.log(multiplexedSaleInfoList, 123)
+    };
+
+    updateIbanPercent = (value, id) => {
+        const {multiplexedSaleInfoList} = this.state;
+        multiplexedSaleInfoList[id].percent = value;
+        multiplexedSaleInfoList[id].amount = "";
+        this.setState({
+            multiplexedSaleInfoList
+        });
+        console.log(multiplexedSaleInfoList, 123)
+    };
+
+    updateIbanAmount = (value, id) => {
+        const {multiplexedSaleInfoList} = this.state;
+        multiplexedSaleInfoList[id].amount = value;
+        multiplexedSaleInfoList[id].percent = "";
+        this.setState({
+            multiplexedSaleInfoList
+        });
+        console.log(multiplexedSaleInfoList, 123)
+    };
 
     componentDidMount() {
 
@@ -65,8 +141,30 @@ class confirmProduct extends Component {
             });
         }
         this.makeCheckBox();
+        this.getIbanInfo();
         this.showProductDetails();
     }
+
+    getIbanInfo = async () => {
+        const {productInfo} = this.props.location;
+        if (!productInfo) return this.props.history.goBack();
+        const id = {
+            "identifier": productInfo.identifier
+        };
+        try {
+            const result = await getIban(id);
+            if (result.status === 200) {
+                const ibanMerchant = result.data.data;
+                this.setState({ibanMerchant});
+            }
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                toast.error('خطایی در دریافت اطلاعات رخ داده است.');
+            }
+        }
+        document.getElementById("loading").style.display = "none";
+    };
+
 
     hasValue(field) {
         return field !== null && field !== undefined && field !== "";
@@ -93,7 +191,7 @@ class confirmProduct extends Component {
             if (result.status === 200) {
                 toast.success('کالا با موفقیت تایید شد');
                 document.getElementById("loading").style.display = "none";
-                return this.props.history.push('/product-management');
+                return this.props.history.goBack();
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -102,6 +200,7 @@ class confirmProduct extends Component {
         }
         document.getElementById("loading").style.display = "none";
     };
+
     cancelProductInfo = async () => {
         try {
             let data = {identifier: this.state.identifier};
@@ -109,7 +208,7 @@ class confirmProduct extends Component {
             if (result.status === 200) {
                 toast.success('کالا با موفقیت لغو شد');
                 document.getElementById("loading").style.display = "none";
-                return this.props.history.push('/update-product');
+                return this.props.history.goBack();
             }
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
@@ -121,10 +220,21 @@ class confirmProduct extends Component {
 
     showProductDetails = () => {
         const {productInfo} = this.props.location;
-        if (!productInfo) return this.props.history.push('/product-management');
+        if (!productInfo) return this.props.history.goBack();
+        const multiplexedSaleInfoList = [];
+        productInfo.multiplexedSaleInfoList.forEach((info) => {
+            const data = {
+                "iban": info.iban,
+                "percent": info.percent,
+                "amount": info.amount,
+                "id": productInfo.multiplexedSaleInfoList.indexOf(info),
+            };
+            multiplexedSaleInfoList.push(data);
+        });
         this.setState({
             canConfirmOrRejectProduct: this.getValue(productInfo.canConfirmOrRejectProduct),
             name: this.getValue(productInfo.name),
+            multiplexedSaleInfoList: multiplexedSaleInfoList,
             identifier: this.getValue(productInfo.identifier),
             englishName: this.getValue(productInfo.englishName),
             code: this.getValue(productInfo.code),
@@ -174,6 +284,7 @@ class confirmProduct extends Component {
 
     render() {
         const productItem = this.state;
+        const {multiplexedSaleInfoList} = this.state;
         return (
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
@@ -234,19 +345,43 @@ class confirmProduct extends Component {
 
                             />
                         </div>
-
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                            <label>نوع پرداخت :</label>
+                            <select
+                                className="form-control text-center w-50"
+                                onChange={(e) => this.fillParameterValue(e.target.value, "typeOfPay")}
+                            >
+                                {[{value: "onlinePay", name: "پرداخت انلاین"}, {
+                                    value: "hardPay",
+                                    name: "پرداخت در محل"
+                                }, {value: "bothPay", name: "هر دو مورد"}].map(
+                                    (merchant) => {
+                                        return (
+                                            <option value={merchant.identifier}>{merchant.name}</option>);
+                                    }
+                                )}
+                            </select>
+                        </div>
+                        <div className="form-group col-12  float-right">
+                            <label>شماره شبا پذیرنده :</label>
+                            <input className=" col-3 form-control text-center w-100"
+                                   placeholder="---"
+                                   value={this.state.ibanMerchant}
+                            />
+                        </div>
                         <div className="form-group col-12 float-right">
                             <label>توضیحات :</label>
                             <textarea className="form-control text-center w-50 "
                                       value={productItem.description}
                             />
                         </div>
+
                         {this.state.productItemImageBase64List.length !== 0 ?
                             <div className="col-12 justify-content-center align-items-center text-center">
                                 <div
                                     className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
                                     <div className="form-group col-12 ">
-                                        <label className="col-12 py-1 font-weight-bold">عکس کالا :</label>
+                                        <h4 className="py-3 col-12 ">عکس کالا :</h4>
                                         {this.state.productItemImageBase64List.map((productItemImage) =>
                                             (
                                                 <img
@@ -262,6 +397,7 @@ class confirmProduct extends Component {
                             : null
                         }
                     </div>
+
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div
@@ -289,6 +425,90 @@ class confirmProduct extends Component {
                             <textarea className="form-control text-center textarea-style  "
                             />
                         </div>
+                    </div>
+                </div>
+                <div className="col-12 justify-content-center align-items-center text-center">
+                    <div className="rtl m-0 float-right row w-100 justify-content-start my-3 pb-3 bg-color border">
+                        <h4 className="py-3 col-12 ">تسهیم کالا :</h4>
+
+                        {multiplexedSaleInfoList !== null && multiplexedSaleInfoList !== "" && multiplexedSaleInfoList !== undefined ?
+                            multiplexedSaleInfoList.map((info) =>
+                                (
+                                    <div className="col-12 border py-2 bg-light">
+                                        <div className="form-group col-12 col-sm-6 col-md-4 float-right">
+                                            <label>شماره شبا :</label>
+                                            <input className="form-control text-center w-100"
+                                                   placeholder=" (24 رقم)IR "
+                                                   value={info.iban}
+                                                   id={info.id}
+                                                   onChange={(e) => this.updateIban(e.target.value, e.target.id)}
+
+                                            />
+                                        </div>
+                                        <div className="form-group col-12 col-sm-6 col-md-2 float-right">
+                                            <label> درصد :</label>
+                                            <input className="form-control text-center w-100"
+                                                   type={"number"}
+                                                   placeholder="---"
+                                                   value={info.percent}
+                                                   id={info.id}
+                                                   onChange={(e) => this.updateIbanPercent(e.target.value, e.target.id)}
+
+                                            />
+                                        </div>
+                                        <div className="form-group col-12 col-sm-6 col-md-2 float-right">
+                                            <label>مقدار(ریال) :</label>
+                                            <input className="form-control text-center w-100"
+                                                   type={"number"}
+                                                   placeholder="---"
+                                                   value={info.amount}
+                                                   id={info.id}
+                                                   onChange={(e) => this.updateIbanAmount(e.target.value, e.target.id)}
+                                            />
+                                        </div>
+                                    </div>
+                                )
+                            ) : null
+                        }
+                            <div className="col-12 border bg-light my-4 py-2 px-2">
+                                <h5 className="py-3 col-12">اضافه کردن شبا :</h5>
+
+                                <div className="form-group col-12 col-sm-6 col-md-4 float-right">
+                                    <label>شماره شبا :</label>
+                                    <input className="form-control text-center w-100"
+                                           placeholder=" (24 رقم)IR "
+                                           value={this.state.iban}
+                                           name="iban"
+                                           onChange={(e) => this.addIban(e.target.value, e.target.name)}
+                                    />
+                                </div>
+                                <div className="form-group col-12 col-sm-6 col-md-2 float-right">
+                                    <label> درصد :</label>
+                                    <input className="form-control text-center w-100"
+                                           type={"number"}
+                                           placeholder="---"
+                                           value={this.state.percent}
+                                           name="percent"
+                                           onChange={(e) => this.addIban(e.target.value, e.target.name)}
+                                    />
+                                </div>
+                                <div className="form-group col-12 col-sm-6 col-md-2 float-right">
+                                    <label>مقدار(ریال) :</label>
+                                    <input className="form-control text-center w-100"
+                                           type={"number"}
+                                           placeholder="---"
+                                           value={this.state.amount}
+                                           name="amount"
+                                           onChange={(e) => this.addIban(e.target.value, e.target.name)}
+                                    />
+                                </div>
+
+                                <button className="btn btn-success btn-m" data-title="اضافه کردن"
+                                        onClick={this.onCheckd}>
+                                    <span className="fa fa-plus" title="اضافه کردن"/>
+                                </button>
+                            </div>
+
                     </div>
                 </div>
                 {this.state.checkbox.length !== 0 ? (

@@ -271,3 +271,10 @@ svg.custom path.link {
     stroke: rgba(37, 147, 184, 0.51);
     stroke-width: 1.5px;
 }
+.bg-color {
+    background-color: #fdfeff !important;
+}
+.btn-m {
+    margin-right: 60px;
+    margin-top: 30px;
+}

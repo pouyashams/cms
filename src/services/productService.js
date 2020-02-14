@@ -9,6 +9,9 @@ export function loadAllProductAttributeCategory() {
 export function sendListOfProduct(categoryInfo) {
     return http.post("http://shop.isuncharge.com/isunshop/register/product-attribute-category", categoryInfo);
 }
+export function getIban(id) {
+    return http.post("http://shop.isuncharge.com/isunshop/fetch/product-merchant-iban", id);
+}
 
 export function loadData() {
     return http.get("http://shop.isuncharge.com/isunshop/fetch/define-product-category-info");

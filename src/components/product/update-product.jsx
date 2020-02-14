@@ -18,8 +18,8 @@ class updateProduct extends Component {
             searchResultList: [],
             merchants: []
         };
-            this.onUpdate = this.onUpdate.bind(this);
-            this.onAccept = this.onAccept.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
+        this.onAccept = this.onAccept.bind(this);
         this.search = this.search.bind(this);
     }
 
@@ -53,20 +53,20 @@ class updateProduct extends Component {
         document.getElementById("loading").style.display = "none";
     }
 
-        onUpdate(searchResult) {
-            this.props.history.push({
-                pathname: '/product-info-update',
-                productInfo: searchResult
-            });
-        }
+    onUpdate(searchResult) {
+        this.props.history.push({
+            pathname: '/product-info-update',
+            productInfo: searchResult
+        });
+    }
 
-        onAccept(searchResult) {
-            this.props.history.push({
-                pathname: '/accept-product',
-                productInfo:searchResult
-                // Object.assign(searchResult,{checkUpdate: false})
-            });
-        }
+    onAccept(searchResult) {
+        this.props.history.push({
+            pathname: '/accept-product',
+            productInfo: searchResult
+            // Object.assign(searchResult,{checkUpdate: false})
+        });
+    }
 
     getSearchCriteriaArray() {
         return [
@@ -190,13 +190,14 @@ class updateProduct extends Component {
 
     search = async (parameters) => {
         try {
-            const result = await searchProduct(Object.assign(parameters, {onlyForCustomer: false , searchForCMS : true}));
+            const result = await searchProduct(Object.assign(parameters, {onlyForCustomer: false, searchForCMS: true}));
             let searchResultList = [];
             if (result.status === 200) {
                 result.data.data.forEach((dataInfo) => {
                     searchResultList.push(
                         {
                             identifier: dataInfo.identifier,
+                            multiplexedSaleInfoList: dataInfo.multiplexedSaleInfoList,
                             productItemInfoIdentifier: dataInfo.productItemInfo.identifier,
                             canConfirmOrRejectProduct: dataInfo.canConfirmOrRejectProduct,
                             status: dataInfo.status,

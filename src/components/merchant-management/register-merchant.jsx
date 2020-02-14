@@ -11,17 +11,18 @@ class RegisterMerchant extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            authorities : [],
-            merchants : [],
-            name : '',
-            username : '',
-            password : '',
-            clientId : '',
-            clientSecret : '',
-            appName : '',
-            nationalCode : '',
-            accessTokenValidity : 900,
-            refreshTokenValidity : 2592000,
+            authorities: [],
+            merchants: [],
+            name: '',
+            username: '',
+            password: '',
+            clientId: '',
+            clientSecret: '',
+            appName: '',
+            iban: '',
+            nationalCode: '',
+            accessTokenValidity: 900,
+            refreshTokenValidity: 2592000,
             parent: '',
             currentPage: 1,
             pageSize: 5
@@ -76,6 +77,7 @@ class RegisterMerchant extends Component {
         if (canRegister) {
             try {
                 const parameters = this.prepareRegisterMerchantParameter();
+                console.log(parameters,1234)
                 const result = await persistMerchant(parameters);
                 if (result.status === 200) {
                     toast.success('ایجاد پذیرنده با موفقیت انجام شد.');
@@ -91,7 +93,7 @@ class RegisterMerchant extends Component {
     };
 
     handlePageChange = page => {
-        this.setState({ currentPage: page });
+        this.setState({currentPage: page});
     };
 
 
@@ -114,6 +116,7 @@ class RegisterMerchant extends Component {
         merchantInfo.nationalCode = info.nationalCode;
         merchantInfo.authorities = authorities;
         merchantInfo.appName = info.appName;
+        merchantInfo.iban = info.iban;
         merchantOAuthDetails.clientId = info.clientId;
         merchantOAuthDetails.clientSecret = info.clientSecret;
         merchantOAuthDetails.accessTokenValidity = info.accessTokenValidity;
@@ -142,7 +145,7 @@ class RegisterMerchant extends Component {
 
     canRegisterMerchant() {
         let selectedAuthorities = this.prepareSelectedAuthorities();
-        const {name, username, password, clientId, clientSecret, appName} = this.state;
+        const {name, username, password, clientId, clientSecret, appName, iban} = this.state;
 
         if (!this.hasValue(name)) {
             toast.error('نام پذیرنده را وارد کنید');
@@ -178,12 +181,24 @@ class RegisterMerchant extends Component {
             toast.error('نام نرم افزار را وارد کنید');
             return false;
         }
+        if (!this.hasValue(iban)) {
+            toast.error('شماره شبا را وارد کنید');
+            return false;
+        }
+        if (!this.isCorrect(iban)) {
+            toast.error('شماره شبا را درست وارد کنید');
+            return false;
+        }
 
         return true;
     }
 
     hasValue(field) {
         return field !== null && field !== undefined && field !== "";
+    }
+
+    isCorrect(field) {
+        return field.length === 26 && field.charAt(0)==='I'&& field.charAt(1)==='R';
     }
 
     getValue(field) {
@@ -219,13 +234,14 @@ class RegisterMerchant extends Component {
         const authoritiesForThisPage = this.getPageData();
         let authorityCounter = (currentPage - 1) * pageSize;
         return (
-            <div className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
+            <div
+                className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
                     <h4 className="py-2">افزودن پذیرنده</h4>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div className="rtl border m-0 bg-light shadow float-right w-100 justify-content-start my-3 pb-3">
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>نام :</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -236,7 +252,7 @@ class RegisterMerchant extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>نام کاربری :</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -248,7 +264,7 @@ class RegisterMerchant extends Component {
                         </div>
 
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>کلمه عبور:</label>
                             <input className="form-control text-center"
                                    type="password"
@@ -269,13 +285,14 @@ class RegisterMerchant extends Component {
                                 <option value="" key={index++}>---</option>
                                 {merchants.map(
                                     (merchant) => {
-                                        return (<option value={merchant.identifier} key={index++}>{merchant.name}</option>);
+                                        return (
+                                            <option value={merchant.identifier} key={index++}>{merchant.name}</option>);
                                     }
                                 )}
                             </select>
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>ایمیل :</label>
                             <input className="form-control text-center"
                                    type="email"
@@ -287,7 +304,7 @@ class RegisterMerchant extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>شناسه ملی :</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -298,7 +315,7 @@ class RegisterMerchant extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>Client Identifier :</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -309,7 +326,7 @@ class RegisterMerchant extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>Client Secret :</label>
                             <input className="form-control text-center"
                                    type="password"
@@ -321,7 +338,7 @@ class RegisterMerchant extends Component {
                             />
                         </div>
 
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right" >
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>نام نرم افزار:</label>
                             <input className="form-control text-center"
                                    type="text"
@@ -331,14 +348,26 @@ class RegisterMerchant extends Component {
                                    onChange={(e) => this.fillParameterValue(e.target.value, "appName")}
                             />
                         </div>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                            <label>شماره شبا :</label>
+                            <input className="form-control text-center"
+                                   type="text"
+                                   placeholder=" (24 رقم)IR "
+                                   value={this.state.iban}
+                                   name="name"
+                                   onChange={(e) => this.fillParameterValue(e.target.value, "iban")}
+                            />
+                        </div>
                     </div>
                     <div className="rtl border m-0 bg-light shadow float-right w-100 justify-content-start my-3 pb-3">
-                        <div className="col-12 justify-content-center align-items-center text-center table-responsive my-3 ">
+                        <div
+                            className="col-12 justify-content-center align-items-center text-center table-responsive my-3 ">
                             <table className="table table-bordered table-striped ">
                                 <thead>
                                 <tr>
                                     <th className="table-checkbox">
-                                        <input type="checkbox" id="checkAll" onChange={(e) => this.handleAllAuthoritiesChange(e.target.checked)}/>
+                                        <input type="checkbox" id="checkAll"
+                                               onChange={(e) => this.handleAllAuthoritiesChange(e.target.checked)}/>
                                     </th>
                                     <th className="hidden-xs table-counter"></th>
                                     <th className="text-center">دسترسی</th>
@@ -357,7 +386,8 @@ class RegisterMerchant extends Component {
                                         (
                                             <tr key={index++}>
                                                 <td className="table-checkbox">
-                                                    <input type="checkbox" className="check" checked={authority.checked} onChange={(e) => this.changeAuthorityCheckedValue(authority, e.target.checked)}/>
+                                                    <input type="checkbox" className="check" checked={authority.checked}
+                                                           onChange={(e) => this.changeAuthorityCheckedValue(authority, e.target.checked)}/>
                                                 </td>
                                                 <td className="hidden-xs table-counter">
                                                     {++authorityCounter}
@@ -376,11 +406,12 @@ class RegisterMerchant extends Component {
                                     currentPage={currentPage}
                                     onPageChange={this.handlePageChange}
                                 />
-                            ):null}
+                            ) : null}
                         </div>
                         <hr/>
                         <div className="col-12 justify-content-center align-items-center text-center my-3 ">
-                            <input type="button" className="btn btn-primary" value="ثبت پذیرنده" onClick={this.registerMerchant}/>
+                            <input type="button" className="btn btn-primary" value="ثبت پذیرنده"
+                                   onClick={this.registerMerchant}/>
                         </div>
                     </div>
                 </div>

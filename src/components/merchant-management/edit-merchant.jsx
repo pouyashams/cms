@@ -39,6 +39,7 @@ class EditMerchant extends Component {
             name: this.getValue(merchantInfo.name),
             username: this.getValue(merchantInfo.username),
             appName: this.getValue(merchantInfo.appName),
+            iban: this.getValue(merchantInfo.iban),
             clientId: this.getValue(merchantInfo.merchantOAuthDetails.clientId),
             parent: this.getValue(merchantInfo.parent),
             nationalCode: this.getValue(merchantInfo.nationalCode)
@@ -76,7 +77,7 @@ class EditMerchant extends Component {
     }
 
     fillParameterValue = (value, name) => {
-        // this.setState({[name]: value});
+        this.setState({[name]: value});
     };
 
     async updateMerchant() {
@@ -122,7 +123,7 @@ class EditMerchant extends Component {
         merchantInfo.email = info.email;
         merchantInfo.nationalCode = info.nationalCode;
         merchantInfo.authorities = authorities;
-        merchantInfo.appName = info.appName;
+        merchantInfo.iban = info.iban;
         merchantOAuthDetails.clientId = info.clientId;
         merchantOAuthDetails.clientSecret = info.clientSecret;
         merchantOAuthDetails.accessTokenValidity = info.accessTokenValidity;
@@ -149,7 +150,7 @@ class EditMerchant extends Component {
 
     canUpdateMerchant() {
         let selectedAuthorities = this.prepareSelectedAuthorities();
-        const {name, username, clientId, appName} = this.state;
+        const {name, username, clientId, appName,iban} = this.state;
 
         if (!this.hasValue(name)) {
             toast.error('نام پذیرنده را وارد کنید');
@@ -173,6 +174,13 @@ class EditMerchant extends Component {
 
         if (!this.hasValue(appName)) {
             toast.error('نام نرم افزار را وارد کنید');
+            return false;
+        }if (!this.hasValue(iban)) {
+            toast.error('شماره شبا را وارد کنید');
+            return false;
+        }
+        if (!this.isCorrect(iban)) {
+            toast.error('شماره شبا را درست وارد کنید');
             return false;
         }
 
@@ -319,6 +327,16 @@ class EditMerchant extends Component {
                                    value={this.state.appName}
                                    name="name"
                                    onChange={(e) => this.fillParameterValue(e.target.value, "appName")}
+                            />
+                        </div>
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
+                            <label>شماره شبا :</label>
+                            <input className="form-control text-center"
+                                   type="text"
+                                   placeholder=" (24 رقم)IR "
+                                   value={this.state.iban}
+                                   name="name"
+                                   onChange={(e) => this.fillParameterValue(e.target.value, "iban")}
                             />
                         </div>
                     </div>

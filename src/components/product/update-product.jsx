@@ -197,6 +197,7 @@ class updateProduct extends Component {
                     searchResultList.push(
                         {
                             identifier: dataInfo.identifier,
+                            paymentTypes: dataInfo.paymentTypes,
                             multiplexedSaleInfoList: dataInfo.multiplexedSaleInfoList,
                             productItemInfoIdentifier: dataInfo.productItemInfo.identifier,
                             canConfirmOrRejectProduct: dataInfo.canConfirmOrRejectProduct,

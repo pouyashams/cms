@@ -11,7 +11,6 @@ class confirmProduct extends Component {
         this.state = {
             productAttributeCategoryList: [],
             productItemImageBase64List: [],
-            typeOfPay: "onlinePay",
             name: "",
             englishName: "",
             code: "",
@@ -27,7 +26,9 @@ class confirmProduct extends Component {
             amount: "",
             iban: "",
             percent: "",
-            multiplexedSaleInfoList: "",
+            multiplexedSaleInfoList: [],
+            paymentTypes: "",
+            type: "",
             checkbox: []
         }
     };
@@ -45,15 +46,14 @@ class confirmProduct extends Component {
             );
             this.setState({
                 multiplexedSaleInfoList,
-                iban:"",
-                amount:"",
-                percent:"",
+                iban: "",
+                amount: "",
+                percent: "",
             });
         } else {
             toast.error('شماره شبا را درست وارد کنید');
         }
     };
-
 
     isCorrect(field) {
         return field.length === 26 && field.charAt(0) === 'I' && field.charAt(1) === 'R';
@@ -86,7 +86,14 @@ class confirmProduct extends Component {
     };
 
     fillParameterValue = (value, name) => {
-        this.setState({[name]: value});
+        console.log(value, name)
+        if (value === "onlinePay") {
+            this.setState({[name]: [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}]});
+        } else if (value === "hardPay") {
+            this.setState({[name]: [{code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}]});
+        } else if (value === "bothPay") {
+            this.setState({[name]: [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}, {code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}]});
+        }
     };
 
     addIban = (value, name) => {
@@ -165,10 +172,45 @@ class confirmProduct extends Component {
         document.getElementById("loading").style.display = "none";
     };
 
-
     hasValue(field) {
         return field !== null && field !== undefined && field !== "";
     }
+
+    isValid = () => {
+        const {multiplexedSaleInfoList} = this.state;
+        let ibanValid = true;
+        let sumOfPercent = 0;
+        let sumOfAmount = 0;
+        multiplexedSaleInfoList.forEach((info) => {
+            if (!this.isCorrect(info.iban)) {
+                ibanValid = false;
+            }
+            if (info.percent !== "") {
+                sumOfPercent += parseInt(info.percent);
+            }
+            if (info.amount !== "") {
+                sumOfAmount += parseInt(info.amount);
+            }
+        });
+        if (ibanValid === false) {
+            toast.error('شماره شبا وارد شده در قسمت تسهیم صحیح نمی باشد');
+            return false;
+        }
+        else if (sumOfPercent === 100) {
+            return true;
+        }
+        else if (sumOfAmount === parseInt(this.state.price)) {
+            return true;
+        }
+        else if (sumOfPercent === 0 && sumOfAmount === 0) {
+            toast.error('لطفا مبلغ یا درصد تسهیم را وارد کنید');
+            return false;
+        }
+        else {
+            toast.error('جمع مبلغ یا درصد تسهیم صحیح نمی باشد');
+            return false;
+        }
+    };
 
     getValue(field) {
         if (this.hasValue(field)) {
@@ -185,19 +227,29 @@ class confirmProduct extends Component {
                 allowedMerchants.push(merchant.id);
             }
         });
-        try {
-            let data = {identifier: this.state.identifier, allowedMerchants: allowedMerchants};
-            const result = await acceptProduct(data);
-            if (result.status === 200) {
-                toast.success('کالا با موفقیت تایید شد');
-                document.getElementById("loading").style.display = "none";
-                return this.props.history.goBack();
-            }
-        } catch (ex) {
-            if (ex.response && ex.response.status === 400) {
-                toast.error('ارتباط با سرور برقرار نشد');
+        if (this.isValid()) {
+
+            try {
+                let data = {
+                    identifier: this.state.identifier,
+                    allowedMerchants: allowedMerchants,
+                    multiplexedSaleInfos: this.state.multiplexedSaleInfoList,
+                    paymentTypes: this.state.paymentTypes,
+                };
+                console.log(data, 1234)
+                const result = await acceptProduct(data);
+                if (result.status === 200) {
+                    toast.success('کالا با موفقیت تایید شد');
+                    document.getElementById("loading").style.display = "none";
+                    return this.props.history.goBack();
+                }
+            } catch (ex) {
+                if (ex.response && ex.response.status === 400) {
+                    toast.error('ارتباط با سرور برقرار نشد');
+                }
             }
         }
+
         document.getElementById("loading").style.display = "none";
     };
 
@@ -221,6 +273,7 @@ class confirmProduct extends Component {
     showProductDetails = () => {
         const {productInfo} = this.props.location;
         if (!productInfo) return this.props.history.goBack();
+        console.log(productInfo, 1234)
         const multiplexedSaleInfoList = [];
         productInfo.multiplexedSaleInfoList.forEach((info) => {
             const data = {
@@ -231,9 +284,27 @@ class confirmProduct extends Component {
             };
             multiplexedSaleInfoList.push(data);
         });
+        let paymentTypes = "";
+        if (productInfo.paymentTypes.length === 0) {
+            this.setState({type:""});
+        } else if (productInfo.paymentTypes.length === 2) {
+            this.setState({type:"bothPay"});
+            paymentTypes = [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}, {code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}]
+
+        }
+        else if (productInfo.paymentTypes.length === 1) {
+            if (productInfo.paymentTypes[0].code === "ONLINE_ORDER_PAYMENT_TYPE") {
+                paymentTypes = [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}]
+                this.setState({type:"onlinePay"})
+            } else {
+                paymentTypes = [{code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}]
+                this.setState({type:"hardPay"})
+            }
+        }
         this.setState({
             canConfirmOrRejectProduct: this.getValue(productInfo.canConfirmOrRejectProduct),
             name: this.getValue(productInfo.name),
+            paymentTypes: paymentTypes,
             multiplexedSaleInfoList: multiplexedSaleInfoList,
             identifier: this.getValue(productInfo.identifier),
             englishName: this.getValue(productInfo.englishName),
@@ -283,6 +354,10 @@ class confirmProduct extends Component {
     };
 
     render() {
+        const option = [{value: "", name: "انتخاب کنید..."},
+            {value: "onlinePay", name: "پرداخت انلاین"},
+            {value: "hardPay", name: "پرداخت در محل"},
+            {value: "bothPay", name: "انلاین و در محل"}];
         const productItem = this.state;
         const {multiplexedSaleInfoList} = this.state;
         return (
@@ -348,16 +423,14 @@ class confirmProduct extends Component {
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>نوع پرداخت :</label>
                             <select
-                                className="form-control text-center w-50"
-                                onChange={(e) => this.fillParameterValue(e.target.value, "typeOfPay")}
+                                className="form-control text-center w-75"
+                                onChange={(e) => this.fillParameterValue(e.target.value, "paymentTypes")}
                             >
-                                {[{value: "onlinePay", name: "پرداخت انلاین"}, {
-                                    value: "hardPay",
-                                    name: "پرداخت در محل"
-                                }, {value: "bothPay", name: "هر دو مورد"}].map(
-                                    (merchant) => {
+                                {option.map(
+                                    (info) => {
                                         return (
-                                            <option value={merchant.identifier}>{merchant.name}</option>);
+                                            <option selected={info.value === this.state.type}
+                                                    value={info.value}>{info.name}</option>);
                                     }
                                 )}
                             </select>
@@ -430,7 +503,6 @@ class confirmProduct extends Component {
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div className="rtl m-0 float-right row w-100 justify-content-start my-3 pb-3 bg-color border">
                         <h4 className="py-3 col-12 ">تسهیم کالا :</h4>
-
                         {multiplexedSaleInfoList !== null && multiplexedSaleInfoList !== "" && multiplexedSaleInfoList !== undefined ?
                             multiplexedSaleInfoList.map((info) =>
                                 (
@@ -457,7 +529,7 @@ class confirmProduct extends Component {
                                             />
                                         </div>
                                         <div className="form-group col-12 col-sm-6 col-md-2 float-right">
-                                            <label>مقدار(ریال) :</label>
+                                            <label>مبلغ(ریال) :</label>
                                             <input className="form-control text-center w-100"
                                                    type={"number"}
                                                    placeholder="---"
@@ -470,44 +542,44 @@ class confirmProduct extends Component {
                                 )
                             ) : null
                         }
-                            <div className="col-12 border bg-light my-4 py-2 px-2">
-                                <h5 className="py-3 col-12">اضافه کردن شبا :</h5>
+                        <div className="col-12 border bg-light my-4 py-2 px-2">
+                            <h5 className="py-3 col-12">اضافه کردن شبا :</h5>
 
-                                <div className="form-group col-12 col-sm-6 col-md-4 float-right">
-                                    <label>شماره شبا :</label>
-                                    <input className="form-control text-center w-100"
-                                           placeholder=" (24 رقم)IR "
-                                           value={this.state.iban}
-                                           name="iban"
-                                           onChange={(e) => this.addIban(e.target.value, e.target.name)}
-                                    />
-                                </div>
-                                <div className="form-group col-12 col-sm-6 col-md-2 float-right">
-                                    <label> درصد :</label>
-                                    <input className="form-control text-center w-100"
-                                           type={"number"}
-                                           placeholder="---"
-                                           value={this.state.percent}
-                                           name="percent"
-                                           onChange={(e) => this.addIban(e.target.value, e.target.name)}
-                                    />
-                                </div>
-                                <div className="form-group col-12 col-sm-6 col-md-2 float-right">
-                                    <label>مقدار(ریال) :</label>
-                                    <input className="form-control text-center w-100"
-                                           type={"number"}
-                                           placeholder="---"
-                                           value={this.state.amount}
-                                           name="amount"
-                                           onChange={(e) => this.addIban(e.target.value, e.target.name)}
-                                    />
-                                </div>
-
-                                <button className="btn btn-success btn-m" data-title="اضافه کردن"
-                                        onClick={this.onCheckd}>
-                                    <span className="fa fa-plus" title="اضافه کردن"/>
-                                </button>
+                            <div className="form-group col-12 col-sm-6 col-md-4 float-right">
+                                <label>شماره شبا :</label>
+                                <input className="form-control text-center w-100"
+                                       placeholder=" (24 رقم)IR "
+                                       value={this.state.iban}
+                                       name="iban"
+                                       onChange={(e) => this.addIban(e.target.value, e.target.name)}
+                                />
                             </div>
+                            <div className="form-group col-12 col-sm-6 col-md-2 float-right">
+                                <label> درصد :</label>
+                                <input className="form-control text-center w-100"
+                                       type={"number"}
+                                       placeholder="---"
+                                       value={this.state.percent}
+                                       name="percent"
+                                       onChange={(e) => this.addIban(e.target.value, e.target.name)}
+                                />
+                            </div>
+                            <div className="form-group col-12 col-sm-6 col-md-2 float-right">
+                                <label>مبلغ(ریال) :</label>
+                                <input className="form-control text-center w-100"
+                                       type={"number"}
+                                       placeholder="---"
+                                       value={this.state.amount}
+                                       name="amount"
+                                       onChange={(e) => this.addIban(e.target.value, e.target.name)}
+                                />
+                            </div>
+
+                            <button className="btn btn-success btn-m" data-title="اضافه کردن"
+                                    onClick={this.onCheckd}>
+                                <span className="fa fa-plus" title="اضافه کردن"/>
+                            </button>
+                        </div>
 
                     </div>
                 </div>

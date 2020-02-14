@@ -22,6 +22,9 @@ import acceptProduct from "./components/product/accept-product";
 import productInfoUpdate from "./components/product/product-info-update";
 import deliveryInfoManagement from "./components/deliveryInfo-management/deliveryInfo-management";
 import editDeliveryInfo from "./components/deliveryInfo-management/edit-deliveryInfo";
+import sharingManagement from "./components/sharing-management/sharing-management";
+import addSharing from "./components/sharing-management/add-sharing";
+import editSharing from "./components/sharing-management/edit-sharing";
 import hardwareInfo from "./components/hardwareInfo";
 import Confirmation from "./components/confirmation/confirmation";
 import acceptConfirmation from "./components/confirmation/accept-confirmation";
@@ -72,6 +75,9 @@ class App extends Component {
                                 <PrivateRoute path="/product-info-update" exact={false} component={productInfoUpdate}/>
                                 <PrivateRoute path="/accept-product" exact={false} component={acceptProduct}/>
                                 <PrivateRoute path="/deliveryInfo-management" exact={false} component={deliveryInfoManagement}/>
+                                <PrivateRoute path="/sharing-management" exact={false} component={sharingManagement}/>
+                                <PrivateRoute path="/edit-sharing" exact={false} component={editSharing}/>
+                                <PrivateRoute path="/add-sharing" exact={false} component={addSharing}/>
                                 <PrivateRoute path="/edit-deliveryInfo" exact={false} component={editDeliveryInfo}/>
                                 <PrivateRoute path="/hardwareInfo" exact={false} component={hardwareInfo}/>
                                 <PrivateRoute path="/confirmation" exact={false} component={Confirmation}/>

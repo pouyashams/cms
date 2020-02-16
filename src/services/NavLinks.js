@@ -101,7 +101,7 @@ const navLinks = [
         path: "/sharing-management",
         name: "مدیریت تسهیم",
         icon: "fa fa-balance-scale",
-        authority: "FESTIVAL_SALE_MANAGEMENT"
+        authority: "MULTIPLEXED_SALE_MANAGEMENT"
 
     }, {
         path: "/manage-limitation",

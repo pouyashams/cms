@@ -15,7 +15,9 @@ class EditMerchant extends Component {
             authorities: [],
             name: '',
             username: '',
-            password: '',
+            appName: '',
+            email: '',
+            realPassword: '',
             clientId: '',
             clientSecret: '',
             nationalCode: '',
@@ -38,11 +40,14 @@ class EditMerchant extends Component {
             identifier: merchantInfo.identifier,
             name: this.getValue(merchantInfo.name),
             username: this.getValue(merchantInfo.username),
+            realPassword: this.getValue(merchantInfo.realPassword),
             appName: this.getValue(merchantInfo.appName),
             iban: this.getValue(merchantInfo.iban),
+            email: this.getValue(merchantInfo.email),
             clientId: this.getValue(merchantInfo.merchantOAuthDetails.clientId),
             parent: this.getValue(merchantInfo.parent),
-            nationalCode: this.getValue(merchantInfo.nationalCode)
+            nationalCode: this.getValue(merchantInfo.nationalCode),
+            clientSecret: this.getValue(merchantInfo.clientSecret),
         });
 
         await this.fillAuthorities(merchantInfo);
@@ -122,11 +127,12 @@ class EditMerchant extends Component {
         merchantInfo.identifier = info.identifier;
         merchantInfo.name = info.name;
         merchantInfo.username = info.username;
-        merchantInfo.realPassword = info.password;
+        merchantInfo.realPassword = info.realPassword;
         merchantInfo.email = info.email;
         merchantInfo.nationalCode = info.nationalCode;
         merchantInfo.authorities = authorities;
         merchantInfo.iban = info.iban;
+        merchantInfo.appName = info.appName;
         merchantOAuthDetails.clientId = info.clientId;
         merchantOAuthDetails.clientSecret = info.clientSecret;
         merchantOAuthDetails.accessTokenValidity = info.accessTokenValidity;
@@ -178,7 +184,8 @@ class EditMerchant extends Component {
         if (!this.hasValue(appName)) {
             toast.error('نام نرم افزار را وارد کنید');
             return false;
-        }if (!this.hasValue(iban)) {
+        }
+        if (!this.hasValue(iban)) {
             toast.error('شماره شبا را وارد کنید');
             return false;
         }
@@ -263,9 +270,9 @@ class EditMerchant extends Component {
                                    type="password"
                                    autoComplete="off"
                                    placeholder="***"
-                                   value={this.state.password}
-                                   name="password"
-                                   onChange={(e) => this.fillParameterValue(e.target.value, "password")}
+                                   value={this.state.realPassword}
+                                   name="realPassword"
+                                   onChange={(e) => this.fillParameterValue(e.target.value, "realPassword")}
                             />
                         </div>
 

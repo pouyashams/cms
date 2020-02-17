@@ -15,11 +15,12 @@ class RegisterMerchant extends Component {
             merchants: [],
             name: '',
             username: '',
-            password: '',
+            realPassword: '',
             clientId: '',
             clientSecret: '',
             appName: '',
             iban: '',
+            email: '',
             nationalCode: '',
             accessTokenValidity: 900,
             refreshTokenValidity: 2592000,
@@ -111,7 +112,7 @@ class RegisterMerchant extends Component {
 
         merchantInfo.name = info.name;
         merchantInfo.username = info.username;
-        merchantInfo.realPassword = info.password;
+        merchantInfo.realPassword = info.realPassword;
         merchantInfo.email = info.email;
         merchantInfo.nationalCode = info.nationalCode;
         merchantInfo.authorities = authorities;
@@ -145,7 +146,7 @@ class RegisterMerchant extends Component {
 
     canRegisterMerchant() {
         let selectedAuthorities = this.prepareSelectedAuthorities();
-        const {name, username, password, clientId, clientSecret, appName, iban} = this.state;
+        const {name, username, realPassword, clientId, clientSecret, appName, iban} = this.state;
 
         if (!this.hasValue(name)) {
             toast.error('نام پذیرنده را وارد کنید');
@@ -157,7 +158,7 @@ class RegisterMerchant extends Component {
             return false;
         }
 
-        if (!this.hasValue(password)) {
+        if (!this.hasValue(realPassword)) {
             toast.error('کلمه عبور پذیرنده را وارد کنید');
             return false;
         }
@@ -270,9 +271,9 @@ class RegisterMerchant extends Component {
                                    type="password"
                                    autoComplete="off"
                                    placeholder="***"
-                                   value={this.state.password}
-                                   name="password"
-                                   onChange={(e) => this.fillParameterValue(e.target.value, "password")}
+                                   value={this.state.realPassword}
+                                   name="realPassword"
+                                   onChange={(e) => this.fillParameterValue(e.target.value, "realPassword")}
                             />
                         </div>
 

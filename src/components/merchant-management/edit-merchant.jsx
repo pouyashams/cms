@@ -87,12 +87,12 @@ class EditMerchant extends Component {
                 const parameters = this.prepareUpdateMerchantParameter();
                 const result = await updateMerchant(parameters);
                 if (result.status === 200) {
-                    toast.success('ایجاد پذیرنده با موفقیت انجام شد.');
+                    toast.success('ویرایش پذیرنده با موفقیت انجام شد');
                     this.props.history.goBack();
                 }
             } catch (ex) {
                 if (ex.response && ex.response.status === 400) {
-                    toast.error('لطفا کلیه موارد را پر کنید');
+                    toast.error('ارتباط با سرور بر قرار نشد');
                 }
             }
             document.getElementById("loading").style.display = "none";
@@ -108,6 +108,9 @@ class EditMerchant extends Component {
         const {authorities, pageSize, currentPage} = this.state;
         const authoritiesForThisPage = paginate(authorities, currentPage, pageSize);
         return authoritiesForThisPage;
+    };
+    isCorrect(field) {
+        return field.length === 26 && field.charAt(0)==='I'&& field.charAt(1)==='R';
     };
 
     prepareUpdateMerchantParameter() {

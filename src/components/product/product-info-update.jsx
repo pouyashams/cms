@@ -175,6 +175,7 @@ class productInfo extends Component {
     async onUpdateInfo() {
         let canUpdate = this.canAddProduct();
         if (canUpdate) {
+            console.log(this.madeData())
             try {
                 const result = await onUpdate(this.madeData());
                 if (result.status === 200) {

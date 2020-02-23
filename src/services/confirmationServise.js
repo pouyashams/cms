@@ -11,7 +11,9 @@ export function acceptConfirmation(data) {
 
 export function acceptReturnConfirmation(data) {
     return http.post("http://shop.isuncharge.com/isunshop/update/accept-return-order", data);
-
+}
+export function changeStatus(data) {
+    return http.post("http://shop.isuncharge.com/isunshop/update/change-order-status", data);
 }
 
 export function sendRequestReturnOrder(data) {

@@ -17,6 +17,7 @@ class confirmation extends Component {
         };
         this.onUpdate = this.onUpdate.bind(this);
         this.onReturn = this.onReturn.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
 
@@ -31,6 +32,12 @@ class confirmation extends Component {
     onReturn(searchResult) {
         this.props.history.push({
             pathname: '/return-confirmation',
+            dataInfo: searchResult
+        });
+    }
+    onChange(searchResult) {
+        this.props.history.push({
+            pathname: '/order-status',
             dataInfo: searchResult
         });
     }
@@ -62,7 +69,7 @@ class confirmation extends Component {
                 element: "select",
                 placeholder: "---",
                 defaultValue: "",
-                label: "وضعیت پرداخت",
+                label: "وضعیت سفارش",
                 options: [
                     {value: "", title: "انتخاب کنید..."},
                     {value: "REGISTERED_ORDER_STATUS", title: "ثبت شده"},
@@ -70,6 +77,8 @@ class confirmation extends Component {
                     {value: "CANCELED_ORDER_STATUS", title: "لغو شده"},
                     {value: "PAID_ORDER_STATUS", title: "پرداخت شده"},
                     {value: "REVERSED_ORDER_STATUS", title: "برگشت خورده"},
+                    {value: "READY_TO_SEND", title: "آماده ارسال"},
+                    {value: "DELIVERED_TO_CUSTOMER", title: "تحویل داده شده"},
                     {value: "WAITING_FOR_RETURN_CHECK_ORDER_STATUS", title: "در انتظار بررسی درخواست عودت"},
                     {value: "RETURNED_ORDER_STATUS", title: "عودت داده شده"}
                 ]
@@ -108,9 +117,16 @@ class confirmation extends Component {
                     name: 'return',
                     title: 'درخواست عودت',
                     icon: 'fa fa-check-square',
-                    style: 'btn btn-success btn-xs',
+                    style: 'btn btn-danger btn-xs',
                     onclick: this.onReturn
-                }
+                },
+                {
+                    name: 'return',
+                    title: 'تغییر وضعیت',
+                    icon: 'fa fa-retweet',
+                    style: 'btn btn-warning btn-xs',
+                    onclick: this.onChange
+                },
             ],
             headerTitleInfos: [
                 {name: "identifier", title: "شناسه سفارش"},

@@ -41,7 +41,7 @@ const navLinks = [
         path: "/requirements-audit",
         name: "ممیزی نیازمندی ها",
         icon: "fa fa-edit",
-        authority: "MENU_SIM_CARD_MANAGEMENT"
+        authority: "REQUIREMENTS_AUDIT"
     },
     {
         path: "/Confirmation",
@@ -107,14 +107,19 @@ const navLinks = [
         path: "/manage-limitation",
         name: "مدیریت محدودیت ها",
         icon: "fa fa-crop",
-        authority: "FESTIVAL_SALE_MANAGEMENT"
+        authority: "CONSTRAINTS_MANAGEMENT"
 
     },
     {
         path: "/product-reject",
         name: "گزارش تخلف سیم کارت",
         icon: "fa fa-calendar-times-o",
-        authority: "FESTIVAL_SALE_MANAGEMENT"
+        authority: "REPORT_SIM_CARD_VIOLATION"
+    },{
+        path: "/force-update",
+        name: "مدیریت آپدیت",
+        icon: "fa fa-upload",
+        authority: "FORCE_UPDATE_APPLICATION"
     },
     {
         path: "/hardwareInfo",

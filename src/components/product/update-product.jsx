@@ -194,9 +194,11 @@ class updateProduct extends Component {
             let searchResultList = [];
             if (result.status === 200) {
                 result.data.data.forEach((dataInfo) => {
+                    console.log(dataInfo)
                     searchResultList.push(
                         {
                             identifier: dataInfo.identifier,
+                            rejectionReason: dataInfo.rejectionReason,
                             paymentTypes: dataInfo.paymentTypes,
                             multiplexedSaleInfoList: dataInfo.multiplexedSaleInfoList,
                             productItemInfoIdentifier: dataInfo.productItemInfo.identifier,

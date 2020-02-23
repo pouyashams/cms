@@ -165,6 +165,7 @@ class SimcardManagement extends Component {
                         {
                             name: dataInfo.name,
                             firstName: dataInfo.customerInfo.firstName,
+                            rejectionReason: dataInfo.rejectionReason,
                             lastName: dataInfo.customerInfo.lastName,
                             mobileNumber: dataInfo.customerInfo.mobileNumber,
                             dealType: dataInfo.dealTypeInfo.name,

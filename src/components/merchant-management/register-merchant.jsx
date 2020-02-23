@@ -179,7 +179,7 @@ class RegisterMerchant extends Component {
         }
 
         if (!this.hasValue(appName)) {
-            toast.error('نام نرم افزار را وارد کنید');
+            toast.error('نام برنامه را وارد کنید');
             return false;
         }
         if (!this.hasValue(iban)) {

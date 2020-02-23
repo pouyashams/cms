@@ -18,6 +18,7 @@ import RegisterMerchant from "./components/merchant-management/register-merchant
 import EditMerchant from "./components/merchant-management/edit-merchant";
 import MerchantManagement from "./components/merchant-management/merchant-management";
 import productInfo from "./components/product/product-info";
+import forceUpdate from "./components/force-update/force-update-management";
 import acceptProduct from "./components/product/accept-product";
 import productInfoUpdate from "./components/product/product-info-update";
 import deliveryInfoManagement from "./components/deliveryInfo-management/deliveryInfo-management";
@@ -42,6 +43,9 @@ import acceptRequirementsAudit from "./components/requirements-audit/accept-requ
 import manageLimitation from "./components/manage-limitation/manage-limitation";
 import editManageLimitation from "./components/manage-limitation/edit-limitation";
 import addManageLimitation from "./components/manage-limitation/add-limitation";
+import orderStatus from "./components/confirmation/order-status";
+import editForceUpdate from "./components/force-update/edit-force-update";
+import addForceUpdate from "./components/force-update/add-force-update";
 
 class App extends Component {
     render() {
@@ -94,6 +98,10 @@ class App extends Component {
                                 <PrivateRoute path="/manage-limitation" exact={false} component={manageLimitation}/>
                                 <PrivateRoute path="/edit-limitation" exact={false} component={editManageLimitation}/>
                                 <PrivateRoute path="/add-limitation" exact={false} component={addManageLimitation}/>
+                                <PrivateRoute path="/order-status" exact={false} component={orderStatus}/>
+                                <PrivateRoute path="/force-update" exact={false} component={forceUpdate}/>
+                                <PrivateRoute path="/edit-force-update" exact={false} component={editForceUpdate}/>
+                                <PrivateRoute path="/add-force-update" exact={false} component={addForceUpdate}/>
                                 <PrivateRoute path="/" exact={true} component={productCategory}/>
                                 <Redirect to="/not-found"/>
                             </Switch>

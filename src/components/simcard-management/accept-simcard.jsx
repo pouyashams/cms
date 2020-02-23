@@ -14,6 +14,7 @@ class acceptSimcard extends Component {
             lastName: "",
             mobileNumber: "",
             status: "",
+            rejectionReason: "",
             dealType: "",
             price: "",
             productAttributeItemList: [],
@@ -75,6 +76,10 @@ class acceptSimcard extends Component {
         }
     }
 
+    handelChangeInput = (value, name) => {
+        this.setState({[name]: value});
+    };
+
     acceptProductInfo = async () => {
         const allowedMerchants = [];
         this.state.checkbox.forEach((merchant) => {
@@ -99,7 +104,10 @@ class acceptSimcard extends Component {
     };
     cancelProductInfo = async () => {
         try {
-            let data = {identifier: this.state.identifier};
+            let data = {
+                identifier: this.state.identifier,
+                rejectionReason: this.state.rejectionReason
+            };
             const result = await cancelProduct(data);
             if (result.status === 200) {
                 toast.success('کالا با موفقیت لغو شد');
@@ -120,6 +128,7 @@ class acceptSimcard extends Component {
         console.log(productInfo)
         this.setState({
             canConfirmOrRejectProduct: this.getValue(productInfo.canConfirmOrRejectProduct),
+            rejectionReason: this.getValue(productInfo.rejectionReason),
             name: this.getValue(productInfo.name),
             firstName: this.getValue(productInfo.firstName),
             dealType: this.getValue(productInfo.dealType),
@@ -285,8 +294,10 @@ class acceptSimcard extends Component {
                         className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
                         <h4 className="py-3 col-12">علت لغو کالا :</h4>
                         <div className="form-group col-6 float-right">
-                            <textarea className="form-control text-center textarea-style  "
-                                      value={productItem.description}
+                            <textarea className="form-control text-center textarea-style"
+                                      value={this.state.rejectionReason}
+                                      name={"rejectionReason"}
+                                      onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
                     </div>
@@ -322,11 +333,11 @@ class acceptSimcard extends Component {
                 ) : null}
                 {this.state.canConfirmOrRejectProduct ?
                     <div className="col-12 p-3 text-center">
-                        <input type="button" className="btn btn-primary mr-3" value="تایید "
+                        <input type="button" className="btn btn-success mr-3" value="تایید "
                                onClick={() => {
                                    this.acceptProductInfo()
                                }}/>
-                        <input type="button" className="btn btn-primary mr-3" value="لغو"
+                        <input type="button" className="btn btn-danger mr-3" value="لغو"
                                onClick={() => {
                                    this.cancelProductInfo()
                                }}/>

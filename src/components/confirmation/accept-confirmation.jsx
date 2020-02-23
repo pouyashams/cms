@@ -85,6 +85,7 @@ class acceptConfirmations extends Component {
             if (result.status === 200) {
                 const productItemSellInfoList = [];
                 let resultInfo = result.data.data[0];
+                console.log(resultInfo,12345)
                 resultInfo.productItemSellInfoList.map(productItem => (
                     productItemSellInfoList.push(
                         {
@@ -95,7 +96,7 @@ class acceptConfirmations extends Component {
                     )
                 ));
                 this.setState({
-                    name: this.getValue(resultInfo.orderStatus.name,),
+                    name: this.getValue(resultInfo.name),
                     mobileNumber: this.getValue(resultInfo.mobileNumber),
                     identifier: this.getValue(resultInfo.identifier),
                     date: this.getValue(resultInfo.orderDeliveryInfo.date),
@@ -143,13 +144,13 @@ class acceptConfirmations extends Component {
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div
                         className="rtl border m-0 bg-light shadow float-right row w-100 justify-content-start my-3 pb-3">
-                        <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>نام خریدار :</label>
-                            <input className="form-control text-center"
-                                   type="text"
-                                   value={this.state.name}
-                            />
-                        </div>
+                        {/*<div className="form-group col-12 col-sm-6 col-md-3 float-right">*/}
+                            {/*<label>نام خریدار :</label>*/}
+                            {/*<input className="form-control text-center"*/}
+                                   {/*type="text"*/}
+                                   {/*value={this.state.name}*/}
+                            {/*/>*/}
+                        {/*</div>*/}
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>شماره تلفن :</label>
                             <input className="form-control text-center"

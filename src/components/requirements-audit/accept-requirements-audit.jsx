@@ -15,6 +15,7 @@ class acceptSimcard extends Component {
             mobileNumber: "",
             status: "",
             dealType: "",
+            rejectionReason: "",
             price: "",
             productAttributeItemList: [],
             identifier: "",
@@ -48,6 +49,9 @@ class acceptSimcard extends Component {
         this.setState({checkbox});
     };
 
+    handelChangeInput = (value, name) => {
+        this.setState({[name]: value});
+    };
 
     componentDidMount() {
         if (this.props.productCategoryList !== undefined) {
@@ -98,7 +102,10 @@ class acceptSimcard extends Component {
     };
     cancelProductInfo = async () => {
         try {
-            let data = {identifier: this.state.identifier};
+            let data = {
+                identifier: this.state.identifier,
+                rejectionReason: this.state.rejectionReason
+            };
             const result = await cancelProduct(data);
             if (result.status === 200) {
                 toast.success('کالا با موفقیت لغو شد');
@@ -116,10 +123,10 @@ class acceptSimcard extends Component {
     showProductDetails = () => {
         const {productInfo} = this.props.location;
         if (!productInfo) return this.props.history.push('/requirements-audit');
-        console.log(productInfo)
         this.setState({
             canConfirmOrRejectProduct: this.getValue(productInfo.canConfirmOrRejectProduct),
             name: this.getValue(productInfo.name),
+            rejectionReason: this.getValue(productInfo.rejectionReason),
             firstName: this.getValue(productInfo.firstName),
             dealType: this.getValue(productInfo.dealType),
             status: this.getValue(productInfo.status),
@@ -280,17 +287,19 @@ class acceptSimcard extends Component {
                         </div>
                     </div>
                 </div>
-                    <div className="col-12 justify-content-center align-items-center text-center">
-                        <div
-                            className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
-                            <h4 className="py-3 col-12">علت لغو کالا :</h4>
-                            <div className="form-group col-6 float-right">
-                                <textarea className="form-control text-center textarea-style  "
-                                          value={productItem.description}
-                                />
-                            </div>
+                <div className="col-12 justify-content-center align-items-center text-center">
+                    <div
+                        className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
+                        <h4 className="py-3 col-12">علت لغو کالا :</h4>
+                        <div className="form-group col-6 float-right">
+                            <textarea className="form-control text-center textarea-style"
+                                      value={this.state.rejectionReason}
+                                      name={"rejectionReason"}
+                                      onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
+                            />
                         </div>
                     </div>
+                </div>
                 {this.state.checkbox.length !== 0 ? (
                     <div className="col-12 justify-content-center align-items-center text-center">
                         <div
@@ -322,11 +331,11 @@ class acceptSimcard extends Component {
                 ) : null}
                 {this.state.canConfirmOrRejectProduct ?
                     <div className="col-12 p-3 text-center">
-                        <input type="button" className="btn btn-primary mr-3" value="تایید "
+                        <input type="button" className="btn btn-success mr-3" value="تایید "
                                onClick={() => {
                                    this.acceptProductInfo()
                                }}/>
-                        <input type="button" className="btn btn-primary mr-3" value="لغو"
+                        <input type="button" className="btn btn-danger mr-3" value="لغو"
                                onClick={() => {
                                    this.cancelProductInfo()
                                }}/>

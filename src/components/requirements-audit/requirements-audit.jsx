@@ -171,6 +171,7 @@ class requirementsAudit extends Component {
                             name: dataInfo.name,
                             firstName: dataInfo.customerInfo.firstName,
                             lastName: dataInfo.customerInfo.lastName,
+                            rejectionReason: dataInfo.rejectionReason,
                             mobileNumber: dataInfo.customerInfo.mobileNumber,
                             dealType: dataInfo.dealTypeInfo.name,
                             identifier: dataInfo.identifier,

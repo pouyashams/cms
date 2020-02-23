@@ -13,6 +13,7 @@ class confirmProduct extends Component {
             productItemImageBase64List: [],
             name: "",
             englishName: "",
+            rejectionReason: "",
             code: "",
             numberOfProduct: "",
             taxation: "",
@@ -86,7 +87,6 @@ class confirmProduct extends Component {
     };
 
     fillParameterValue = (value, name) => {
-        console.log(value, name)
         if (value === "onlinePay") {
             this.setState({[name]: [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}]});
         } else if (value === "hardPay") {
@@ -254,26 +254,34 @@ class confirmProduct extends Component {
     };
 
     cancelProductInfo = async () => {
-        try {
-            let data = {identifier: this.state.identifier};
-            const result = await cancelProduct(data);
-            if (result.status === 200) {
-                toast.success('کالا با موفقیت لغو شد');
-                document.getElementById("loading").style.display = "none";
-                return this.props.history.goBack();
+        if(this.hasValue(this.state.rejectionReason)){
+            try {
+                let data = {
+                    identifier: this.state.identifier,
+                    rejectionReason: this.state.rejectionReason
+                };
+                const result = await cancelProduct(data);
+                if (result.status === 200) {
+                    toast.success('کالا با موفقیت لغو شد');
+                    document.getElementById("loading").style.display = "none";
+                    return this.props.history.goBack();
+                }
+            } catch (ex) {
+                if (ex.response && ex.response.status === 400) {
+                    toast.error('ارتباط با سرور برقرار نشد');
+                }
             }
-        } catch (ex) {
-            if (ex.response && ex.response.status === 400) {
-                toast.error('ارتباط با سرور برقرار نشد');
-            }
+            document.getElementById("loading").style.display = "none";
+        }else{
+            toast.error('علت لغو کالا پر کنید');
         }
-        document.getElementById("loading").style.display = "none";
+
     };
 
     showProductDetails = () => {
         const {productInfo} = this.props.location;
         if (!productInfo) return this.props.history.goBack();
-        console.log(productInfo, 1234)
+        console.log(productInfo, 1234);
         const multiplexedSaleInfoList = [];
         productInfo.multiplexedSaleInfoList.forEach((info) => {
             const data = {
@@ -286,24 +294,25 @@ class confirmProduct extends Component {
         });
         let paymentTypes = "";
         if (productInfo.paymentTypes.length === 0) {
-            this.setState({type:""});
+            this.setState({type: ""});
         } else if (productInfo.paymentTypes.length === 2) {
-            this.setState({type:"bothPay"});
+            this.setState({type: "bothPay"});
             paymentTypes = [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}, {code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}]
 
         }
         else if (productInfo.paymentTypes.length === 1) {
             if (productInfo.paymentTypes[0].code === "ONLINE_ORDER_PAYMENT_TYPE") {
                 paymentTypes = [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}]
-                this.setState({type:"onlinePay"})
+                this.setState({type: "onlinePay"})
             } else {
                 paymentTypes = [{code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}]
-                this.setState({type:"hardPay"})
+                this.setState({type: "hardPay"})
             }
         }
         this.setState({
             canConfirmOrRejectProduct: this.getValue(productInfo.canConfirmOrRejectProduct),
             name: this.getValue(productInfo.name),
+            rejectionReason: this.getValue(productInfo.rejectionReason),
             paymentTypes: paymentTypes,
             multiplexedSaleInfoList: multiplexedSaleInfoList,
             identifier: this.getValue(productInfo.identifier),
@@ -317,7 +326,9 @@ class confirmProduct extends Component {
             productItemImageBase64List: this.getValue(productInfo.productItemImageBase64List)
         });
     };
-
+    handelChangeInput = (value, name) => {
+        this.setState({[name]: value});
+    };
     makeCheckBox = () => {
         const {productInfo} = this.props.location;
         if (!productInfo) return this.props.history.push('/product-management');
@@ -495,7 +506,10 @@ class confirmProduct extends Component {
                         className="rtl border bg-light shadow m-0 float-right row w-100 justify-content-start my-3 pb-3">
                         <h4 className="py-3 col-12">علت لغو کالا :</h4>
                         <div className="form-group col-6 float-right">
-                            <textarea className="form-control text-center textarea-style  "
+                            <textarea className="form-control text-center textarea-style"
+                                      value={this.state.rejectionReason}
+                                      name={"rejectionReason"}
+                                      onChange={(e) => this.handelChangeInput(e.target.value, e.target.name)}
                             />
                         </div>
                     </div>

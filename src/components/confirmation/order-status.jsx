@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {sendRequestReturnOrder, productDetails} from "../../services/confirmationServise"
+import {
+    changeStatus,
+    productDetails
+} from "../../services/confirmationServise"
 import SearchResult from "../search/search-result";
 
-class returnConfirmations extends Component {
+class orderStatus extends Component {
 
     constructor(props) {
         super(props);
@@ -18,9 +21,10 @@ class returnConfirmations extends Component {
             mobileNumber: "",
             identifier: "",
             orderStatus: "",
+            status: "",
             customerReferenceNumber: "",
             productItemSellInfoList: "",
-            canSendReturnProduct: "",
+            canAcceptOrReject: "",
             sumOfAmount: "",
         };
 
@@ -41,40 +45,50 @@ class returnConfirmations extends Component {
     }
 
     cancelConfirmationInfo = async () => {
-        this.props.history.push({
-            pathname: '/Confirmation',
-        });
+        this.props.history.goBack();
     };
 
-    sendRequestReturnOrderInfo = async () => {
-        const result = await sendRequestReturnOrder({identifier : this.state.identifier});
-        try {
-            if (result.status === 200) {
-                toast.success('عملیات با موفقیت انجام شد.');
-                this.props.history.push({
-                    pathname: '/confirmation',
-                });
+    acceptConfirmationInfo = async () => {
+        if(this.hasValue(this.state.status)){
+            const data = {
+                identifier : this.state.identifier,
+                orderStatus:{
+                    code:this.state.status
+                }
+            };
+            console.log(data)
+            const result = await changeStatus(data);
+            try {
+                if (result.status === 200) {
+                    toast.success('عملیات با موفقیت انجام شد');
+                    this.props.history.push({
+                        pathname: '/confirmation',
+                    });
+                }
+            } catch (ex) {
+                if (ex.response && ex.response.status === 400) {
+                    toast.error('خطایی در دریافت اطلاعات رخ داده است');
+                }
             }
-        } catch (ex) {
-            if (ex.response && ex.response.status === 400) {
-                toast.error('خطایی در دریافت اطلاعات رخ داده است.');
-            }
+            document.getElementById("loading").style.display = "none";
+        }else{
+            toast.error("لطفا وضعیت سفارش را تغییر دهید");
         }
-        document.getElementById("loading").style.display = "none";
     };
 
+    fillParameterValue = (value, name) => {
+        this.setState({[name]: value});
+    };
 
     async componentDidMount() {
         const {dataInfo} = this.props.location;
         if (!dataInfo) return this.props.history.push('/confirmation');
         try {
             const result = await productDetails(this.getValue({identifier : dataInfo.identifier}));
-
             if (result.status === 200) {
                 const productItemSellInfoList = [];
                 let resultInfo = result.data.data[0];
-                console.log("hi")
-                console.log(resultInfo)
+                console.log(resultInfo,12345)
                 resultInfo.productItemSellInfoList.map(productItem => (
                     productItemSellInfoList.push(
                         {
@@ -96,7 +110,6 @@ class returnConfirmations extends Component {
                     deliveryType: this.getValue(resultInfo.orderDeliveryInfo.deliveryType.name),
                     address: this.getValue(resultInfo.addressInfo.address),
                     canAcceptOrReject: this.getValue(resultInfo.canAcceptOrReject),
-                    canSendReturnProduct: this.getValue(resultInfo.canSendReturnProduct),
                     sumOfAmount: this.getValue(resultInfo.sumOfAmount),
                     productItemSellInfoList: productItemSellInfoList
                 });
@@ -125,11 +138,14 @@ class returnConfirmations extends Component {
     render() {
         const headerInfo = this.getResultTableHeader();
         const pageSize = 5;
+        const option = [{value: "", name: "انتخاب کنید..."},
+            {value: "READY_TO_SEND", name: "آماده ارسال"},
+            {value: "DELIVERED_TO_CUSTOMER", name: "تحویل داده شده"}];
         return (
             <div
                 className="rtl border bg-light shadow row w-100 m-0 text-center justify-content-center align-items-center my-3">
                 <div className="col-12 justify-content-center align-items-center text-center header-box text-light">
-                    <h4 className="py-2">درخواست عودت</h4>
+                    <h4 className="py-2">تغییر وضعیت سفارش</h4>
                 </div>
                 <div className="col-12 justify-content-center align-items-center text-center">
                     <div
@@ -163,7 +179,7 @@ class returnConfirmations extends Component {
                             />
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
-                            <label>وضعیت سفارش :</label>
+                            <label>وضعیت سابق سفارش :</label>
                             <input className="form-control text-center"
                                    type="text"
                                    value={this.state.orderStatus}
@@ -211,34 +227,36 @@ class returnConfirmations extends Component {
                         </div>
                         <div className="form-group col-12 col-sm-6 col-md-3 float-right">
                             <label>قیمت کل سفارش (ریال):</label>
-                            <input className="form-control text-center"
+                            <input className="form-control text-center w-75"
                                    type="text"
                                    value={this.state.sumOfAmount}
                             />
                         </div>
-                        {this.state.canSendReturnProduct === true ?
-                            <div className="col-12 text-center justify-content-center row align-items-center my-3">
-                                <div className="px-3">
+                        <div className="form-group col-12 col-sm-6 col-md-3 float-right pb-3">
+                            <label>تغییر وضعیت سفارش :</label>
+                            <select
+                                className="form-control text-center w-75"
+                                onChange={(e) => this.fillParameterValue(e.target.value, "status")}
+                            >
+                                {option.map(
+                                    (info) => {
+                                        return (
+                                            <option value={info.value}>{info.name}</option>);
+                                    }
+                                )}
+                            </select>
+                        </div>
+                        <div className="col-12 text-center justify-content-center row align-items-center my-3">
+                            <div className="px-3">
 
-                                    <input type="button" className="btn btn-primary" value="درخواست عودت"
-                                           onClick={this.sendRequestReturnOrderInfo}/>
-                                </div>
-                                <div className="px-3">
-                                    <input type="button" className="btn btn-primary" value="لغو"
-                                           onClick={this.cancelConfirmationInfo}/>
-                                </div>
+                                <input type="button" className="btn btn-success" value="تایید"
+                                       onClick={this.acceptConfirmationInfo}/>
                             </div>
-                            :
-                            <div className="col-12 text-center justify-content-center">
-
-
-                                <button className="btn btn-danger btn-sm">
-                                    <span className="fa fa-warning"/>
-                                </button>
-                                <h6 className="p-2 font-weight-bold">(قادر به درخواست عودت نمی باشید)</h6>
+                            <div className="px-3">
+                                <input type="button" className="btn btn-danger" value="بازگشت"
+                                       onClick={this.cancelConfirmationInfo}/>
                             </div>
-                        }
-
+                        </div>
                     </div>
                 </div>
             </div>
@@ -247,4 +265,4 @@ class returnConfirmations extends Component {
     }
 }
 
-export default withRouter(returnConfirmations);
+export default withRouter(orderStatus);

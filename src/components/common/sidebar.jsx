@@ -1,21 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-// import { getCourseCount } from '../../services/courseService';
 import getNavLinks from './../../services/NavLinks';
+import "bootstrap-v4-rtl/dist/css/bootstrap.min.css"
 
 class Sidebar extends Component {
-
-
-    state = {
-        courseCount: ''
-    };
-
-    // async componentDidMount() {
-    //     const { data: courseCount } = await getCourseCount();
-    //     console.log(courseCount);
-    //     this.setState({ courseCount: courseCount.count });
-    // }
-
 
     logout = () => {
         sessionStorage.removeItem("access_token");
@@ -39,24 +27,102 @@ class Sidebar extends Component {
         let count = 1;
         const navLinks = getNavLinks();
         return (
-            <nav className="col-2 position-fixed d-none d-md-block bg-light sidebar">
+            <nav className="col-2 position-fixed d-none d-md-block sidebar side-back">
                 <div className="sidebar-sticky">
                     <div className="sidebar-header pb-3 pt-1 justify-content-center">
                         <div className="user-info justify-content-center text-center">
-                            <span className="user-name justify-content-center">
+                            <span className="user-name justify-content-center text-white">
                                 <strong>شرکت آیسانیک</strong>
                             </span>
                         </div>
                     </div>
                     <ul className="nav flex-column">
-                        {navLinks.map(nav => this.hasAuthority(nav.authority) ? (
-                            <li className="nav-item sidebar-dropdown" key={count++}>
-                                <Link className="nav-link" to={nav.path}>
-                                    <span className={nav.icon}/>
-                                    <span className="icon-title m-2">{nav.name}</span>
-                                </Link>
+                        <div id="accordion">
+                            <span>
+                                 <li className="nav-item sidebar-dropdown" data-toggle="collapse" href="#collapseThree"
+                                     key={count++}>
+                                <span className="nav-link pointer">
+                                    <span className="fa fa-unsorted text-warning"/>
+                                    <span className="icon-title m-2 font-weight-bold text-warning">ایجاد کالا</span>
+                                </span>
                             </li>
-                        ) : null)}
+                                {navLinks.map(nav => this.hasAuthority(nav.authority) ?
+                                    nav.type==="product" ?
+                                        <div id="collapseThree" className="collapse" data-parent="#accordion">
+                                            <li className="nav-item sidebar-dropdown" key={count++}>
+                                                <Link className="nav-link" to={nav.path}>
+                                                    <span className={`${nav.icon} text-light`}/>
+                                                    <span className="icon-title m-2 text-light">{nav.name}</span>
+                                                </Link>
+                                            </li>
+                                        </div>
+                                        : null
+                                    : null)}
+                            </span>
+                            <span>
+                                 <li className="nav-item sidebar-dropdown" data-toggle="collapse" href="#collapseOne"
+                                     key={count++}>
+                                 <span className="nav-link pointer">
+                                     <span className="fa fa-unsorted text-warning"/>
+                                    <span className="icon-title m-2 font-weight-bold text-warning">مدیریت ها</span>
+                                </span>
+                            </li>
+                                {navLinks.map(nav => this.hasAuthority(nav.authority) ?
+                                    nav.type==="management" ?
+                                        <div id="collapseOne" className="collapse" data-parent="#accordion">
+                                            <li className="nav-item sidebar-dropdown" key={count++}>
+                                                <Link className="nav-link" to={nav.path}>
+                                                    <span className={`${nav.icon} text-light`}/>
+                                                    <span className="icon-title m-2 text-light">{nav.name}</span>
+                                                </Link>
+                                            </li>
+                                        </div>
+                                        : null
+                                    : null)}
+                            </span>
+                            <span>
+                                 <li className="nav-item sidebar-dropdown" data-toggle="collapse" href="#collapseTwo"
+                                     key={count++}>
+                                 <span className="nav-link pointer">
+                                     <span className="fa fa-unsorted text-warning"/>
+                                    <span className="icon-title m-2 font-weight-bold text-warning">گزارشات</span>
+                                </span>
+                            </li>
+                                {navLinks.map(nav => this.hasAuthority(nav.authority) ?
+                                    nav.type==="report" ?
+                                        <div id="collapseTwo" className="collapse" data-parent="#accordion">
+                                            <li className="nav-item sidebar-dropdown" key={count++}>
+                                                <Link className="nav-link" to={nav.path}>
+                                                    <span className={`${nav.icon} text-light`}/>
+                                                    <span className="icon-title m-2 text-light">{nav.name}</span>
+                                                </Link>
+                                            </li>
+                                        </div>
+                                        : null
+                                    : null)}
+                            </span>
+                            <span>
+                                 <li className="nav-item sidebar-dropdown" data-toggle="collapse" href="#collapseFour"
+                                     key={count++}>
+                                <span className="nav-link pointer">
+                                    <span className="fa fa-unsorted text-warning"/>
+                                    <span className="icon-title m-2 font-weight-bold text-warning">بررسی و ممیزی</span>
+                                </span>
+                            </li>
+                                {navLinks.map(nav => this.hasAuthority(nav.authority) ?
+                                    nav.type==="other" ?
+                                        <div id="collapseFour" className="collapse" data-parent="#accordion">
+                                            <li className="nav-item sidebar-dropdown" key={count++}>
+                                                <Link className="nav-link" to={nav.path}>
+                                                    <span className={`${nav.icon} text-light`}/>
+                                                    <span className="icon-title m-2 text-light">{nav.name}</span>
+                                                </Link>
+                                            </li>
+                                        </div>
+                                        : null
+                                    : null)}
+                            </span>
+                        </div>
                     </ul>
                 </div>
             </nav>

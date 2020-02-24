@@ -169,7 +169,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'yekan', 'Segoe UI',
         'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
         'Helvetica Neue', sans-serif !important;
-    background: url('../images/light-grey-terrazzo.png') repeat center center
+    background: url('../images/dark-grey-terrazzo.jpeg') repeat center center
         fixed;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -277,4 +277,10 @@ svg.custom path.link {
 .btn-m {
     margin-right: 60px;
     margin-top: 30px;
+}
+.side-back {
+    background: url('../images/sidebar.jpg')  repeat center center
+    fixed
+}.pointer {
+     cursor: pointer;
 }

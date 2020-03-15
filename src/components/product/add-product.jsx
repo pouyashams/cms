@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {loadDataOfProduct, sendProduct} from "../../services/productService";
 import {toast} from "react-toastify";
 import ProductInfo from "./product-info";
+import {withRouter} from "react-router-dom";
 
 class addProduct extends Component {
 
@@ -46,9 +47,7 @@ class addProduct extends Component {
                 const result = await sendProduct(data);
                 if (result.status === 200) {
                     toast.success('کالا با موفقیت ثبت شد');
-                    this.setState({
-                        categoryValue: ""
-                    });
+                    window.location.reload();
                 }
             } catch (ex) {
                 if (ex.response && ex.response.status === 400) {
@@ -163,7 +162,10 @@ class addProduct extends Component {
                                     <input type="button" className="btn btn-primary mr-3" value="ثبت کالا "
                                            onClick={() => {
                                                this.madeData();
-                                           }}/>
+                                           }}/> <input type="button" className="btn btn-primary mr-3" value=" کالا "
+                                                       onClick={() => {
+                                                           this.p();
+                                                       }}/>
                                 </div>
                             </form>
                         </div>
@@ -176,6 +178,6 @@ class addProduct extends Component {
     };
 }
 
-export default addProduct;
+export default withRouter(addProduct);
 
 

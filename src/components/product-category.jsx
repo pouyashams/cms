@@ -46,7 +46,7 @@ class productCategory extends Component {
 
 
 
-        getSelectedProductCategoryName = (id) => {
+    getSelectedProductCategoryName = (id) => {
         let categoryName = "";
         const {oldProductAttributeCategoryArray} = this.state;
         oldProductAttributeCategoryArray.forEach((oldProductAttributeCategory) => {
@@ -83,6 +83,16 @@ class productCategory extends Component {
         document.getElementById("loading").style.display = "none";
     };
 
+    handelChangeProductAttribute = (newValue, attributeInfo) => {
+        const {productAttributeList} = this.state;
+        productAttributeList.forEach((productAttribute) => {
+            if (productAttribute.index === attributeInfo.index) {
+                productAttribute.attributeValue = newValue;
+                this.setState({productAttributeList});
+            }
+        });
+    };
+
     handelChangeOldProductAttributeCategory = (identifier) => {
         if (this.hasValue(identifier)) {
             const {oldProductAttributeCategoryArray} = this.state;
@@ -96,7 +106,7 @@ class productCategory extends Component {
                         let lastIndex = this.state.lastIndex;
                         oldProductAttributeCategory.productAttributeList.forEach((productAttribute, index) => {
                             newProductAttributeList.push({
-                                index: lastIndex,
+                                index: ++lastIndex,
                                 identifier: productAttribute.identifier,
                                 attributeValue: productAttribute.attributeValue,
                                 canBeDelete: false,
@@ -119,7 +129,6 @@ class productCategory extends Component {
     };
 
     chooseSuperCategory = (identifier) => {
-        console.log(identifier)
         if (this.hasValue(identifier)) {
             this.state.superCategories.forEach((categories) => {
                 if (categories.identifier.toString() === identifier) {
@@ -242,7 +251,7 @@ class productCategory extends Component {
                                                            placeholder="---"
                                                            name="productAttribute"
                                                            value={productAttribute.attributeValue}
-                                                        // onChange={(e) => this.handelChangeProductAttribute(e.target.value, productAttribute)}
+                                                        onChange={(e) => this.handelChangeProductAttribute(e.target.value, productAttribute)}
                                                     />
                                                     <span
                                                         className={

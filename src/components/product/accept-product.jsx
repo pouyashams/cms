@@ -30,6 +30,7 @@ class confirmProduct extends Component {
             multiplexedSaleInfoList: [],
             paymentTypes: "",
             type: "",
+            deliver: "",
             checkbox: []
         }
     };
@@ -88,11 +89,14 @@ class confirmProduct extends Component {
 
     fillParameterValue = (value, name) => {
         if (value === "onlinePay") {
-            this.setState({[name]: [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}]});
+            this.setState({[name]: [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}], deliver: false});
         } else if (value === "hardPay") {
-            this.setState({[name]: [{code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}]});
+            this.setState({[name]: [{code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}], deliver: true});
         } else if (value === "bothPay") {
-            this.setState({[name]: [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}, {code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}]});
+            this.setState({
+                [name]: [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}, {code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}],
+                deliver: false
+            });
         }
     };
 
@@ -181,35 +185,44 @@ class confirmProduct extends Component {
         let ibanValid = true;
         let sumOfPercent = 0;
         let sumOfAmount = 0;
-        multiplexedSaleInfoList.forEach((info) => {
-            if (!this.isCorrect(info.iban)) {
-                ibanValid = false;
+        if(this.state.paymentTypes.length===0){
+            toast.error('نوع پرداخت انتخاب کنید');
+        }else{
+            if (!this.state.deliver) {
+                multiplexedSaleInfoList.forEach((info) => {
+                    if (!this.isCorrect(info.iban)) {
+                        ibanValid = false;
+                    }
+                    if (info.percent !== "") {
+                        sumOfPercent += parseInt(info.percent);
+                    }
+                    if (info.amount !== "") {
+                        sumOfAmount += parseInt(info.amount);
+                    }
+                });
+                if (ibanValid === false) {
+                    toast.error('شماره شبا وارد شده در قسمت تسهیم صحیح نمی باشد');
+                    return false;
+                }
+                else if (sumOfPercent === 100) {
+                    return true;
+                }
+                else if (sumOfAmount === parseInt(this.state.price)) {
+                    return true;
+                }
+                else if (sumOfPercent === 0 && sumOfAmount === 0) {
+                    toast.error('لطفا مبلغ یا درصد تسهیم را وارد کنید');
+                    return false;
+                }
+                else {
+                    toast.error('جمع مبلغ یا درصد تسهیم صحیح نمی باشد');
+                    return false;
+                }
+            } else {
+                return true;
             }
-            if (info.percent !== "") {
-                sumOfPercent += parseInt(info.percent);
-            }
-            if (info.amount !== "") {
-                sumOfAmount += parseInt(info.amount);
-            }
-        });
-        if (ibanValid === false) {
-            toast.error('شماره شبا وارد شده در قسمت تسهیم صحیح نمی باشد');
-            return false;
         }
-        else if (sumOfPercent === 100) {
-            return true;
-        }
-        else if (sumOfAmount === parseInt(this.state.price)) {
-            return true;
-        }
-        else if (sumOfPercent === 0 && sumOfAmount === 0) {
-            toast.error('لطفا مبلغ یا درصد تسهیم را وارد کنید');
-            return false;
-        }
-        else {
-            toast.error('جمع مبلغ یا درصد تسهیم صحیح نمی باشد');
-            return false;
-        }
+
     };
 
     getValue(field) {
@@ -228,7 +241,6 @@ class confirmProduct extends Component {
             }
         });
         if (this.isValid()) {
-
             try {
                 let data = {
                     identifier: this.state.identifier,
@@ -236,7 +248,6 @@ class confirmProduct extends Component {
                     multiplexedSaleInfos: this.state.multiplexedSaleInfoList,
                     paymentTypes: this.state.paymentTypes,
                 };
-                console.log(data, 1234)
                 const result = await acceptProduct(data);
                 if (result.status === 200) {
                     toast.success('کالا با موفقیت تایید شد');
@@ -254,7 +265,7 @@ class confirmProduct extends Component {
     };
 
     cancelProductInfo = async () => {
-        if(this.hasValue(this.state.rejectionReason)){
+        if (this.hasValue(this.state.rejectionReason)) {
             try {
                 let data = {
                     identifier: this.state.identifier,
@@ -272,7 +283,7 @@ class confirmProduct extends Component {
                 }
             }
             document.getElementById("loading").style.display = "none";
-        }else{
+        } else {
             toast.error('علت لغو کالا پر کنید');
         }
 
@@ -294,19 +305,19 @@ class confirmProduct extends Component {
         });
         let paymentTypes = "";
         if (productInfo.paymentTypes.length === 0) {
-            this.setState({type: ""});
+            this.setState({type: "", deliver: false});
         } else if (productInfo.paymentTypes.length === 2) {
-            this.setState({type: "bothPay"});
+            this.setState({type: "bothPay", deliver: false});
             paymentTypes = [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}, {code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}]
 
         }
         else if (productInfo.paymentTypes.length === 1) {
             if (productInfo.paymentTypes[0].code === "ONLINE_ORDER_PAYMENT_TYPE") {
-                paymentTypes = [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}]
-                this.setState({type: "onlinePay"})
+                paymentTypes = [{code: 'ONLINE_ORDER_PAYMENT_TYPE'}];
+                this.setState({type: "onlinePay", deliver: false})
             } else {
-                paymentTypes = [{code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}]
-                this.setState({type: "hardPay"})
+                paymentTypes = [{code: 'AT_THE_PLACE_ORDER_PAYMENT_TYPE'}];
+                this.setState({type: "hardPay", deliver: true})
             }
         }
         this.setState({
